@@ -3,7 +3,7 @@
 
 /*필요에 따라 추가해서 쓰시면 됩니다!*/
 :root {
-  --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-default: 'NanumSquare', sans-serif;
   /* === 메인 색깔 === */
   --color-green1: #123524; /* 글자용 */
   --color-green2: #3e7b27;
@@ -42,7 +42,7 @@
   html,
   body {
     @apply mx-auto h-screen max-w-[430px];
-    font-family: var(--font-inter);
+    font-family: var(--font-default);
     background-color: var(--color-gray1);
     color: var(--color-black);
   }
