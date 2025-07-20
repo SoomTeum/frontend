@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@import '../public/fonts/fonts.css';
+
+/*필요에 따라 추가해서 쓰시면 됩니다!*/
+:root {
+  --font-default: 'NanumSquare', sans-serif;
+  /* === 메인 색깔 === */
+  --color-green1: #123524; /* 글자용 */
+  --color-green2: #3e7b27;
+  --color-green3: #85a947;
+  --color-green3-light: #e3ebd4;
+  --color-green-muted: #7f8c7a; /* 글자용 희미 */
+  --color-beige2: #efe3c2; /* 4단계 */
+  --color-beige3: #fffdf6; /* 5단계 */
+
+  /* === 보조 색깔 === */
+  --color-orange: #ffb675;
+  --color-mint: #7edc96;
+  --color-blue: #6193ff;
+  --color-pink: #ffe2e4;
+
+  --color-yellow1: #ffda61;
+  --color-yellow2: #fdf2d4; /* 4단계 중간 */
+
+  --color-gray1: #cccccc;
+  --color-gray2: #e6e6e6;
+
+  --color-red1: #ff616d;
+  --color-red2: #ff8b94;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+}
+
+@layer base {
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    @apply mx-auto h-screen max-w-[430px];
+    font-family: var(--font-default);
+    background-color: var(--color-gray1);
+    color: var(--color-black);
+  }
+}
+
+@layer utilities {
+  /* 텍스트 색상 */
+  .text-green1 {
+    color: var(--color-green1);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .text-black {
+    color: var(--color-black);
+  }
+  .text-gray1 {
+    color: var(--color-gray1);
+  }
+
+  /*배경 색상*/
+  .bg-green2 {
+    background-color: var(--color-green2);
+  }
+  .bg-green3 {
+    background-color: var(--color-green3);
+  }
+  .bg-green3-light {
+    background-color: var(--color-green3-light);
+  }
+  .bg-red2 {
+    background-color: var(--color-red2);
+  }
+  .bg-pink {
+    background-color: var(--color-pink);
+  }
+  .bg-orange {
+    background-color: var(--color-orange);
+  }
+  .bg-yellow1 {
+    background-color: var(--color-yellow1);
+  }
+  .bg-yellow2 {
+    background-color: var(--color-yellow2);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  .bg-beige3 {
+    background-color: var(--color-beige3);
+  }
+  .bg-gray2 {
+    background-color: var(--color-gray2);
+  }
+
+  /* border */
+  .border-green3 {
+    border-color: var(--color-green3);
+  }
+  .border-gray1 {
+    border-color: var(--color-gray1);
+  }
+  .border-black {
+    border-color: var(--color-black);
+  }
+}
