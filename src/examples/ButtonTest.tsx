@@ -1,4 +1,5 @@
 import { Button, TagButton } from "@/component";
+import Badge from "@/component/common/Badge/Badge";
 import { useState } from "react";
 
 const options=[
@@ -46,7 +47,13 @@ const ButtonTestPage=()=>{
           {label}
         </TagButton>
       ))}
-    </div>
+      </div>
+      <h1 className="text-caption1">뱃지 테스트</h1>
+      <Badge type="default" color="green" size="lg">추천해요</Badge>
+      <Badge type="default" color="red">자연관광지</Badge>
+      <Badge type="default" color="green" count={2}>한적함</Badge>
+      <Badge type="parkingCount" percent={30}>100</Badge>
+      <Badge type="parkingTag" size="xl">뭐시기뭐시기주차장</Badge>
     </div>
   )
 }

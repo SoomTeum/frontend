@@ -10,6 +10,7 @@
   --color-green3: #85a947;
   --color-green3-light: #e3ebd4;
   --color-green-muted: #7f8c7a; /* 글자용 희미 */
+  --color-green4: #63be7a;
   --color-beige2: #efe3c2; /* 4단계 */
   --color-beige3: #fffdf6; /* 5단계 */
 
@@ -115,7 +116,7 @@
   .btn-text-white{
     color:var(--color-white);
   }
-  .btn-text-balck{
+  .btn-text-black{
     color:var(--color-black)
   }
 
@@ -131,6 +132,9 @@
   }
   .bg-green-muted{
     background-color: var(--color-green-muted);
+  }
+  .bg-green4{
+    background-color: var(--color-green4);
   }
   .bg-red2 {
     background-color: var(--color-red2);
