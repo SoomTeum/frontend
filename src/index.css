@@ -159,6 +159,9 @@
   .bg-gray2 {
     background-color: var(--color-gray2);
   }
+  .bg-mint{
+    background-color: var(--color-mint);
+  }
 
   /* border */
   .border-green3 {

@@ -1,9 +1,18 @@
-import { Button } from "@/component";
+import { Button, TagButton } from "@/component";
+import { useState } from "react";
+
+const options=[
+  {label:'추천해요', color:'green' as const},
+  {label:'별로예요', color:'red' as const},
+];
 
 const ButtonTestPage=()=>{
   const handleClick=()=>{
     alert('버튼 클릭됨');
   }
+
+  const [selected, setSelected]=useState<string|null>(null);
+
   return(
     <div className="flex flex-col min-h-screen bg-beige3 gap-4 p-4">
       <h1 className="text-caption1">버튼 테스트</h1>
@@ -24,6 +33,20 @@ const ButtonTestPage=()=>{
       <Button variant="sm">바로가기</Button>
 
       {/*이외에도 className props으로 조정 가능...*/}
+
+      <h1 className="text-caption1">태그 버튼 테스트</h1>
+      <div className="flex gap-2">
+      {options.map(({ label, color }) => (
+        <TagButton
+          key={label}
+          color={color}
+          selected={selected === label}
+          onClick={() => setSelected(label)}
+        >
+          {label}
+        </TagButton>
+      ))}
+    </div>
     </div>
   )
 }
