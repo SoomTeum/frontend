@@ -1,3 +1,12 @@
+---
+name: Feature request
+about: 이슈를 생성해주세요
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## 📝 설명
 
 설명을 작성해 주세요
