@@ -31,10 +31,8 @@
 
   --color-black: #000000;
   --color-white: #ffffff;
-
-
   --radius-s: 2px;
-  --radius-m: 8px; 
+  --radius-m: 8px;
   --radius-l: 12px;
   --radius-full: 99px;
 
@@ -63,7 +61,6 @@
   --leading-2: 20px;
   --leading-1: 18px;
   --leading-0: 16px;
-
 }
 
 @layer base {
@@ -77,22 +74,24 @@
   body {
     @apply mx-auto h-screen max-w-[430px];
     font-family: var(--font-default);
-    background-color: var(--color-gray1);
+    background-color: var(--color-beige3);
     color: var(--color-black);
   }
 }
 
 @layer utilities {
-
   /* 텍스트 */
-  .text-caption1{
+  .text-title {
+    font-size: var(--text-size-3);
+  }
+  .text-caption1 {
     font-size: var(--text-size-1);
     font-weight: var(--font-weight-bold);
     line-height: var(--leading-1);
     font-family: var(--font-default);
   }
 
-  .text-caption2{
+  .text-caption2 {
     font-size: var(--text-size-0);
     font-weight: var(--font-weight-normal);
     line-height: var(--leading-0);
@@ -113,11 +112,11 @@
     color: var(--color-gray1);
   }
   /*버튼 텍스트*/
-  .btn-text-white{
-    color:var(--color-white);
+  .btn-text-white {
+    color: var(--color-white);
   }
-  .btn-text-black{
-    color:var(--color-black)
+  .btn-text-black {
+    color: var(--color-black);
   }
 
   /*배경 색상*/
@@ -130,10 +129,10 @@
   .bg-green3-light {
     background-color: var(--color-green3-light);
   }
-  .bg-green-muted{
+  .bg-green-muted {
     background-color: var(--color-green-muted);
   }
-  .bg-green4{
+  .bg-green4 {
     background-color: var(--color-green4);
   }
   .bg-red2 {
@@ -154,16 +153,19 @@
   .bg-white {
     background-color: var(--color-white);
   }
-  .bg-beige2{
+  .bg-beige2 {
     background-color: var(--color-beige2);
   }
   .bg-beige3 {
     background-color: var(--color-beige3);
   }
+  .bg-gray1 {
+    background-color: var(--color-gray1);
+  }
   .bg-gray2 {
     background-color: var(--color-gray2);
   }
-  .bg-mint{
+  .bg-mint {
     background-color: var(--color-mint);
   }
 
@@ -194,5 +196,4 @@
   .rounded-full {
     border-radius: var(--radius-full); /*99px*/
   }
-
 }
