@@ -1,42 +1,39 @@
-import React from 'react';
+import { Menu, User } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
-import { Menu, User, Home } from 'react-feather';
+import Logo from '../image/Logo.png'; // 상대 경로 import (src/component/Header.tsx 기준)
 
 type HeaderProps = {
   onMenuClick: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+export default function Header({ onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <header className="flex justify-between items-center px-4 py-2 bg-white border-b border-gray-200 shadow-sm">
-      {/* 로고 영역 */}
-      <div
-        className="flex items-center gap-2 cursor-pointer"
-        onClick={() => navigate('/')}
-      >
-        <img src="/logo.png" alt="logo" className="w-8 h-8" />
-        <span className="font-bold text-lg">숨여행, 틈</span>
-      </div>
-
-      {/* 아이콘 영역 */}
-      <div className="flex items-center gap-4">
-        <User
-          className="w-6 h-6 text-green-700 cursor-pointer"
-          onClick={() => navigate('/mypage')}
-        />
-        <Home
-          className="w-6 h-6 text-green-700 cursor-pointer"
-          onClick={() => navigate('/')}
-        />
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[#f8fbe9] border-b border-gray-200">
+      <div className="w-full flex flex-row items-center justify-between px-4 py-2">
+        {/* 왼쪽: 메뉴(햄버거) 아이콘 */}
         <Menu
-          className="w-6 h-6 text-green-700 cursor-pointer"
+          className="w-7 h-7 text-green-700 cursor-pointer"
           onClick={onMenuClick}
+        />
+
+        {/* 가운데: 로고 이미지 */}
+        <div className="flex-1 flex justify-center">
+          <img
+            src={Logo}
+            alt="logo"
+            className="h-8 object-contain cursor-pointer"
+            onClick={() => navigate('/')}
+          />
+        </div>
+
+        {/* 오른쪽: 사람 아이콘 */}
+        <User
+          className="w-7 h-7 text-green-700 cursor-pointer"
+          onClick={() => navigate('/mypage')}
         />
       </div>
     </header>
   );
-};
-
-export default Header;
+}
