@@ -1,6 +1,6 @@
 import { Menu, User } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../image/Logo.png'; // 상대 경로 import (src/component/Header.tsx 기준)
+import Logo from '../image/Logo.png'; 
 
 type HeaderProps = {
   onMenuClick: () => void;
