@@ -31,7 +31,6 @@
 
   --color-black: #000000;
   --color-white: #ffffff;
-
   --radius-s: 2px;
   --radius-m: 8px;
   --radius-l: 12px;
@@ -73,7 +72,7 @@
   body {
     @apply mx-auto h-screen max-w-[430px];
     font-family: var(--font-default);
-    background-color: var(--color-gray1);
+    background-color: var(--color-beige3);
     color: var(--color-black);
   }
 }
@@ -228,6 +227,9 @@
   }
   .bg-beige3 {
     background-color: var(--color-beige3);
+  }
+  .bg-gray1 {
+    background-color: var(--color-gray1);
   }
   .bg-gray2 {
     background-color: var(--color-gray2);
