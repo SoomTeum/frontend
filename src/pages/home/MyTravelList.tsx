@@ -1,25 +1,30 @@
+import  { useState } from 'react';
 import Header from '@/component/Header';
+import Sidebar from '@/component/SideBar';
 import { X, Heart } from 'react-feather';
 import Button from '@/component/common/Button/Button';
 
 const MyTravelList = () => {
-  const travelItems = [
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [travelItems, setTravelItems] = useState([
     { id: 1, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
     { id: 2, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
     { id: 3, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
     { id: 4, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
-  ];
+  ]);
 
-  // 👇 여기! 타입 명시
-  const handleMenuClick: () => void = () => {
-    console.log('메뉴 버튼 클릭됨 (Sidebar 열기 등)');
+  const handleMenuClick = () => setIsSidebarOpen(true);
+  const handleCloseSidebar = () => setIsSidebarOpen(false);
+  const handleRemoveItem = (id: number) => {
+    setTravelItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   return (
     <div className="bg-beige1 min-h-screen">
       <Header onMenuClick={handleMenuClick} />
+      <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
 
-      <div className="px-4 pt-2 pb-8">
+      <div className="pt-14 px-4 pb-8"> {/* 헤더 높이만큼 pt-14 추가 */}
         <div className="text-center text-heading3 py-2 font-bold text-green1">
           나의 여행지
         </div>
@@ -59,7 +64,10 @@ const MyTravelList = () => {
               </div>
 
               <div className="flex flex-col items-end gap-1">
-                <X className="w-4 h-4 text-gray-500 cursor-pointer" />
+                <X
+                  className="w-4 h-4 text-gray-500 cursor-pointer"
+                  onClick={() => handleRemoveItem(item.id)}
+                />
                 <div className="flex items-center text-xs text-red-400">
                   <Heart className="w-4 h-4 mr-1 fill-red-300 text-red-300" />
                   {item.likes}
