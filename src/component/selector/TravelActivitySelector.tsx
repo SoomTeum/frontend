@@ -60,4 +60,3 @@ const TravelActivitySelector = () => {
 };
 
 export default TravelActivitySelector;
-s
