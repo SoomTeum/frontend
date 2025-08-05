@@ -3,7 +3,7 @@
 
 /*필요에 따라 추가해서 쓰시면 됩니다!*/
 :root {
-  --font-default: 'NanumSquare', sans-serif;
+  --font-default: 'Pretendard', sans-serif;
   /* === 메인 색깔 === */
   --color-green1: #123524; /* 글자용 */
   --color-green2: #3e7b27;
@@ -37,30 +37,28 @@
   --radius-full: 99px;
 
   /*텍스트 크기*/
-  --text-size-10: 40px;
-  --text-size-9: 30px;
-  --text-size-8: 26px;
-  --text-size-7: 24px;
-  --text-size-6: 22px;
-  --text-size-5: 20px;
-  --text-size-4: 18px;
-  --text-size-3: 16px;
-  --text-size-2: 14px;
-  --text-size-1: 12px;
-  --text-size-0: 10px;
+  --text-size-10: 24px;
+  --text-size-9: 22px;
+  --text-size-8: 20px;
+  --text-size-7: 18px;
+  --text-size-6: 16px;
+  --text-size-5: 14px;
+  --text-size-4: 12px;
+  --text-size-3: 11px;
+  --text-size-2: 10px;
+  --text-size-1: 8px;
 
   /*line height*/
-  --leading-10: 48px;
-  --leading-9: 38px;
-  --leading-8: 32px;
-  --leading-7: 30px;
-  --leading-6: 28px;
-  --leading-5: 26px;
-  --leading-4: 24px;
-  --leading-3: 22px;
-  --leading-2: 20px;
-  --leading-1: 18px;
-  --leading-0: 16px;
+  --leading-10: 32px;
+  --leading-9: 30px;
+  --leading-8: 28px;
+  --leading-7: 26px;
+  --leading-6: 24px;
+  --leading-5: 22px;
+  --leading-4: 20px;
+  --leading-3: 18px;
+  --leading-2: 16px;
+  --leading-1: 12px;
 }
 
 @layer base {
@@ -81,21 +79,92 @@
 
 @layer utilities {
   /* 텍스트 */
-  .text-title {
+  .text-title1 {
+    font-size: var(--text-size-6);
+    font-weight: var(--font-weight-extrabold);
+    line-height: var(--leading-3);
+    font-family: var(--font-default);
+  }
+  .text-title2 {
+    font-size: var(--text-size-6);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-4);
+    font-family: var(--font-default);
+  }
+  .text-title3 {
+    font-size: var(--text-size-9);
+    font-weight: var(--font-weight-extrabold);
+    line-height: var(--leading-8);
+    font-family: var(--font-default);
+  }
+  .text-title4 {
+    font-size: var(--text-size-5);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-4);
+    font-family: var(--font-default);
+  }
+  .text-title5 {
+    font-size: var(--text-size-5);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--leading-4);
+    font-family: var(--font-default);
+  }
+  .text-title6 {
+    font-size: var(--text-size-10);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-9);
+    font-family: var(--font-default);
+  }
+  .text-body1 {
+    font-size: var(--text-size-4);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-2);
+    font-family: var(--font-default);
+  }
+  .text-body2 {
     font-size: var(--text-size-3);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--leading-2);
+    font-family: var(--font-default);
+  }
+  .text-body3 {
+    font-size: var(--text-size-2);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-1);
+    font-family: var(--font-default);
   }
   .text-caption1 {
-    font-size: var(--text-size-1);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--leading-1);
+    font-size: var(--text-size-4);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-3);
     font-family: var(--font-default);
   }
 
   .text-caption2 {
-    font-size: var(--text-size-0);
-    font-weight: var(--font-weight-normal);
-    line-height: var(--leading-0);
+    font-size: var(--text-size-2);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--leading-2);
     font-family: var(--font-default);
+  }
+
+  .text-caption3 {
+    font-size: var(--text-size-5);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-4);
+    font-family: var(--font-default);
+  }
+
+  .text-caption4 {
+    font-size: var(--text-size-4);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--leading-4);
+    font-family: var(--font-default);
+  }
+  .text-caption5 {
+    font-size: var(--text-size-1);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-1);
+    font-weight: var(--font-default);
   }
 
   /* 텍스트 색상 */

@@ -1,3 +1,4 @@
+//그냥 테스트용...
 import { PlaceCard } from '@/component';
 import { useState } from 'react';
 
@@ -40,6 +41,20 @@ export default function CardTestPage() {
           onRemove={() => handelRemove(place.id)}
         />
       ))}
+      <h1 className="text-caprion1">placecard 테스트 (x없는 버전)</h1>
+      {places.map((place) => (
+        <PlaceCard
+          key={place.id}
+          title={place.title}
+          theme={place.theme}
+          likeCount={place.likeCount}
+          imgUrl={place.imgUrl}
+          quietLevel={place.quietLevel}
+          onRemove={() => handelRemove(place.id)}
+        />
+      ))}
     </div>
+    
+    
   );
 }
