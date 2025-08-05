@@ -20,7 +20,7 @@ const Image = ({ src, alt = '', className }: ImageProps) => {
       alt={alt}
       onLoad={() => setIsLoading(false)}
       onError={() => setHasError(true)}
-      className={cn('object-cover', isLoading ? 'blur-sm' : '', className)}
+      className={cn('object-cover', isLoading ? 'opacity-70 blur-sm' : '', className)}
     />
   );
 };
