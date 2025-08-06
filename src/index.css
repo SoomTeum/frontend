@@ -180,6 +180,9 @@
   .text-gray1 {
     color: var(--color-gray1);
   }
+  .text-green-muted{
+    color:var(--color-green-muted)
+  }
   /*버튼 텍스트*/
   .btn-text-white {
     color: var(--color-white);

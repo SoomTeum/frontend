@@ -20,7 +20,7 @@ export default function Alert({ children, onClose, className }: AlertProps) {
         <AlertIcon className="shrink-0" />
         <div className="text-caption1 text-black">{children}</div>
       </div>
-      <button onClick={onClose} className="text-gray-400 transition-colors">
+      <button onClick={onClose} className="cursor-pointer text-green-muted text-gray-400 transition-colors">
         <CancelIcon className="w-3" />
       </button>
     </div>
