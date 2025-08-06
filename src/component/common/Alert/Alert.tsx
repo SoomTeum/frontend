@@ -12,7 +12,7 @@ export default function Alert({ children, onClose, className }: AlertProps) {
   return (
     <div
       className={cn(
-        'bg-pink flex h-14 w-full items-center justify-between rounded-lg px-4',
+        'bg-pink flex h-14 w-full items-center justify-between rounded-l px-4',
         className,
       )}
     >
