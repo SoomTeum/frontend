@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/home/Homepage';
-import ButtonTestPage from '@/examples/ButtonTest';
 import MyTravelList from '@/pages/home/MyTravelList';
 import MyPage from '@/pages/home/MyPage';
 import RegionSelector from '@/component/selector/RegionSelector';
 import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
 
 import CardTestPage from '@/examples/CardTest';
+import AlertComponent from '@/examples/AlertTest';
 
 export const router = createBrowserRouter([
   {
@@ -14,8 +14,8 @@ export const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: '/button',
-    element: <ButtonTestPage />,
+    path: '/alert',
+    element: <AlertComponent />,
   },
   {
     path: '/mytravel',
