@@ -6,6 +6,8 @@ import MyPage from '@/pages/home/MyPage';
 import RegionSelector from '@/component/selector/RegionSelector';
 import TravelActivitySelector from '@/component/selector/TravelActivitySelector'; 
 
+import CardTestPage from '@/examples/CardTest';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -30,5 +32,10 @@ export const router = createBrowserRouter([
   {
     path: '/activity', // ✅ 여행 활동 선택 테스트용
     element: <TravelActivitySelector />,
+
+
+    path: '/card',
+    element: <CardTestPage />,
+
   },
 ]);
