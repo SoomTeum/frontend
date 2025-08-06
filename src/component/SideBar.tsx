@@ -4,13 +4,24 @@ import { X } from 'react-feather';
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
+  position?: 'left' | 'right'; // ✅ 추가: 왼쪽/오른쪽 위치 결정
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  position = 'right',
+}) => {
+  const isLeft = position === 'left';
+
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-64 bg-[#f8fbe9] shadow-lg transform ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
+      className={`fixed top-0 ${isLeft ? 'left-0' : 'right-0'} h-full w-64 bg-[#f8fbe9] shadow-lg transform ${
+        isOpen
+          ? 'translate-x-0'
+          : isLeft
+          ? '-translate-x-full'
+          : 'translate-x-full'
       } transition-transform duration-300 z-50`}
     >
       {/* 닫기 버튼 */}

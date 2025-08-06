@@ -1,7 +1,8 @@
 export type ButtonVariant = 'lg' | 'md' | 'sm';
+
 export type ButtonColorLg = 'green3' | 'green-muted';
 export type ButtonColorMd = 'green3' | 'green-muted';
-export type ButtonColorSm = 'beige1';
+export type ButtonColorSm = 'beige1' | 'green3' | 'green-muted'; 
 
 interface CommonProps {
   onClick?: () => void;
@@ -11,7 +12,7 @@ interface CommonProps {
 }
 
 export interface LgButtonProps extends CommonProps {
-  variant?: 'lg'; //디폴트
+  variant?: 'lg'; // default
   color?: ButtonColorLg;
 }
 
@@ -22,7 +23,7 @@ export interface MdButtonProps extends CommonProps {
 
 export interface SmButtonProps extends CommonProps {
   variant: 'sm';
-  color?: ButtonColorSm;
+  color?: ButtonColorSm; 
 }
 
 export type ButtonProps = LgButtonProps | MdButtonProps | SmButtonProps;
