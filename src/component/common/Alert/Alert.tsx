@@ -17,7 +17,7 @@ export default function Alert({ children, onClose, className }: AlertProps) {
       )}
     >
       <div className="flex items-center gap-4">
-        <AlertIcon className="mb-4 shrink-0" />
+        <AlertIcon className="shrink-0" />
         <div className="text-caption1 text-black">{children}</div>
       </div>
       <button onClick={onClose} className="text-gray-400 transition-colors">
