@@ -4,7 +4,6 @@ import MyTravelList from '@/pages/home/MyTravelList';
 import MyPage from '@/pages/home/MyPage';
 import RegionSelector from '@/component/selector/RegionSelector';
 import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
-
 import CardTestPage from '@/examples/CardTest';
 import AlertComponent from '@/examples/AlertTest';
 
@@ -13,9 +12,15 @@ export const router = createBrowserRouter([
     path: '/',
     element: <HomePage />,
   },
+
+  //테스트
   {
     path: '/alert',
     element: <AlertComponent />,
+  },
+  {
+    path: '/card',
+    element: <CardTestPage />,
   },
   {
     path: '/mytravel',
