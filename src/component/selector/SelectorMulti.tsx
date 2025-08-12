@@ -75,7 +75,7 @@ const SelectorMulti = ({
               <button
                 key={sub}
                 onClick={() => toggleSub(sub)}
-                className={`text-caption4 mx-2 mb-1 ml-5 w-1/2 rounded-l px-2 py-1 text-center ${
+                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 rounded-l px-2 py-1 text-center ${
                   active ? rightActive : rightItem
                 }`}
               >
