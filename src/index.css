@@ -20,6 +20,8 @@
   --color-blue: #6193ff;
   --color-pink: #ffe2e4;
 
+  --color-green0: #f9ffee;
+
   --color-yellow1: #ffda61;
   --color-yellow2: #fdf2d4; /* 4단계 중간 */
 
@@ -180,8 +182,8 @@
   .text-gray1 {
     color: var(--color-gray1);
   }
-  .text-green-muted{
-    color:var(--color-green-muted)
+  .text-green-muted {
+    color: var(--color-green-muted);
   }
   /*버튼 텍스트*/
   .btn-text-white {
@@ -239,6 +241,9 @@
   }
   .bg-mint {
     background-color: var(--color-mint);
+  }
+  .bg-green0 {
+    background-color: var(--color-green0);
   }
 
   /* border */

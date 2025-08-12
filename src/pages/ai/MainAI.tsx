@@ -24,7 +24,7 @@ export default function AiExplorePage() {
 
   const goThemeSelect = () =>
     navigate({
-      pathname: '/themes/select',
+      pathname: '/explore/theme',
       search: theme ? createSearchParams({ selected: theme.id }).toString() : '',
     });
 
