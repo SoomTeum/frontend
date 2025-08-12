@@ -43,6 +43,7 @@ const ThemeSelcetPage = () => {
             leftActive: 'bg-green0',
             rightItem: 'text-black',
             rightActive: 'outline outline-1 outline-[var(--color-green3)]',
+            borderColor: 'border-green3',
           }}
           onSelect={(m, s) => {
             setMain(m);

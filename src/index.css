@@ -256,6 +256,9 @@
   .border-black {
     border-color: var(--color-black);
   }
+  .border-red2 {
+    border-color: var(--color-red2);
+  }
 
   /* radius */
   .rounded-s {

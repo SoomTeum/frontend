@@ -13,6 +13,7 @@ export type SelectorMultiProps = {
     leftActive?: string;
     rightItem?: string;
     rightActive?: string;
+    borderColor?: string;
   };
 };
 
@@ -20,7 +21,7 @@ const SelectorMulti = ({
   dataMap,
   initialMain,
   onSelect,
-  initialSubs = [],
+  initialSubs,
   colorScheme = {},
 }: SelectorMultiProps) => {
   const {
@@ -29,10 +30,11 @@ const SelectorMulti = ({
     leftActive = 'bg-green0 text-caption4',
     rightItem = 'text-green1',
     rightActive = 'bg-green4 text-black text-caption4',
+    borderColor = 'border-green3',
   } = colorScheme;
 
   const [selectedMain, setSelectedMain] = useState(initialMain);
-  const [selectedSubs, setSelectedSubs] = useState<string[]>(initialSubs);
+  const [selectedSubs, setSelectedSubs] = useState<string[]>(initialSubs ?? []);
 
   const changeMain = (next: string) => {
     setSelectedMain(next);
@@ -50,7 +52,9 @@ const SelectorMulti = ({
   }, [initialMain]);
 
   useEffect(() => {
-    setSelectedSubs(initialSubs ?? []);
+    if (initialSubs !== undefined) {
+      setSelectedSubs(initialSubs);
+    }
   }, [initialSubs]);
 
   useEffect(() => {
@@ -58,7 +62,7 @@ const SelectorMulti = ({
   }, [selectedMain, selectedSubs, onSelect]);
 
   return (
-    <div className="border-green3 flex h-80 w-full overflow-hidden border-t">
+    <div className={`flex h-80 w-full overflow-hidden border-t ${borderColor}`}>
       {/*대분류*/}
       <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
         {Object.keys(dataMap).map((main) => (
