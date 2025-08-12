@@ -10,8 +10,8 @@ const TravelActivitySelector = () => {
   colorScheme={{
     base: 'bg-rose-300',                        
     active: 'bg-rose-100 text-rose-800',         
-    text: 'text-white',                        
-    rightActive: 'bg-rose-300 text-white',    
+    text: 'text-black',                        
+    rightActive: 'bg-rose-300 text-black',    
   }}
   onSelect={(category, activity) => {
     console.log('선택된:', category, activity);
