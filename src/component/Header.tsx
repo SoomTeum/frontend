@@ -10,8 +10,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <header className="bg-beige3 fixed top-0 right-0 left-0 z-50 mx-auto flex h-[44px] w-full max-w-[430px] items-center justify-between">
-      <div className="flex w-full flex-row items-center justify-between px-4 py-2">
+    <header className="bg-beige3 fixed top-0 right-0 left-0 z-50 mx-auto flex h-14 w-full max-w-[430px] items-center justify-between">
+      <div className="flex w-full flex-row items-center justify-between px-4 py-3">
         {/* 왼쪽: 메뉴(햄버거) 아이콘 */}
         <Menu className="h-7 w-7 cursor-pointer text-green-700" onClick={onMenuClick} />
 
