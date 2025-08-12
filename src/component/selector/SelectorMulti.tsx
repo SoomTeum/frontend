@@ -50,14 +50,14 @@ const SelectorMulti = ({
   }, [selectedMain, selectedSubs, onSelect]);
 
   return (
-    <div className="flex h-[400px] w-full overflow-hidden">
+    <div className="border-green3 flex h-[400px] w-full overflow-hidden border-t">
       {/*대분류*/}
-      <div className={`flex w-1/4 flex-col items-stretch py-2 ${leftBase}`}>
+      <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
         {Object.keys(dataMap).map((main) => (
           <button
             key={main}
             onClick={() => changeMain(main)}
-            className={`text-caption4 mx-1 mb-1 rounded-l px-2 py-2 text-center ${
+            className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-1 text-center ${
               selectedMain === main ? leftActive : leftItem
             }`}
           >
@@ -67,7 +67,7 @@ const SelectorMulti = ({
       </div>
 
       {/*소분류*/}
-      <div className="flex w-1/2 flex-col py-2">
+      <div className="min-h-col scrollbar-hidden flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
         {dataMap[selectedMain]?.length ? (
           dataMap[selectedMain].map((sub) => {
             const active = selectedSubs.includes(sub);
@@ -75,7 +75,7 @@ const SelectorMulti = ({
               <button
                 key={sub}
                 onClick={() => toggleSub(sub)}
-                className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-2 text-center ${
+                className={`text-caption4 mx-2 mb-1 ml-5 w-1/2 rounded-l px-2 py-1 text-center ${
                   active ? rightActive : rightItem
                 }`}
               >

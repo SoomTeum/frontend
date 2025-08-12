@@ -273,4 +273,13 @@
   .rounded-full {
     border-radius: var(--radius-full); /*99px*/
   }
+
+  /* 스크롤바를 숨기는 유틸리티 클래스 */
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
