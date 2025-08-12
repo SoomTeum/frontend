@@ -59,7 +59,7 @@ const ThemeSelcetPage = () => {
             disabled={!subs.length}
             onClick={done}
           >
-            AI 탐색 시작하기
+            완료
           </Button>
         </div>
       </div>
