@@ -8,9 +8,11 @@ import { Button } from '@/component';
 
 const ThemeSelcetPage = () => {
   const navigate = useNavigate();
+  const saved = useAIExploreStore((s) => s.theme);
   const setTheme = useAIExploreStore((s) => s.setTheme);
-  const [main, setMain] = useState(Object.keys(activityMap)[0] ?? '자연');
-  const [subs, setSubs] = useState<string[]>([]);
+  const firstMain = Object.keys(activityMap)[0] ?? '자연';
+  const [main, setMain] = useState<string>(saved?.main ?? firstMain);
+  const [subs, setSubs] = useState<string[]>(saved?.subs ?? []);
 
   const done = () => {
     setTheme({ main, subs });
@@ -34,6 +36,7 @@ const ThemeSelcetPage = () => {
         <SelectorMulti
           dataMap={activityMap}
           initialMain={main}
+          initialSubs={subs}
           colorScheme={{
             leftBase: 'bg-green3-light text-caption4',
             leftItem: 'text-black text-caption4',

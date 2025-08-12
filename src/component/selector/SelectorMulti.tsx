@@ -46,6 +46,14 @@ const SelectorMulti = ({
   };
 
   useEffect(() => {
+    setSelectedMain(initialMain);
+  }, [initialMain]);
+
+  useEffect(() => {
+    setSelectedSubs(initialSubs ?? []);
+  }, [initialSubs]);
+
+  useEffect(() => {
     onSelect?.(selectedMain, selectedSubs);
   }, [selectedMain, selectedSubs, onSelect]);
 
