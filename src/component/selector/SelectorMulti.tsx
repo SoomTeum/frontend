@@ -8,11 +8,11 @@ export type SelectorMultiProps = {
 
   // 색상 커스터마이징
   colorScheme?: {
-    leftBase?: string; //좌측 배경
-    leftItem?: string; //좌측 기본 텍스트
-    leftActive?: string; //좌측 활성 상태
-    rightItem?: string; //우측 기본 텍스트
-    rightActive?: string; //우측 활성 상태
+    leftBase?: string;
+    leftItem?: string;
+    leftActive?: string;
+    rightItem?: string;
+    rightActive?: string;
   };
 };
 
@@ -50,7 +50,7 @@ const SelectorMulti = ({
   }, [selectedMain, selectedSubs, onSelect]);
 
   return (
-    <div className="border-green3 flex h-[400px] w-full overflow-hidden border-t">
+    <div className="border-green3 flex h-80 w-full overflow-hidden border-t">
       {/*대분류*/}
       <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
         {Object.keys(dataMap).map((main) => (
@@ -67,7 +67,7 @@ const SelectorMulti = ({
       </div>
 
       {/*소분류*/}
-      <div className="min-h-col scrollbar-hidden flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
+      <div className="min-h-col flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
         {dataMap[selectedMain]?.length ? (
           dataMap[selectedMain].map((sub) => {
             const active = selectedSubs.includes(sub);

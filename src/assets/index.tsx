@@ -5,5 +5,15 @@ import ImageIcon from '@/assets/icons/image-icon.svg?react';
 import AlertIcon from '@/assets/icons/alert_Icon.svg?react';
 import SendIcon from '@/assets/icons/send.svg?react';
 import ExploreIcon from '@/assets/icons/explore.svg?react';
+import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 
-export { InfoIcon, HeartFillIcon, CancelIcon, ImageIcon, AlertIcon, SendIcon, ExploreIcon };
+export {
+  InfoIcon,
+  HeartFillIcon,
+  CancelIcon,
+  ImageIcon,
+  AlertIcon,
+  SendIcon,
+  ExploreIcon,
+  ArrowLeft,
+};

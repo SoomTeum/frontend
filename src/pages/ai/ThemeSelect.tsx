@@ -1,42 +1,64 @@
 import SelectorMulti from '@/component/selector/SelectorMulti';
-const DATA = {
-  자연: [
-    '역사관광지',
-    '휴양관광지',
-    '체험관광지',
-    '산업관광지',
-    '건축/조형물',
-    '문화시설',
-    '축제',
-    '공연/행사',
-    '이렇게',
-    '늘어나면',
-    '어떻게',
-    '되는지',
-  ],
-  인문: [],
-  스포츠: [],
-  쇼핑: [],
-};
+import { activityMap } from '@/constants/ActivityMap';
+import { ArrowLeft } from '@/assets';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAIExploreStore } from '@/stores/useAIExploreStore';
+import { Button } from '@/component';
 
 const ThemeSelcetPage = () => {
+  const navigate = useNavigate();
+  const setTheme = useAIExploreStore((s) => s.setTheme);
+  const [main, setMain] = useState(Object.keys(activityMap)[0] ?? '자연');
+  const [subs, setSubs] = useState<string[]>([]);
+
+  const done = () => {
+    setTheme({ main, subs });
+    navigate('/explore');
+  };
+
   return (
-    <div className="px-10">
-      <div className="px-4 pt-3">
-        <h2 className="text-title3 text-green1 py-2 text-center">테마</h2>
+    <div className="min-h-screen">
+      <div className="bg-green3-light relative h-10 w-full">
+        <button onClick={() => navigate(-1)} className="absolute top-1/2 -translate-y-1/2 pl-4">
+          <ArrowLeft className="w-4" />
+        </button>
+        <span className="text-caption3 text-green1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          AI 맞춤 여행지 탐색 테마
+        </span>
       </div>
-      <SelectorMulti
-        dataMap={DATA}
-        initialMain="자연"
-        colorScheme={{
-          leftBase: 'bg-green3-light text-caption4',
-          leftItem: 'text-black text-caption4',
-          leftActive: 'bg-green0',
-          rightItem: 'text-green1',
-          rightActive: 'outline outline-1 outline-[var(--color-green3)]',
-        }}
-        onSelect={(main, subs) => console.log(main, subs)}
-      />
+      <div className="px-10">
+        <div className="border-green3 mt-5 border-t">
+          <h2 className="text-title4 text-green1 py-2 text-center">테마</h2>
+        </div>
+        <SelectorMulti
+          dataMap={activityMap}
+          initialMain={main}
+          colorScheme={{
+            leftBase: 'bg-green3-light text-caption4',
+            leftItem: 'text-black text-caption4',
+            leftActive: 'bg-green0',
+            rightItem: 'text-black',
+            rightActive: 'outline outline-1 outline-[var(--color-green3)]',
+          }}
+          onSelect={(m, s) => {
+            setMain(m);
+            setSubs(s);
+          }}
+        />
+
+        <div className="fixed right-0 bottom-[10px] left-0 z-10 mx-auto w-full max-w-[430px] px-10 pt-4 pb-6">
+          <Button
+            variant="lg"
+            color="green3"
+            className="w-full"
+            disabled={!subs.length}
+            onClick={done}
+          >
+            AI 탐색 시작하기
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

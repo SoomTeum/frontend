@@ -1,41 +1,24 @@
 import { useMemo, useState } from 'react';
-import { createSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { LabeledInput, Button, Header, Sidebar } from '@/component';
-
-type ThemeOption = { id: string; label: string };
+import { useAIExploreStore } from '@/stores/useAIExploreStore';
 
 export default function AiExplorePage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const selectedThemeFromState = (location.state as { selectedTheme?: ThemeOption } | null)
-    ?.selectedTheme;
+  const address = useAIExploreStore((s) => s.address);
+  const theme = useAIExploreStore((s) => s.theme);
+  const setAddress = useAIExploreStore((s) => s.setAddress);
 
-  const [address, setAddress] = useState('');
-  const [theme, setTheme] = useState<ThemeOption | null>(selectedThemeFromState ?? null);
-
-  // 테마 선택 페이지에서 돌아올 때 반영
-  if (!theme && selectedThemeFromState) setTheme(selectedThemeFromState);
-
-  const isReady = useMemo(() => !!address && !!theme, [address, theme]);
+  const isReady = useMemo(() => !!address && !!theme?.subs.length, [address, theme]);
 
   const fillSampleAddress = () => {
     setAddress('경기도 성남시 수정구 성남대로 1342 이렇게 길어지면'); // UI 확인용입니당... 추후 API 연결
   };
 
-  const goThemeSelect = () =>
-    navigate({
-      pathname: '/explore/theme',
-      search: theme ? createSearchParams({ selected: theme.id }).toString() : '',
-    });
+  const goThemeSelect = () => navigate('/explore/theme'); // ← 쿼리/state 없이 이동
 
-  const startSearch = () =>
-    navigate({
-      pathname: '/explore/result',
-      search: createSearchParams({
-        address,
-        themeId: theme!.id,
-      }).toString(),
-    });
+  const startSearch = () => navigate('/explore/result'); // ← 결과 페이지에서 AI 호출
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleMenuClick = () => {
@@ -68,7 +51,7 @@ export default function AiExplorePage() {
 
             <LabeledInput
               label="테마"
-              value={theme?.label}
+              value={theme?.subs?.length ? theme.subs.join(', ') : undefined}
               placeholder="테마 선택"
               onClick={goThemeSelect}
             />
