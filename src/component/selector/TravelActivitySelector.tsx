@@ -3,22 +3,22 @@ import { activityMap } from '@/constants/ActivityMap';
 
 const TravelActivitySelector = () => {
   return (
-    <div className="min-h-screen px-5 pt-3">
-      <SelectorMulti
-        dataMap={activityMap}
-        initialMain="자연"
-        colorScheme={{
-          leftBase: 'bg-red2 text-black text-caption4',
-          leftItem: 'text-black text-caption4',
-          leftActive: 'bg-pink text-black text-caption4',
-          rightItem: 'text-black',
-          rightActive: 'bg-red2 text-black text-caption4',
-          borderColor: 'border-red2',
-        }}
-        onSelect={(main, subs) => {
-          console.log('선택된:', main, subs);
-        }}
-      />
+
+    <div className="h-[500px] w-full max-w-xs"> 
+      <Selector
+  dataMap={activityMap}
+  initialMain="자연"
+  colorScheme={{
+    base: 'bg-rose-300',                        
+    active: 'bg-rose-100 text-rose-800',         
+    text: 'text-black',                        
+    rightActive: 'bg-rose-300 text-black',    
+  }}
+  onSelect={(category, activity) => {
+    console.log('선택된:', category, activity);
+  }}
+/>
+
     </div>
   );
 };

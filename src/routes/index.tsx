@@ -1,12 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/home/Homepage';
+import ButtonTestPage from '@/examples/ButtonTest';
 import MyTravelList from '@/pages/home/MyTravelList';
-import MyPage from '@/pages/home/MyPage';
+import MyPage from '@/pages/home/MyPage'; 
 import RegionSelector from '@/component/selector/RegionSelector';
-import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
+import TravelActivitySelector from '@/component/selector/TravelActivitySelector'; 
 import CardTestPage from '@/examples/CardTest';
-import AlertComponent from '@/examples/AlertTest';
-
 import Filter from '@/pages/explore/Filter'; 
 export const router = createBrowserRouter([
   {
@@ -16,28 +15,17 @@ export const router = createBrowserRouter([
 
   //테스트
   {
-    path: '/alert',
-    element: <AlertComponent />,
+    path: '/button',
+    element: <ButtonTestPage />,
   },
   {
+
     path: '/card',
     element: <CardTestPage />,
+
   },
-  {
-    path: '/explore',
-    children: [
-      {
-        index: true,
-        element: <AiExploreMain />,
-      },
-      {
-        path: 'theme',
-        element: <ThemeSelcetPage />,
-      },
-    ],
-  },
-  {
-    path: '/mytravel',
+    {
+    path: '/mytravel', 
     element: <MyTravelList />,
   },
   {
@@ -53,11 +41,7 @@ export const router = createBrowserRouter([
     element: <TravelActivitySelector />,
   },
   {
-    path: '/card',
-    element: <CardTestPage />,
+    path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
+    element: <Filter />,
   },
-  {
-      path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
-      element: <Filter />,
-    },
 ]);

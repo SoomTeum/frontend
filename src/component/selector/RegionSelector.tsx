@@ -9,8 +9,8 @@ const RegionSelector = () => {
   colorScheme={{
     base: 'bg-orange-300',                        
     active: 'bg-orange-100 text-orange-800',       
-    text: 'text-white',                            
-    rightActive: 'bg-orange-300 text-white',        
+    text: 'text-black',                            
+    rightActive: 'bg-orange-300 text-black',        
   }}
   onSelect={(region, gu) => {
     console.log(region, gu);
