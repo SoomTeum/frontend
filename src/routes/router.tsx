@@ -6,8 +6,9 @@ import RegionSelector from '@/component/selector/RegionSelector';
 import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
 import CardTestPage from '@/examples/CardTest';
 import AlertComponent from '@/examples/AlertTest';
-
-import Filter from '@/pages/explore/Filter'; 
+import AiExploreMain from '@/pages/ai/MainAI';
+import ThemeSelcetPage from '@/pages/ai/ThemeSelect';
+import Filter from '@/pages/explore/Filter';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
     element: <CardTestPage />,
   },
   {
-      path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
-      element: <Filter />,
-    },
+    path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
+    element: <Filter />,
+  },
 ]);
