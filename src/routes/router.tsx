@@ -6,6 +6,7 @@ import RegionSelector from '@/component/selector/RegionSelector';
 import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
 import CardTestPage from '@/examples/CardTest';
 import AlertComponent from '@/examples/AlertTest';
+
 import Filter from '@/pages/explore/Filter'; 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,19 @@ export const router = createBrowserRouter([
   {
     path: '/card',
     element: <CardTestPage />,
+  },
+  {
+    path: '/explore',
+    children: [
+      {
+        index: true,
+        element: <AiExploreMain />,
+      },
+      {
+        path: 'theme',
+        element: <ThemeSelcetPage />,
+      },
+    ],
   },
   {
     path: '/mytravel',

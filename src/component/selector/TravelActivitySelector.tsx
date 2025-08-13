@@ -1,8 +1,9 @@
-import Selector from '@/component/selector/Selector';
+import SelectorMulti from './SelectorMulti';
 import { activityMap } from '@/constants/ActivityMap';
 
 const TravelActivitySelector = () => {
   return (
+
     <div className="h-[500px] w-full max-w-xs"> 
       <Selector
   dataMap={activityMap}
@@ -17,6 +18,7 @@ const TravelActivitySelector = () => {
     console.log('선택된:', category, activity);
   }}
 />
+
     </div>
   );
 };
