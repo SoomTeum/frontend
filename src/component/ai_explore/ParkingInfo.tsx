@@ -25,13 +25,13 @@ const ParkingTable = memo(function ParkingTable({ parkings, className }: Parking
         <div className="table w-full table-fixed">
           <div className="table-header-group">
             <div className="table-row">
-              <div className="table-cell w-[50%] py-2 text-left">
+              <div className="table-cell w-[50%] py-1 text-left">
                 <span className="text-title4 text-black">근처 공영주차장</span>
               </div>
-              <div className="table-cell w-[20%] py-2 text-center">
+              <div className="table-cell w-[20%] py-1 text-center">
                 <span className="text-body3 text-black">총 주차 대수</span>
               </div>
-              <div className="table-cell w-[20%] py-2 text-center">
+              <div className="table-cell w-[20%] py-1 text-center">
                 <span className="text-body3 text-black">가능 주차 대수</span>
               </div>
             </div>
@@ -42,17 +42,17 @@ const ParkingTable = memo(function ParkingTable({ parkings, className }: Parking
               const percent = toPercent(p.available, p.total);
               return (
                 <div key={p.name} className="table-row">
-                  <div className="table-cell py-2 align-middle">
+                  <div className="table-cell py-1 align-middle">
                     <Badge type="parkingTag" size="lg">
                       <span className="truncate">{p.name}</span>
                     </Badge>
                   </div>
-                  <div className="table-cell py-2 text-center align-middle">
+                  <div className="table-cell py-1 text-center align-middle">
                     <Badge type="parkingCount" size="lg" percent={percent}>
                       {String(p.total)}
                     </Badge>
                   </div>
-                  <div className="table-cell py-2 text-center align-middle">
+                  <div className="table-cell py-1 text-center align-middle">
                     <Badge type="parkingCount" size="lg" percent={percent}>
                       {String(p.available)}
                     </Badge>
