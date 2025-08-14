@@ -15,9 +15,9 @@ export default function AiExplorePage() {
     setAddress('경기도 성남시 수정구 성남대로 1342 이렇게 길어지면'); // UI 확인용입니당... 추후 API 연결
   };
 
-  const goThemeSelect = () => navigate('/explore/theme'); // ← 쿼리/state 없이 이동
+  const goThemeSelect = () => navigate('/explore/theme');
 
-  const startSearch = () => navigate('/explore/result'); // ← 결과 페이지에서 AI 호출
+  const startSearch = () => navigate('/explore/result');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
