@@ -3,7 +3,7 @@ import { ArrowLeft, EnergyIcon, ImageIcon } from '@/assets';
 import type { PlaceDetail } from '@/types/Detail';
 import { mockPlaceDetails } from '@/__mocks/placeDetail.mock';
 import { useEffect, useMemo, useState } from 'react';
-import { Badge, Image } from '@/component';
+import { Badge, Image, ParkingTable } from '@/component';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
@@ -92,9 +92,7 @@ const TravelSpotDetail = () => {
         )}
         {/*주차장 정보*/}
         {data.extra?.parkings && (
-          <div className="mt-9 px-1">
-            <div className="text-title4">근처 공영주차장</div>
-          </div>
+          <ParkingTable parkings={data.extra.parkings} className="mt-9 px-1" />
         )}
       </div>
     </div>
