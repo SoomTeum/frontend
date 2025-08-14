@@ -79,7 +79,7 @@ export const mockPlaceDetails: PlaceDetail[] = [
     description:
       '경기도 성남시 수정구(글로벌 캠퍼스)와 인천광역시 연수구(메디컬 캠퍼스)에 위치한 4년제 사립 종합대학교이다.',
     liked: false,
-    likeCount: 5,
+    likeCount: 1002,
     bookmarked: false,
   },
 ];

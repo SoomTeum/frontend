@@ -1,5 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, EnergyIcon, ImageIcon } from '@/assets';
+import {
+  ArrowLeft,
+  EnergyIcon,
+  ImageIcon,
+  StarFill,
+  StarLine,
+  HeartFill,
+  HeartOutline,
+} from '@/assets';
 import type { PlaceDetail } from '@/types/Detail';
 import { mockPlaceDetails } from '@/__mocks/placeDetail.mock';
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +16,7 @@ import { Badge, Image, ParkingTable } from '@/component';
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
   const { contentId = '' } = useParams<{ contentId: string }>();
+  const formatCount = (n: number, cap = 999) => (n > cap ? `${cap}+` : `${n}`);
 
   //추후 API로 대체
   const data = useMemo<PlaceDetail | null>(
@@ -19,6 +28,15 @@ const TravelSpotDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
 
+  const handleToggleLike = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setLikeCount((c) => (liked ? Math.max(0, c - 1) : c + 1));
+    setLiked((prev) => !prev);
+  };
+  const handleToggleBookmark = () => {
+    setBookmarked((prev) => !prev);
+  };
   useEffect(() => {
     if (!data) return;
     setLiked(data.liked);
@@ -57,9 +75,24 @@ const TravelSpotDetail = () => {
               <div className="text-caption3 line-clamp-2 break-words">{data.name}</div>
               <div className="text-body3 mt-6 line-clamp-2">{data.address}</div>
             </div>
-          </div>
 
-          {/*좋아요, 저장*/}
+            {/*좋아요, 저장*/}
+            <div className="mt-8 flex items-center gap-1">
+              <button onClick={handleToggleLike} className="transition-transform">
+                {liked ? <HeartFill /> : <HeartOutline />}
+              </button>
+              <span
+                className="text-caption4 ml-0.5 w-[4ch] leading-none whitespace-nowrap tabular-nums"
+                aria-label={`좋아요 ${likeCount}개`}
+              >
+                {formatCount(likeCount)}
+              </span>
+
+              <button onClick={handleToggleBookmark} className="ml-5 transition-transform">
+                {bookmarked ? <StarFill /> : <StarLine />}
+              </button>
+            </div>
+          </div>
         </div>
         {/*태그 뱃지 영역*/}
         <div className="mt-3 flex gap-3">

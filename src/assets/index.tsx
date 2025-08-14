@@ -7,10 +7,14 @@ import SendIcon from '@/assets/icons/send.svg?react';
 import ExploreIcon from '@/assets/icons/explore.svg?react';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
 import EnergyIcon from '@/assets/icons/energy_icon.svg?react';
+import HeartFill from '@/assets/icons/heart_filled.svg?react';
+import HeartOutline from '@/assets/icons/heart_outlined.svg?react';
+import StarFill from '@/assets/icons/star_filled.svg?react';
+import StarLine from '@/assets/icons/star_outlined.svg?react';
 
 export {
   InfoIcon,
-  HeartFillIcon,
+  HeartFillIcon, //sm
   CancelIcon,
   ImageIcon,
   AlertIcon,
@@ -18,4 +22,8 @@ export {
   ExploreIcon,
   ArrowLeft,
   EnergyIcon,
+  HeartFill, //lg
+  HeartOutline,
+  StarFill,
+  StarLine,
 };
