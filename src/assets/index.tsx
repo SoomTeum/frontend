@@ -6,6 +6,7 @@ import AlertIcon from '@/assets/icons/alert_Icon.svg?react';
 import SendIcon from '@/assets/icons/send.svg?react';
 import ExploreIcon from '@/assets/icons/explore.svg?react';
 import ArrowLeft from '@/assets/icons/arrow_left.svg?react';
+import EnergyIcon from '@/assets/icons/energy_icon.svg?react';
 
 export {
   InfoIcon,
@@ -16,4 +17,5 @@ export {
   SendIcon,
   ExploreIcon,
   ArrowLeft,
+  EnergyIcon,
 };

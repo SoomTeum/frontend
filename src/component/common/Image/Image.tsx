@@ -18,6 +18,7 @@ const Image = ({ src, alt = '', className }: ImageProps) => {
     <img
       src={src}
       alt={alt}
+      loading="lazy"
       onLoad={() => setIsLoading(false)}
       onError={() => setHasError(true)}
       className={cn('object-cover', isLoading ? 'opacity-70 blur-sm' : '', className)}
