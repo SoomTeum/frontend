@@ -50,7 +50,7 @@ const TravelSpotDetail = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-green3-light relative h-10 w-full">
+      <div className="bg-green3-light relative sticky top-0 z-50 h-10 w-full shadow-sm">
         <button onClick={() => navigate(-1)} className="absolute top-1/2 -translate-y-1/2 pl-4">
           <ArrowLeft className="w-4" />
         </button>
