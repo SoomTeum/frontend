@@ -32,7 +32,7 @@ const ThemeSelcetPage = () => {
           AI 맞춤 여행지 탐색 테마
         </span>
       </div>
-      <div className="px-10">
+      <div className="px-9">
         <div className="border-green3 mt-5 border-t">
           <h2 className="text-title4 text-green1 py-2 text-center">테마</h2>
         </div>
