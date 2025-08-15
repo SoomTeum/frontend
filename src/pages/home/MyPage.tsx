@@ -18,8 +18,7 @@ const MyPage = () => {
     <div className="flex min-h-screen flex-col bg-[#FFFDF5]">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />{' '}
-      {/* ✅ position="left" 전달 */}
-      {/* 사용자 정보 */}
+    
       <div className="mt-[3.5rem] bg-green-100 px-4 py-4 text-center text-sm text-green-900">
         <p className="font-semibold">안녕하세요 여행자님!</p>
         <p className="text-green-900">breathtrip@naver.com</p>
@@ -27,7 +26,6 @@ const MyPage = () => {
           로그아웃
         </button>
       </div>
-      {/* 개인정보 입력 */}
       <div className="mt-8 flex flex-col gap-6 px-6 text-gray-700">
         <div>
           <label htmlFor="email" className="mb-1 block text-sm font-semibold">
@@ -56,7 +54,6 @@ const MyPage = () => {
 
         <button className="mt-2 self-start text-sm text-red-600">회원 탈퇴</button>
       </div>
-      {/* 플로팅 유저 아이콘 */}
       <div className="fixed right-4 bottom-4 rounded-full bg-white p-2 shadow-lg">
         <User className="text-blue-600" size={28} />
       </div>
