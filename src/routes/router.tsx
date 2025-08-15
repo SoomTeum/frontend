@@ -9,6 +9,7 @@ import AlertComponent from '@/examples/AlertTest';
 import AiExploreMain from '@/pages/ai/MainAI';
 import ThemeSelcetPage from '@/pages/ai/ThemeSelect';
 import Filter from '@/pages/explore/Filter';
+import TravelSpotDetail from '@/pages/ai/TravelSpotDetail';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
         element: <ThemeSelcetPage />,
       },
     ],
+  },
+  //여행지 상세페이지
+  {
+    path: '/place/:contentId',
+    element: <TravelSpotDetail />,
   },
   {
     path: '/mytravel',

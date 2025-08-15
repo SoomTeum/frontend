@@ -1,7 +1,7 @@
 export const BADGE_BASE = 'items-center justify-center inline-flex w-fit text-caption2';
 
 export const BADGE_SIZE = {
-  sm: 'px-[10px] py-[2px]',
+  sm: 'px-[11px] py-[3px]',
   lg: 'px-4 py-1',
   xl: 'px-5 py-1',
 } as const;

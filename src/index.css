@@ -132,7 +132,7 @@
   .text-body3 {
     font-size: var(--text-size-2);
     font-weight: var(--font-weight-normal);
-    line-height: var(--leading-1);
+    line-height: var(--leading-2);
     font-family: var(--font-default);
   }
   .text-caption1 {
