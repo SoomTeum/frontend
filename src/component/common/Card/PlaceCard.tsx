@@ -9,6 +9,7 @@ type PlaceCardProps = {
   likeCount: number;
   showRemoveButton?: boolean;
   onRemove?: () => void;
+  onClick?: () => void;
 };
 
 export default function PlaceCard({
@@ -19,9 +20,13 @@ export default function PlaceCard({
   likeCount,
   showRemoveButton,
   onRemove,
+  onClick,
 }: PlaceCardProps) {
   return (
-    <div className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95">
+    <div
+      className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95"
+      onClick={onClick}
+    >
       {/*썸네일*/}
       <div className="bg-gray1 flex aspect-square w-15 flex-shrink-0 items-center justify-center overflow-hidden rounded-[5px]">
         {imgUrl ? (

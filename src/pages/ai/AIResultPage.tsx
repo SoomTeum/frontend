@@ -1,6 +1,7 @@
 import { Header, PlaceCard, Sidebar } from '@/component';
 import { useState } from 'react';
 import { mockAICard } from '@/__mocks/AICard.mock';
+import { useNavigate } from 'react-router-dom';
 
 function getRankBadgeClass(n: number) {
   if (n === 1) return 'bg-red1 text-black';
@@ -10,6 +11,7 @@ function getRankBadgeClass(n: number) {
 }
 
 export default function AIResultPage() {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleMenuClick = () => {
@@ -49,6 +51,7 @@ export default function AIResultPage() {
                       theme={it.themeTag}
                       quietLevel={it.serenity}
                       likeCount={it.likeCount}
+                      onClick={() => navigate(`/place/${it.id}`)}
                     />
                   </div>
                 </div>
