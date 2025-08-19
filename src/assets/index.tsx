@@ -11,6 +11,8 @@ import HeartFill from '@/assets/icons/heart_filled.svg?react';
 import HeartOutline from '@/assets/icons/heart_outlined.svg?react';
 import StarFill from '@/assets/icons/star_filled.svg?react';
 import StarLine from '@/assets/icons/star_outlined.svg?react';
+import AIComment from '@/assets/icons/ai_comment.svg?react';
+import AIImage from '@/assets/icons/ai_image.svg?react';
 
 export {
   InfoIcon,
@@ -26,4 +28,6 @@ export {
   HeartOutline,
   StarFill,
   StarLine,
+  AIComment,
+  AIImage,
 };

@@ -10,6 +10,7 @@ import Sidebar from './SideBar';
 import SelectorMulti from './selector/SelectorMulti';
 import Selector from './selector/Selector';
 import ParkingTable from './ai_explore/ParkingInfo';
+import Loader from './common/Loading/Loading';
 
 export {
   Button,
@@ -23,4 +24,5 @@ export {
   Selector,
   SelectorMulti,
   ParkingTable,
+  Loader,
 };

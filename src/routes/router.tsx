@@ -10,6 +10,7 @@ import AiExploreMain from '@/pages/ai/MainAI';
 import ThemeSelcetPage from '@/pages/ai/ThemeSelect';
 import Filter from '@/pages/explore/Filter';
 import TravelSpotDetail from '@/pages/ai/TravelSpotDetail';
+import AILoadingPage from '@/pages/ai/AILoadingPage';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: 'theme',
         element: <ThemeSelcetPage />,
+      },
+      {
+        path: 'loading',
+        element: <AILoadingPage />,
       },
     ],
   },
