@@ -209,6 +209,9 @@
   .bg-green4 {
     background-color: var(--color-green4);
   }
+  .bg-red1 {
+    background-color: var(--color-red1);
+  }
   .bg-red2 {
     background-color: var(--color-red2);
   }

@@ -1,4 +1,4 @@
-export const BADGE_BASE = 'items-center justify-center inline-flex w-fit text-caption2';
+export const BADGE_BASE = 'items-center justify-center inline-flex w-fit text-caption2 shrink-0';
 
 export const BADGE_SIZE = {
   sm: 'px-[11px] py-[3px]',

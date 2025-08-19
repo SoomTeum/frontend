@@ -38,7 +38,7 @@ export default function PlaceCard({
         </div>
 
         {/* 뱃지 2개 */}
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex shrink-0 gap-3">
           <Badge type="default" color="green" count={quietLevel}>
             한적함
           </Badge>
