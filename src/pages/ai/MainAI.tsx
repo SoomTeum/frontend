@@ -2,22 +2,28 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LabeledInput, Button, Header, Sidebar } from '@/component';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
+import DistanceSlider from '@/component/ai_explore/DistanceSlider';
 
 export default function AiExplorePage() {
   const navigate = useNavigate();
   const address = useAIExploreStore((s) => s.address);
   const theme = useAIExploreStore((s) => s.theme);
+  const distanceKm = useAIExploreStore((s) => s.distanceKm);
   const setAddress = useAIExploreStore((s) => s.setAddress);
+  const setDistanceKm = useAIExploreStore((s) => s.setDistanceKm);
 
-  const isReady = useMemo(() => !!address && !!theme?.subs.length, [address, theme]);
+  const isReady = useMemo(
+    () => !!address && !!theme?.subs.length && distanceKm !== null,
+    [address, theme, distanceKm],
+  );
 
   const fillSampleAddress = () => {
     setAddress('경기도 성남시 수정구 성남대로 1342 이렇게 길어지면'); // UI 확인용입니당... 추후 API 연결
   };
 
-  const goThemeSelect = () => navigate('/explore/theme'); // ← 쿼리/state 없이 이동
+  const goThemeSelect = () => navigate('/explore/theme');
 
-  const startSearch = () => navigate('/explore/result'); // ← 결과 페이지에서 AI 호출
+  const startSearch = () => navigate('/explore/result');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -55,6 +61,8 @@ export default function AiExplorePage() {
               placeholder="테마 선택"
               onClick={goThemeSelect}
             />
+
+            <DistanceSlider value={distanceKm} onChange={setDistanceKm} />
 
             <div className="fixed right-0 bottom-[10px] left-0 z-10 mx-auto w-full max-w-[430px] px-10 pt-4 pb-6">
               <Button

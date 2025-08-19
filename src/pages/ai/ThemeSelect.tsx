@@ -16,13 +16,16 @@ const ThemeSelcetPage = () => {
 
   const done = () => {
     setTheme({ main, subs });
-    navigate('/explore');
+    navigate('/explore', { replace: true });
   };
 
   return (
     <div className="min-h-screen">
       <div className="bg-green3-light relative h-10 w-full">
-        <button onClick={() => navigate(-1)} className="absolute top-1/2 -translate-y-1/2 pl-4">
+        <button
+          onClick={() => navigate('/explore', { replace: true })}
+          className="absolute top-1/2 -translate-y-1/2 pl-4"
+        >
           <ArrowLeft className="w-4" />
         </button>
         <span className="text-caption3 text-green1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
