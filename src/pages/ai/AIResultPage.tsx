@@ -1,25 +1,6 @@
 import { Header, PlaceCard, Sidebar } from '@/component';
 import { useState } from 'react';
-
-type Item = {
-  id: string | number;
-  name: string;
-  serenity: number;
-  themeTag: string;
-  likeCount: number;
-  thumbnail?: string;
-}; //목데이터용 임시타입...
-
-const MOCK_ITEMS: Item[] = [
-  { id: 1, name: '행궁동', serenity: 2, themeTag: '자연관광지', likeCount: 3 },
-  { id: 2, name: '문막천 산책길', serenity: 3, themeTag: '산책', likeCount: 5 },
-  { id: 3, name: '대부도 갯벌길', serenity: 4, themeTag: '자연관광지', likeCount: 8 },
-  { id: 4, name: '수리산 둘레길', serenity: 3, themeTag: '산책', likeCount: 2 },
-  { id: 5, name: '물향기수목원', serenity: 5, themeTag: '자연관광지', likeCount: 11 },
-  { id: 6, name: '물향기수목원', serenity: 5, themeTag: '자연관광지', likeCount: 11 },
-  { id: 7, name: '물향기수목원', serenity: 5, themeTag: '자연관광지', likeCount: 11 },
-  { id: 8, name: '물향기수목원', serenity: 5, themeTag: '자연관광지', likeCount: 11 },
-];
+import { mockAICard } from '@/__mocks/AICard.mock';
 
 function getRankBadgeClass(n: number) {
   if (n === 1) return 'bg-red1 text-black';
@@ -49,7 +30,7 @@ export default function AIResultPage() {
           AI 맞춤 여행지 탐색
         </div>
         <ul className="w-full space-y-4 py-5 pr-8 pl-5">
-          {MOCK_ITEMS.map((it, idx) => {
+          {mockAICard.map((it, idx) => {
             const rank = idx + 1;
             return (
               <li key={it.id}>

@@ -57,9 +57,11 @@ export default function PlaceCard({
           <div className="h-3 w-3" />
         )}
         {/* 좋아요 수 */}
-        <div className="text-caption5 mt-6 ml-6 flex items-center justify-center gap-1">
+        <div className="text-caption5 mt-6 ml-5 flex items-center justify-center gap-[3px]">
           <HeartFillIcon className="h-3 w-3" />
-          <span>{likeCount}</span>
+          <span className="w-[3ch] leading-none whitespace-nowrap tabular-nums">
+            {likeCount > 99 ? '99+' : likeCount}
+          </span>
         </div>
       </div>
     </div>
