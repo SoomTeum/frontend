@@ -9,6 +9,7 @@ type PlaceCardProps = {
   likeCount: number;
   showRemoveButton?: boolean;
   onRemove?: () => void;
+  onClick?: () => void;
 };
 
 export default function PlaceCard({
@@ -19,9 +20,13 @@ export default function PlaceCard({
   likeCount,
   showRemoveButton,
   onRemove,
+  onClick,
 }: PlaceCardProps) {
   return (
-    <div className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95">
+    <div
+      className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95"
+      onClick={onClick}
+    >
       {/*썸네일*/}
       <div className="bg-gray1 flex aspect-square w-15 flex-shrink-0 items-center justify-center overflow-hidden rounded-[5px]">
         {imgUrl ? (
@@ -38,7 +43,7 @@ export default function PlaceCard({
         </div>
 
         {/* 뱃지 2개 */}
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex shrink-0 gap-3">
           <Badge type="default" color="green" count={quietLevel}>
             한적함
           </Badge>
@@ -57,9 +62,11 @@ export default function PlaceCard({
           <div className="h-3 w-3" />
         )}
         {/* 좋아요 수 */}
-        <div className="text-caption5 mt-6 ml-6 flex items-center justify-center gap-1">
+        <div className="text-caption5 mt-6 ml-5 flex items-center justify-center gap-[3px]">
           <HeartFillIcon className="h-3 w-3" />
-          <span>{likeCount}</span>
+          <span className="w-[3ch] leading-none whitespace-nowrap tabular-nums">
+            {likeCount > 99 ? '99+' : likeCount}
+          </span>
         </div>
       </div>
     </div>
