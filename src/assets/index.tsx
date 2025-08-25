@@ -13,6 +13,7 @@ import StarFill from '@/assets/icons/star_filled.svg?react';
 import StarLine from '@/assets/icons/star_outlined.svg?react';
 import AIComment from '@/assets/icons/ai_comment.svg?react';
 import AIImage from '@/assets/icons/ai_image.svg?react';
+import HomeBanner from '@/assets/icons/home_banner.jpg';
 
 export {
   InfoIcon,
@@ -30,4 +31,5 @@ export {
   StarLine,
   AIComment,
   AIImage,
+  HomeBanner,
 };

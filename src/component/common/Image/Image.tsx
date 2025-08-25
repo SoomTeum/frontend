@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 type ImageProps = {
   src?: string;
   alt?: string;
-  className: string;
+  className?: string;
 };
 
 const Image = ({ src, alt = '', className }: ImageProps) => {
