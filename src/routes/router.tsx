@@ -12,6 +12,7 @@ import Filter from '@/pages/explore/Filter';
 import TravelSpotDetail from '@/pages/ai/TravelSpotDetail';
 import AILoadingPage from '@/pages/ai/AILoadingPage';
 import AIResultPage from '@/pages/ai/AIResultPage';
+import LoginPage from '@/pages/home/Login';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -24,8 +25,8 @@ export const router = createBrowserRouter([
     element: <AlertComponent />,
   },
   {
-    path: '/card',
-    element: <CardTestPage />,
+    path: '/login',
+    element: <LoginPage />,
   },
   {
     path: '/explore',
