@@ -24,7 +24,7 @@ export default function LoginPage() {
   }, []);
   return (
     <div className="min-h-screen">
-      <div className="mx-auto w-full px-6 pt-16 pb-12">
+      <div className="mx-auto w-full px-8 pt-16 pb-12">
         <div className="text-green1 text-title6">
           환영합니다.
           <br /> 여행자님!
