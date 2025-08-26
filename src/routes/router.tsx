@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: 'api/auth/kakao/callback',
+    path: '/api/auth/kakao/callback',
     element: <KakaoCallbackPage />,
   },
   {

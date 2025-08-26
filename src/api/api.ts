@@ -1,11 +1,12 @@
 import type { ApiError, ApiResponse } from '@/types/api-response';
 import axios from 'axios';
-
-const BASE_URL = import.meta.env.VITE_API_URL;
-if (!BASE_URL) throw new Error('Missing VITE_API_URL');
-
-const API_BASE = `${BASE_URL}/api`;
-
+function buildApiBase() {
+  const base = import.meta.env.VITE_API_URL as string | undefined;
+  if (!base) throw new Error('Missing VITE_API_URL');
+  // 뒤 슬래시 정리 후 /api 붙이기
+  return `${base.replace(/\/+$/, '')}/api`;
+}
+const API_BASE = buildApiBase();
 // 공통 인스턴스 (업무용)
 const api = axios.create({
   baseURL: API_BASE,
@@ -26,16 +27,25 @@ function isAuthRequest(url?: string) {
   if (!url) return false;
   try {
     const u = url.startsWith('http') ? new URL(url) : new URL(url, API_BASE);
-    return u.pathname.startsWith('/api/auth/');
+    const p = u.pathname;
+    return p.startsWith('/api/auth/') || p.startsWith('/auth/');
   } catch {
-    return url.includes('/api/auth/');
+    return url.includes('/api/auth/') || url.includes('/auth/');
   }
 }
 
 //요청 인터셉터
 api.interceptors.request.use(
   (config) => {
+    const m = (config.method || 'get').toUpperCase();
+    if (m === 'GET' || m === 'DELETE') {
+      if (config.headers) delete (config.headers as any)['Content-Type'];
+    } else {
+      config.headers = config.headers ?? {};
+      (config.headers as any)['Content-Type'] ??= 'application/json';
+    }
     const token = localStorage.getItem('accessToken');
+
     if (token && !isAuthRequest(config.url)) {
       config.headers = config.headers ?? {};
       (config.headers as any).Authorization = `Bearer ${token}`;
