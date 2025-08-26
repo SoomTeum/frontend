@@ -45,7 +45,7 @@ export default function KakaoCallbackPage() {
 
         //홈/온보딩으로
         window.history.replaceState(null, '', '/');
-        navigate(result?.newUser ? '/onboarding' : '/', { replace: true });
+        navigate(result.data?.newUser ? '/onboarding' : '/', { replace: true });
       } catch (e) {
         console.error(e);
         alert('로그인에 실패했습니다. 다시 시도해주세요.');
