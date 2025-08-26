@@ -12,6 +12,8 @@ import Filter from '@/pages/explore/Filter';
 import TravelSpotDetail from '@/pages/ai/TravelSpotDetail';
 import AILoadingPage from '@/pages/ai/AILoadingPage';
 import AIResultPage from '@/pages/ai/AIResultPage';
+import LoginPage from '@/pages/home/Login';
+import KakaoCallbackPage from '@/pages/home/KakaoCallbackPage';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -24,8 +26,12 @@ export const router = createBrowserRouter([
     element: <AlertComponent />,
   },
   {
-    path: '/card',
-    element: <CardTestPage />,
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/api/auth/kakao/callback',
+    element: <KakaoCallbackPage />,
   },
   {
     path: '/explore',

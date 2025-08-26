@@ -14,6 +14,8 @@ import StarLine from '@/assets/icons/star_outlined.svg?react';
 import AIComment from '@/assets/icons/ai_comment.svg?react';
 import AIImage from '@/assets/icons/ai_image.svg?react';
 import HomeBanner from '@/assets/icons/home_banner.jpg';
+import KakaoLogin from '@/assets/icons/kakao_login.png';
+import LoginImage from '@/assets/icons/login_image.svg?react';
 
 export {
   InfoIcon,
@@ -32,4 +34,6 @@ export {
   AIComment,
   AIImage,
   HomeBanner,
+  LoginImage,
+  KakaoLogin,
 };
