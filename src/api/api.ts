@@ -36,7 +36,7 @@ function isAuthRequest(url?: string) {
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
-    if (token) {
+    if (token && !isAuthRequest(config.url)) {
       config.headers = config.headers ?? {};
       (config.headers as any).Authorization = `Bearer ${token}`;
     }
