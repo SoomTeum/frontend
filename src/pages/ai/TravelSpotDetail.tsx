@@ -9,8 +9,8 @@ import {
   HeartOutline,
 } from '@/assets';
 import type { PlaceDetail } from '@/types/Detail';
-import { mockPlaceDetails } from '@/__mocks/placeDetail.mock';
-import { useEffect, useMemo, useState } from 'react';
+import { getKorDetail, type KorDetailItem } from '@/api/Detail/detail.api';
+import { useEffect, useState } from 'react';
 import { Badge, Image, ParkingTable } from '@/component';
 
 const TravelSpotDetail = () => {
@@ -18,11 +18,9 @@ const TravelSpotDetail = () => {
   const { contentId = '' } = useParams<{ contentId: string }>();
   const formatCount = (n: number, cap = 999) => (n > cap ? `${cap}+` : `${n}`);
 
-  //추후 API로 대체
-  const data = useMemo<PlaceDetail | null>(
-    () => mockPlaceDetails.find((p) => p.id === contentId) ?? null,
-    [contentId],
-  );
+  const [data, setData] = useState<PlaceDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
 
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -37,12 +35,67 @@ const TravelSpotDetail = () => {
   const handleToggleBookmark = () => {
     setBookmarked((prev) => !prev);
   };
+
+  function mapKorToPlaceDetail(id: string, item: KorDetailItem): PlaceDetail {
+    const name = item.title ?? '';
+    const thumbnail = item.firstimage2 ?? item.firstimage2 ?? '';
+    const address = item.addr1 ?? '';
+    const description = item.overview ?? '';
+
+    const regionTag = '정보없음';
+    return {
+      id,
+      name,
+      thumbnail,
+      address,
+      description,
+      //투두: 서버에 좋아요/북마크 API 붙이면 여기를 갱신
+      liked: false,
+      likeCount: 0,
+      bookmarked: false,
+      //투두: 태그/지표는 추후 실제 데이터로 교체
+      regionTag,
+      themeTag: '여행지',
+      serenity: 0,
+      extra: {},
+    };
+  }
   useEffect(() => {
-    if (!data) return;
-    setLiked(data.liked);
-    setLikeCount(data.likeCount);
-    setBookmarked(data.bookmarked);
-  }, [data]);
+    if (!contentId) {
+      setErrMsg('contentId가 없습니다.');
+      setLoading(false);
+      return;
+    }
+    let alive = true;
+    (async () => {
+      try {
+        setLoading(true);
+        setErrMsg(null);
+        const item = await getKorDetail(contentId);
+        if (!alive) return;
+
+        if (!item) {
+          setErrMsg('해당 여행지 정보를 찾을 수 없습니다.');
+          setData(null);
+        } else {
+          const mapped = mapKorToPlaceDetail(contentId, item);
+          setData(mapped);
+          //좋아요/북마크 초기값 세팅
+          setLiked(mapped.liked);
+          setLikeCount(mapped.likeCount);
+          setBookmarked(mapped.bookmarked);
+        }
+      } catch (e: any) {
+        setErrMsg(e?.message || '여행지 정보를 불러오지 못했습니다.');
+        setData(null);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [contentId]);
 
   if (!data) {
     return <div className="text-caption3">해당하는 id의 여행지가 존재하지 않습니다.</div>;
