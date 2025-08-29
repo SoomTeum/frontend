@@ -38,7 +38,7 @@ const TravelSpotDetail = () => {
 
   function mapKorToPlaceDetail(id: string, item: KorDetailItem): PlaceDetail {
     const name = item.title ?? '';
-    const thumbnail = item.firstimage2 ?? item.firstimage2 ?? '';
+    const thumbnail = item.firstimage ?? item.firstimage2 ?? '';
     const address = item.addr1 ?? '';
     const description = item.overview ?? '';
 
@@ -53,7 +53,7 @@ const TravelSpotDetail = () => {
       liked: false,
       likeCount: 0,
       bookmarked: false,
-      //투두: 태그/지표는 추후 실제 데이터로 교체
+      //투두: 태그/지표는 추후 API 붙이기
       regionTag,
       themeTag: '여행지',
       serenity: 0,
