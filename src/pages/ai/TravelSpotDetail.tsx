@@ -38,7 +38,12 @@ const TravelSpotDetail = () => {
 
   function mapKorToPlaceDetail(id: string, item: KorDetailItem): PlaceDetail {
     const name = item.title ?? '';
-    const thumbnail = item.firstimage ?? item.firstimage2 ?? '';
+    const normalize = (u?: string) => {
+      const s = u?.trim();
+      if (!s) return '';
+      return s.startsWith('http://') ? s.replace(/^http:\/\//, 'https://') : s;
+    };
+    const thumbnail = normalize(item.firstimage) || normalize(item.firstimage2) || '';
     const address = item.addr1 ?? '';
     const description = item.overview ?? '';
 
