@@ -9,9 +9,9 @@ export type LoginResult = {
 };
 
 export async function loginWithKakaoAccessToken(kakaoAccessToken: string) {
-  const { data } = await api.post<ApiResponse<LoginResult>>('/auth/login/kakao', {
-    accessToken: kakaoAccessToken,
-  });
+  const body = { KakaoTokenRequestDto: { accessToken: kakaoAccessToken } };
+
+  const { data } = await api.post<ApiResponse<LoginResult>>('/auth/login/kakao', body);
   localStorage.setItem('accessToken', data.data.accessToken);
   localStorage.setItem('refreshToken', data.data.refreshToken);
   return data;
