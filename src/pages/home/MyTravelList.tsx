@@ -1,84 +1,66 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
-import { X, Heart } from 'react-feather';
-import Button from '@/component/common/Button/Button';
+import SearchIcon from '@/image/Search.svg';
+import { TRAVEL_ITEMS } from '@/constants/MyTravel';
+import PlaceCard from '@/component/common/Card/PlaceCard';
+
+type TravelItem = {
+  id: number;
+  title: string;
+  tranquil: boolean;
+  type: string;
+  likes: number;
+  imgUrl?: string;
+};
 
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [travelItems, setTravelItems] = useState([
-    { id: 1, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
-    { id: 2, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
-    { id: 3, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
-    { id: 4, title: '행궁동', tranquil: true, type: '자연관광지', likes: 3 },
-  ]);
+  const [travelItems, setTravelItems] = useState<TravelItem[]>(
+    () => TRAVEL_ITEMS.map((it) => ({ ...it }))
+  );
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
-  const handleRemoveItem = (id: number) => {
+
+  const handleRemoveItem = (id: number) =>
     setTravelItems((prev) => prev.filter((item) => item.id !== id));
-  };
 
   return (
     <div className="bg-beige1 min-h-screen">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
 
-      <div className="pt-14 px-4 pb-8"> {/* 헤더 높이만큼 pt-14 추가 */}
-        <div className="text-center text-heading3 py-2 font-bold text-green1">
-          나의 여행지
-        </div>
-
-        <div className="relative mb-4">
+      <div className="pt-14 px-4 pb-8">
+       <div className="mx-[-1rem] mb-3 rounded-b-xl bg-green3-light pb-3 pt-2">
+  <div className="text-center text-heading3 font-bold text-green1">나의 여행지</div>
+</div>
+        <div className="relative mb-5">
           <input
-            type="text"
-            placeholder="Search"
-            className="w-full rounded-xl bg-[#edf0e2] px-4 py-2 pl-10 text-sm focus:outline-none"
-          />
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-green-900">
-            🔍
-          </span>
+  type="text"
+  placeholder="Search"
+  className="w-full rounded-full bg-green3-light px-4 py-2 pl-10 text-sm text-black placeholder:text-green2 focus:outline-none"/>
+<span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-green2">
+  <img src={SearchIcon} alt="search" className="h-4 w-4" />
+</span>
+
         </div>
-
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {travelItems.map((item) => (
-            <div
+            <PlaceCard
               key={item.id}
-              className="flex items-center justify-between rounded-xl bg-[#fff1d7] p-3 shadow-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-14 w-14 rounded-md bg-gray-300" />
-                <div className="flex flex-col">
-                  <div className="font-semibold text-sm text-black">
-                    {item.title}
-                  </div>
-                  <div className="mt-1 flex gap-1">
-                    <Button variant="sm" color="green-muted">
-                      한적한
-                    </Button>
-                    <Button variant="sm" color="green3">
-                      {item.type}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-end gap-1">
-                <X
-                  className="w-4 h-4 text-gray-500 cursor-pointer"
-                  onClick={() => handleRemoveItem(item.id)}
-                />
-                <div className="flex items-center text-xs text-red-400">
-                  <Heart className="w-4 h-4 mr-1 fill-red-300 text-red-300" />
-                  {item.likes}
-                </div>
-              </div>
-            </div>
+              title={item.title}
+              theme={item.type}
+              likeCount={item.likes}
+              imgUrl={item.imgUrl}
+              quietLevel={item.tranquil ? 5 : 3}  //백 연동 전 구현 확인 용
+              showRemoveButton
+              onRemove={() => handleRemoveItem(item.id)}
+            />
           ))}
         </div>
       </div>
     </div>
   );
 };
-
 export default MyTravelList;
