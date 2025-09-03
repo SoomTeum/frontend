@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import NickTitle from '@/image/nick.svg';
+import NickTitle from '@/image/Nick.svg';
 import Button from '@/component/common/Button/Button';
 import Alert from '@/component/common/Alert/Alert';
 import { useNavigate } from 'react-router-dom';
