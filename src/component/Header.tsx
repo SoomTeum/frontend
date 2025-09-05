@@ -1,6 +1,6 @@
 import { Menu, User } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../image/Logo.svg';
+import Logo from '../image/Logo.png';
 
 type HeaderProps = {
   onMenuClick: () => void;
