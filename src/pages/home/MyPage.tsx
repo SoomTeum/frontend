@@ -15,15 +15,15 @@ const MyPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FFFDF5]">
+    <div className="flex min-h-screen flex-col">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />{' '}
       {/* ✅ position="left" 전달 */}
       {/* 사용자 정보 */}
-      <div className="mt-[3.5rem] bg-green-100 px-4 py-4 text-center text-sm text-green-900">
-        <p className="font-semibold">안녕하세요 여행자님!</p>
-        <p className="text-green-900">breathtrip@naver.com</p>
-        <button className="mt-2 rounded border border-yellow-200 bg-yellow-100 px-3 py-1 text-xs text-green-800">
+      <div className="bg-green3-light mt-[3.5rem] px-4 py-4 text-center">
+        <p className="text-caption1 text-black">안녕하세요 여행자님!</p>
+        <p className="text-body1 text-green2 pt-[2px]">breathtrip@naver.com</p>
+        <button className="bg-yellow2 rounded-m text-green1 text-caption2 mt-2 px-3 py-1">
           로그아웃
         </button>
       </div>

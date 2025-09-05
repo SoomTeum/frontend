@@ -1,42 +1,60 @@
 import React from 'react';
 import { X } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
 
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
-  position?: 'left' | 'right'; // ✅ 추가: 왼쪽/오른쪽 위치 결정
+  position?: 'left' | 'right';
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }) => {
   const isLeft = position === 'left';
+  const navigate = useNavigate();
 
   return (
-    <div
-      className={`fixed top-0 ${isLeft ? 'left-0' : 'right-0'} h-full w-64 transform bg-[#f8fbe9] shadow-lg ${
-        isOpen ? 'translate-x-0' : isLeft ? '-translate-x-full' : 'translate-x-full'
-      } z-50 transition-transform duration-300`}
-    >
-      {/* 닫기 버튼 */}
-      <div className="flex justify-end p-4">
-        <X className="h-6 w-6 cursor-pointer text-green-700" onClick={onClose} />
-      </div>
+    <>
+      <div
+        className={`fixed top-0 left-[max(0px,calc(50vw-215px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'} overflow-hidden`}
+        aria-hidden={!isOpen}
+      >
+        <div
+          className={`absolute inset-0 bg-black/30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'} `}
+          onClick={onClose}
+        />
 
-      {/* 메뉴 리스트 */}
-      <nav className="flex flex-col gap-4 px-6">
-        <a href="/explore" className="border-b border-gray-300 py-2">
-          AI 맞춤 여행지 탐색
-        </a>
-        <a href="/search" className="border-b border-gray-300 py-2">
-          여행지 검색
-        </a>
-        <a href="/community" className="border-b border-gray-300 py-2">
-          커뮤니티
-        </a>
-        <a href="/mytravel" className="border-b border-gray-300 py-2">
-          나의 여행지
-        </a>
-      </nav>
-    </div>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className={`absolute top-0 ${isLeft ? 'left-0' : 'right-0'} bg-beige3 z-[70] h-full w-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : isLeft ? '-translate-x-full' : 'translate-x-full'} `}
+        >
+          {/* 닫기 버튼 */}
+          <div className="flex justify-end p-3.5">
+            <X className="text-green2 h-4.5 w-4.5 cursor-pointer" onClick={onClose} />
+          </div>
+
+          {/* 메뉴 리스트 */}
+          <nav className="text-title5 text-green1 flex flex-col gap-1 pl-7">
+            <div className="border-gray1 mr-13 border-b" />
+            <button onClick={() => navigate('/')} className="cursor-pointer py-2 text-left">
+              홈
+            </button>
+            <div className="border-gray1 mr-13 border-b" />
+            <button onClick={() => navigate('/explore')} className="cursor-pointer py-2 text-left">
+              AI 맞춤 여행지 탐색
+            </button>
+            <div className="border-gray1 mr-13 border-b" />
+            <button onClick={() => navigate('/search')} className="cursor-pointer py-2 text-left">
+              여행지 검색
+            </button>
+            <div className="border-gray1 mr-13 border-b" />
+            <button onClick={() => navigate('/mytravel')} className="cursor-pointer py-2 text-left">
+              나의 여행지
+            </button>
+          </nav>
+        </div>
+      </div>
+    </>
   );
 };
 
