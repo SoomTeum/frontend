@@ -14,12 +14,21 @@ import AILoadingPage from '@/pages/ai/AILoadingPage';
 import AIResultPage from '@/pages/ai/AIResultPage';
 import LoginPage from '@/pages/home/Login';
 import KakaoCallbackPage from '@/pages/home/KakaoCallbackPage';
+import Register2 from '@/pages/register/Register2';
+import Register3 from '@/pages/register/Register3';
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
   },
-
+{
+  path: '/onboarding',
+  element: <Register2 />,
+},
+{
+  path:'/register/3',
+  element:<Register3/>
+},
   //테스트
   {
     path: '/alert',
