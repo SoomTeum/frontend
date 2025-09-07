@@ -1,7 +1,7 @@
 // src/pages/register/Register2.tsx
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NickTitle from '@/image/nick.svg';
+import NickTitle from '@/image/Nick.svg';
 import Button from '@/component/common/Button/Button';
 import Alert from '@/component/common/Alert/Alert';
 import api from '@/api/api';

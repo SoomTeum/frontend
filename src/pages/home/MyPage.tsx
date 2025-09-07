@@ -10,6 +10,7 @@ type Profile = {
   email: string;
   nickname: string;
 };
+
 export default function MyPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function MyPage() {
       navigate("/", { replace: true });
     }
   };
+
   useEffect(() => {
     let cancelled = false;
 
@@ -42,13 +44,7 @@ export default function MyPage() {
       setLoading(true);
       setError(null);
       try {
-        const accessToken = localStorage.getItem("accessToken");
-        const resp = await api.get<ApiResponse<Profile>>("/my/profile/", {
-          headers: {
-            Accept: "application/json",
-            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-          },
-        });
+        const resp = await api.get<ApiResponse<Profile>>("/my/profile/");
         const res = resp.data;
         if (!cancelled) {
           if (res?.success && res.data) {
@@ -76,13 +72,16 @@ export default function MyPage() {
         !cancelled && setLoading(false);
       }
     }
+
     fetchProfile();
     return () => {
       cancelled = true;
     };
   }, [navigate]);
+
   const email = profile?.email || "";
   const nickname = profile?.nickname || "";
+
   const handleSaveNickname = async () => {
     if (saving) return;
     setSaveMsg(null);
@@ -95,16 +94,8 @@ export default function MyPage() {
 
     setSaving(true);
     try {
-      const accessToken = localStorage.getItem("accessToken") || "";
       const resp = await api.patch<ApiResponse<Profile>>(
-        "/my/profile/nickname",
-        { nickname: value },
-        {
-          headers: {
-            Accept: "application/json",
-            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-          },
-        }
+        "/my/profile/nickname"
       );
       const res = resp.data;
 
@@ -147,6 +138,7 @@ export default function MyPage() {
       setSaving(false);
     }
   };
+
   return (
     <div className="flex min-h-screen flex-col bg-beige3">
       <Header onMenuClick={handleMenuClick} />
@@ -182,9 +174,7 @@ export default function MyPage() {
         )}
       </div>
 
-      {/* 본문 */}
       <div className="mt-6 flex flex-col gap-6 px-6 text-green1">
-        {/* 이메일 */}
         <div>
           <label htmlFor="email" className="mb-1 block text-title4 text-green1">
             이메일
@@ -198,7 +188,6 @@ export default function MyPage() {
           />
         </div>
 
-        {/* 닉네임 */}
         <div>
           <label htmlFor="nickname" className="mb-1 block text-title4 text-green1">
             닉네임
@@ -213,17 +202,7 @@ export default function MyPage() {
                 readOnly
                 className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
               />
-              <button
-                type="button"
-                onClick={() => {
-                  setNewNickname(nickname);
-                  setEditMode(true);
-                  setSaveMsg(null);
-                }}
-                className="rounded-m border px-3 py-2 text-body1 bg-beige2 text-green1 border-gray1"
-              >
-                수정
-              </button>
+              
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -238,25 +217,7 @@ export default function MyPage() {
                 className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
                 placeholder="새 닉네임 입력"
               />
-              <button
-                type="button"
-                onClick={handleSaveNickname}
-                disabled={saving}
-                className="rounded-m border px-3 py-2 text-body1 bg-beige2 text-green1 border-gray1 disabled:opacity-60"
-              >
-                {saving ? "저장 중..." : "저장"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditMode(false);
-                  setNewNickname(nickname);
-                  setSaveMsg(null);
-                }}
-                className="rounded-m border px-3 py-2 text-body1 bg-white text-black border-gray1"
-              >
-                취소
-              </button>
+              
             </div>
           )}
 
@@ -264,7 +225,6 @@ export default function MyPage() {
         </div>
       </div>
 
-      {/* 회원 탈퇴(아직 비활성) */}
       <button
         type="button"
         disabled
