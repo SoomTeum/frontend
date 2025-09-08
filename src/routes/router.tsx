@@ -14,12 +14,23 @@ import AILoadingPage from '@/pages/ai/AILoadingPage';
 import AIResultPage from '@/pages/ai/AIResultPage';
 import LoginPage from '@/pages/home/Login';
 import KakaoCallbackPage from '@/pages/home/KakaoCallbackPage';
+import Register2 from '@/pages/register/Register2';
+import Register3 from '@/pages/register/Register3';
+import Searching from '@/pages/explore/Searching';
+import TravelSearch from '@/pages/home/TravelSearch';
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
   },
-
+{
+  path: '/register/2',
+  element: <Register2 />,
+},
+{
+  path:'/register/3',
+  element:<Register3/>
+},
   //테스트
   {
     path: '/alert',
@@ -52,6 +63,14 @@ export const router = createBrowserRouter([
         path: 'result',
         element: <AIResultPage />,
       },
+      {
+        path: 'searching',
+        element: <Searching />,
+      },
+      {
+        path: 'travelsearch',
+        element: <TravelSearch />,
+      },
     ],
   },
   //여행지 상세페이지
@@ -83,4 +102,5 @@ export const router = createBrowserRouter([
     path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
     element: <Filter />,
   },
+ 
 ]);
