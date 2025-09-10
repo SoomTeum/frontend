@@ -111,7 +111,7 @@ export default function Filter() {
             {step === 1 ? (
               <>
                 <h2 className="text-base font-semibold mb-4 text-green1">1단계: 지역을 골라주세요.</h2>
-                <div className="bg-white rounded-2xl shadow p-3 border border-green3">
+                <div className="bg-white rounded-2xl">
                   <RegionSelector onSelect={setRegion} />
                 </div>
                 <button
@@ -124,7 +124,7 @@ export default function Filter() {
             ) : (
               <>
                 <h2 className="text-base font-semibold mb-4 text-green1">2단계: 테마를 골라주세요.</h2>
-                <div className="bg-white rounded-2xl shadow p-3 border border-green3">
+                <div className="bg-white rounded-2xl ">
                   <TravelActivitySelector onSelect={setActivity} />
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-3">

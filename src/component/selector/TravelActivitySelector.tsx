@@ -22,7 +22,6 @@ export default function TravelActivitySelector({ className, onChange }: Props) {
           borderColor: "border-red2",
         }}
         onSelect={(main, subs) => {
-          // 콘솔 사용은 유지하되, 부모로도 이벤트 전달
           console.log("선택된:", main, subs);
           onChange?.(main, subs);
         }}
