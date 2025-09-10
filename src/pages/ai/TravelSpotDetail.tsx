@@ -12,6 +12,7 @@ import type { PlaceDetail } from '@/types/Detail';
 import { getKorDetail, type KorDetailItem } from '@/api/Detail/detail.api';
 import { useEffect, useState } from 'react';
 import { Badge, Image, Loader, ParkingTable } from '@/component';
+import { likePlace, unlikePlace } from '@/api/like/like.api';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
@@ -26,12 +27,31 @@ const TravelSpotDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
 
-  const handleToggleLike = (e?: React.MouseEvent) => {
+  const handleToggleLike = async (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
-    setLikeCount((c) => (liked ? Math.max(0, c - 1) : c + 1));
-    setLiked((prev) => !prev);
+
+    if (!data) return;
+
+    try {
+      if (liked) {
+        await unlikePlace(contentId);
+        setLikeCount((c) => Math.max(0, c - 1));
+      } else {
+        await likePlace({
+          contentId,
+          regionName: data.regionTag ?? '정보없음',
+          themeName: data.themeTag ?? '여행지',
+          cnctrLevel: data.serenity ?? 0,
+        });
+        setLikeCount((c) => c + 1);
+      }
+      setLiked((prev) => !prev);
+    } catch (err: any) {
+      console.error('좋아요 처리 실패:', err?.message || err);
+    }
   };
+
   const handleToggleBookmark = () => {
     setBookmarked((prev) => !prev);
   };
