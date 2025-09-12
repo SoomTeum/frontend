@@ -17,8 +17,7 @@ export default function MyPage() {
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
 
-  const [editMode, setEditMode] = useState(false);
-  const [newNickname, setNewNickname] = useState("");
+  const [nickname, setNickname] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
@@ -49,7 +48,7 @@ export default function MyPage() {
         if (!cancelled) {
           if (res?.success && res.data) {
             setProfile(res.data);
-            setNewNickname(res.data.nickname ?? "");
+            setNickname(res.data.nickname ?? "");
           } else {
             setError((res as any)?.error?.message || "프로필 정보를 불러오지 못했습니다.");
           }
@@ -80,13 +79,12 @@ export default function MyPage() {
   }, [navigate]);
 
   const email = profile?.email || "";
-  const nickname = profile?.nickname || "";
 
   const handleSaveNickname = async () => {
     if (saving) return;
     setSaveMsg(null);
 
-    const value = (newNickname ?? "").trim();
+    const value = nickname.trim();
     if (value.length < 2) {
       setSaveMsg("닉네임은 2글자 이상이어야 합니다.");
       return;
@@ -94,17 +92,16 @@ export default function MyPage() {
 
     setSaving(true);
     try {
-      const resp = await api.patch<ApiResponse<Profile>>(
-        "/my/profile/nickname"
-      );
+      const resp = await api.patch<ApiResponse<Profile>>("/my/profile/nickname", {
+        nickname: value,
+      });
       const res = resp.data;
 
       if (res?.success && res.data) {
         setProfile((prev) =>
           prev ? { ...prev, nickname: res.data?.nickname ?? value } : res.data
         );
-        setNewNickname(res.data?.nickname ?? value);
-        setEditMode(false);
+        setNickname(res.data?.nickname ?? value);
         setSaveMsg("닉네임이 저장되었습니다.");
         try {
           localStorage.setItem("nickname", res.data?.nickname ?? value);
@@ -143,6 +140,7 @@ export default function MyPage() {
     <div className="flex min-h-screen flex-col bg-beige3">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />
+
       <div className="mt-[3.5rem] px-4 py-4 text-center bg-green3-light text-green2">
         {loading ? (
           <p className="font-semibold">마이페이지 불러오는 중…</p>
@@ -192,35 +190,25 @@ export default function MyPage() {
           <label htmlFor="nickname" className="mb-1 block text-title4 text-green1">
             닉네임
           </label>
-
-          {!editMode ? (
-            <div className="flex items-center gap-2">
-              <input
-                id="nickname"
-                type="text"
-                value={nickname}
-                readOnly
-                className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
-              />
-              
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <input
-                id="nickname-edit"
-                type="text"
-                value={newNickname}
-                onChange={(e) => setNewNickname(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveNickname();
-                }}
-                className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
-                placeholder="새 닉네임 입력"
-              />
-              
-            </div>
-          )}
-
+          <div className="flex items-center gap-2">
+            <input
+              id="nickname"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
+              placeholder="닉네임 입력"
+            />
+            {/* ✅ 수정 버튼 하나만 */}
+            <button
+              type="button"
+              disabled={saving}
+              onClick={handleSaveNickname}
+              className="rounded-m border border-green3 bg-green3-light px-3 py-1 text-caption2 text-green1 hover:brightness-95 disabled:opacity-60"
+            >
+              {saving ? "저장 중..." : "수정"}
+            </button>
+          </div>
           {saveMsg && <p className="mt-2 text-caption2 text-green-muted">{saveMsg}</p>}
         </div>
       </div>

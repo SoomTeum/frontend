@@ -1,50 +1,69 @@
-import { useState, useEffect } from 'react';
+// Selector.tsx
+import { useEffect, useState } from 'react';
 
 export type SelectorProps = {
   dataMap: Record<string, string[]>;
   initialMain: string;
+  onSelect?: (main: string, subs: string[]) => void;
+  initialSubs?: string[];
   colorScheme?: {
-    base: string;
-    active: string;
-    text: string;
-    rightActive: string;
+    leftBase?: string;
+    leftItem?: string;
+    leftActive?: string;
+    rightItem?: string;
+    rightActive?: string;
+    borderColor?: string;  
   };
-  onSelect?: (main: string, sub: string | null) => void;
 };
 
 const Selector = ({
   dataMap,
   initialMain,
-  colorScheme = {
-    base: 'bg-rose-300',
-    active: 'bg-rose-100 text-rose-800',
-    text: 'text-white',
-    rightActive: 'bg-rose-100 text-rose-800 font-bold',
-  },
   onSelect,
+  initialSubs,
+  colorScheme = {},
 }: SelectorProps) => {
-  const [selectedMain, setSelectedMain] = useState(initialMain);
-  const [selectedSub, setSelectedSub] = useState<string | null>(null);
+  const {
+    leftBase = 'bg-green3-light',
+    leftItem = 'text-black text-caption4',
+    leftActive = 'bg-green0 text-caption4',
+    rightItem = 'text-green1',
+    rightActive = 'bg-green4 text-black text-caption4',
+    borderColor = 'border-green3',
+  } = colorScheme;
 
+  const [selectedMain, setSelectedMain] = useState(initialMain);
+  const [selectedSub, setSelectedSub] = useState<string | null>(
+    initialSubs && initialSubs.length ? initialSubs[0] : null
+  );
+
+  const changeMain = (next: string) => {
+    setSelectedMain(next);
+    setSelectedSub(null);
+  };
+  const chooseSub = (sub: string) => {
+    setSelectedSub(prev => (prev === sub ? null : sub));
+  };
+
+  useEffect(() => setSelectedMain(initialMain), [initialMain]);
   useEffect(() => {
-    if (onSelect) onSelect(selectedMain, selectedSub);
-  }, [selectedMain, selectedSub]);
+    if (initialSubs !== undefined) {
+      setSelectedSub(initialSubs.length ? initialSubs[0] : null);
+    }
+  }, [initialSubs]);
+  useEffect(() => {
+    onSelect?.(selectedMain, selectedSub ? [selectedSub] : []);
+  }, [selectedMain, selectedSub, onSelect]);
 
   return (
-    <div className="flex w-full max-w-md h-[400px] rounded-xl overflow-hidden shadow-md">
- 
-      <div className={`w-1/2 flex flex-col justify-start items-stretch py-2 ${colorScheme.base}`}>
+    <div className={`flex h-96 w-full overflow-hidden border-t ${borderColor}`}>
+     <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
         {Object.keys(dataMap).map((main) => (
           <button
             key={main}
-            onClick={() => {
-              setSelectedMain(main);
-              setSelectedSub(null);
-            }}
-            className={`py-2 px-2 text-center text-sm ${
-              selectedMain === main
-                ? `${colorScheme.active} font-bold rounded-md mx-1`
-                : `${colorScheme.text}`
+            onClick={() => changeMain(main)}
+            className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-1 text-center ${
+              selectedMain === main ? leftActive : leftItem
             }`}
           >
             {main}
@@ -52,23 +71,24 @@ const Selector = ({
         ))}
       </div>
 
-      <div className="w-1/2 flex flex-col justify-start items-stretch py-2 bg-white">
-        {dataMap[selectedMain].length > 0 ? (
-          dataMap[selectedMain].map((sub) => (
-            <button
-              key={sub}
-              onClick={() => setSelectedSub(sub)}
-              className={`py-2 px-2 text-center text-sm rounded-md mx-1 mb-1 ${
-                selectedSub === sub
-                  ? `${colorScheme.rightActive}`
-                  : 'text-gray-800 hover:bg-gray-100'
-              }`}
-            >
-              {sub}
-            </button>
-          ))
+     <div className="min-h-col flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
+        {dataMap[selectedMain]?.length ? (
+          dataMap[selectedMain].map((sub) => {
+            const active = selectedSub === sub;
+            return (
+              <button
+                key={sub}
+                onClick={() => chooseSub(sub)}
+                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 rounded-l px-2 py-1 text-center ${
+                  active ? rightActive : rightItem
+                }`}
+              >
+                {sub}
+              </button>
+            );
+          })
         ) : (
-          <div className="flex-1 flex items-center justify-center text-center text-gray-400">
+          <div className="text-gray1 flex flex-1 items-center justify-center text-center">
             해당 항목 없음
           </div>
         )}
