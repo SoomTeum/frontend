@@ -17,8 +17,9 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
   const [places, setPlaces] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState(currentAddress);
+  const [selectedAddress, setSelectedAddress] = useState<string>(currentAddress ?? '');
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const didGeolocateOnceRef = useRef(false);
 
   //초기화
   useEffect(() => {
@@ -48,21 +49,6 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
       markerInstance.setMap(mapInstance);
       setMarker(markerInstance);
 
-      //마커 드래그
-      window.kakao.maps.event.addListener(markerInstance, 'dragend', function () {
-        const position = markerInstance.getPosition();
-        geocoderInstance.coord2Address(
-          position.getLng(),
-          position.getLat(),
-          function (result: any[], status: any) {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const address = result[0].address.address_name;
-              setSelectedAddress(address);
-            }
-          },
-        );
-      });
-
       const locateNow = () => {
         if (!navigator.geolocation) return;
         setIsLoadingLocation(true);
@@ -90,7 +76,41 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
         );
       };
 
-      locateNow();
+      if (currentAddress) {
+        geocoderInstance.addressSearch(currentAddress, (result: any[], status: any) => {
+          if (status === window.kakao.maps.services.Status.OK && result[0]) {
+            const { x, y, address_name } = result[0];
+            const pos = new window.kakao.maps.LatLng(y, x);
+            mapInstance.setCenter(pos);
+            markerInstance.setPosition(pos);
+            setSelectedAddress(address_name || currentAddress);
+          } else {
+            setSelectedAddress(currentAddress);
+          }
+          setTimeout(() => {
+            mapInstance.relayout?.();
+            mapInstance.setCenter(markerInstance.getPosition());
+          }, 0);
+        });
+      } else if (!didGeolocateOnceRef.current) {
+        didGeolocateOnceRef.current = true;
+        locateNow();
+      }
+
+      //마커 드래그
+      window.kakao.maps.event.addListener(markerInstance, 'dragend', function () {
+        const position = markerInstance.getPosition();
+        geocoderInstance.coord2Address(
+          position.getLng(),
+          position.getLat(),
+          function (result: any[], status: any) {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const address = result[0].address.address_name;
+              setSelectedAddress(address);
+            }
+          },
+        );
+      });
     });
   }, [isOpen]);
 
@@ -190,7 +210,6 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
             <X size={22} className="text-black" />
           </button>
         </div>
-
         <div className="border-gray1 border-b p-2">
           <div className="relative">
             <Search className="text-gray1 absolute top-1/2 left-3 -translate-y-1/2" size={18} />
@@ -214,49 +233,44 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
             </span>
           </button>
         </div>
-
         <div className="flex-1 overflow-hidden">
-          {searchResults.length > 0 ? (
-            <div className="scrollbar-hidden h-full overflow-y-auto">
-              {searchResults.map((place, index) => (
-                <button
-                  type="button"
-                  key={index}
-                  onClick={() => selectSearchResult(place)}
-                  className="border-gray1 hover:bg-green0 w-full border-b p-2 text-left"
-                >
-                  <div className="flex items-start gap-3">
-                    <MapPin size={18} className="text-gray1 mt-1" />
-                    <div>
-                      <div className="text-body1 text-black">{place.place_name}</div>
-                      <div className="text-caption2 text-green-muted">{place.address_name}</div>
-                      {place.road_address_name && (
-                        <div className="text-caption2 text-gray1">{place.road_address_name}</div>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full flex-col">
-              <div
-                ref={mapRef}
-                className="border-gray1 max-h-[60dvh] min-h-[100px] w-full flex-1"
-              />
-              <div className="bg-green0 sticky bottom-0 z-10 p-2">
-                <div className="text-caption2 text-green0 mb-1">선택된 주소</div>
-                <div className="text-body1 text-black">
-                  {selectedAddress || '주소를 선택해주세요'}
-                </div>
-                <div className="text-caption2 text-green-muted mt-1">
-                  지도에서 마커를 드래그하여 위치를 조정할 수 있습니다
-                </div>
+          <div className="relative flex h-full flex-col">
+            <div ref={mapRef} className="border-gray1 h-[60dvh] w-full flex-1" />
+            <div className="bg-green0 sticky bottom-0 z-10 p-2">
+              <div className="text-caption2 text-green0 mb-1">선택된 주소</div>
+              <div className="text-body1 text-black">
+                {selectedAddress || '주소를 선택해주세요'}
+              </div>
+              <div className="text-caption2 text-green-muted mt-1">
+                지도에서 마커를 드래그하여 위치를 조정할 수 있습니다
               </div>
             </div>
-          )}
-        </div>
 
+            {searchResults.length > 0 && (
+              <div className="scrollbar-hidden absolute inset-0 z-20 overflow-y-auto bg-white">
+                {searchResults.map((place, index) => (
+                  <button
+                    type="button"
+                    key={index}
+                    onClick={() => selectSearchResult(place)}
+                    className="border-gray1 hover:bg-green0 w-full border-b p-2 text-left"
+                  >
+                    <div className="flex items-start gap-3">
+                      <MapPin size={18} className="text-gray1 mt-1" />
+                      <div>
+                        <div className="text-body1 text-black">{place.place_name}</div>
+                        <div className="text-caption2 text-green-muted">{place.address_name}</div>
+                        {place.road_address_name && (
+                          <div className="text-caption2 text-gray1">{place.road_address_name}</div>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
         <div className="border-gray1 border-t bg-white p-3">
           <Button onClick={handleConfirm} disabled={!selectedAddress}>
             이 주소로 설정하기
