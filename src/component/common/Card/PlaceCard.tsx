@@ -42,8 +42,8 @@ export default function PlaceCard({
           <p className="text-caption4 truncate font-medium">{title}</p>
         </div>
 
-        {/* 뱃지 2개 */}
-        <div className="mt-5 flex shrink-0 gap-3">
+        {/*뱃지 2개*/}
+        <div className="mt-4.5 flex shrink-0 gap-3 pr-12">
           <Badge type="default" color="green" count={quietLevel}>
             한적함
           </Badge>
@@ -55,13 +55,19 @@ export default function PlaceCard({
 
       <div className="flex flex-col items-end justify-between gap-2">
         {showRemoveButton ? (
-          <button onClick={onRemove} className="cursor-pointer">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove?.();
+            }}
+            className="cursor-pointer"
+          >
             <CancelIcon className="h-3 w-3 text-black" />
           </button>
         ) : (
           <div className="h-3 w-3" />
         )}
-        {/* 좋아요 수 */}
+        {/*좋아요 수*/}
         <div className="text-caption5 mt-6 ml-5 flex items-center justify-center gap-[3px]">
           <HeartFillIcon className="h-3 w-3" />
           <span className="w-[3ch] leading-none whitespace-nowrap tabular-nums">
