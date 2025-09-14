@@ -19,7 +19,6 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>(currentAddress ?? '');
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-  const didGeolocateOnceRef = useRef(false);
 
   //초기화
   useEffect(() => {
