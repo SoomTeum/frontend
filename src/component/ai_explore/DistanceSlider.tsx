@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function DistanceSlider({
-  min = 1,
+  min = 0,
   max = 50,
   step = 1,
   value,
