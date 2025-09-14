@@ -12,7 +12,7 @@ export default function Alert({ children, onClose, className }: AlertProps) {
   return (
     <div
       className={cn(
-        'bg-pink flex h-14 w-full items-center justify-between rounded-l px-4',
+        'bg-pink flex h-13 w-full items-center justify-between rounded-l px-4',
         className,
       )}
     >
@@ -20,7 +20,10 @@ export default function Alert({ children, onClose, className }: AlertProps) {
         <AlertIcon className="shrink-0" />
         <div className="text-caption1 text-black">{children}</div>
       </div>
-      <button onClick={onClose} className="cursor-pointer text-green-muted text-gray-400 transition-colors">
+      <button
+        onClick={onClose}
+        className="text-green-muted cursor-pointer text-gray-400 transition-colors"
+      >
         <CancelIcon className="w-3" />
       </button>
     </div>
