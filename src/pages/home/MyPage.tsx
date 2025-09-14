@@ -157,12 +157,14 @@ export default function MyPage() {
           </>
         ) : (
           <>
-            <p className="font-semibold">안녕하세요 {nickname ? `${nickname}님` : '여행자님'}!</p>
-            <p>{email || '이메일 정보 없음'}</p>
+            <p className="text-caption1 text-black">
+              안녕하세요 {nickname ? `${nickname}님` : '여행자님'}!
+            </p>
+            <p className="text-body1 text-green2">{email || '이메일 정보 없음'}</p>
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-m text-caption2 bg-beige2 text-green1 border-gray1 mt-2 border px-3 py-1 hover:brightness-95 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+              className="text-caption2 bg-yellow2 text-green1 rounded-m mt-3 px-3.5 py-1 hover:brightness-95"
             >
               로그아웃
             </button>
@@ -197,14 +199,14 @@ export default function MyPage() {
               className="rounded-m border-gray1 text-body1 w-full border bg-white px-3 py-2"
               placeholder="닉네임 입력"
             />
-            {/* ✅ 수정 버튼 하나만 */}
+
             <button
               type="button"
               disabled={saving}
               onClick={handleSaveNickname}
-              className="rounded-m border-green3 bg-green3-light text-caption2 text-green1 border px-3 py-1 hover:brightness-95 disabled:opacity-60"
+              className="rounded-m bg-green3-light text-caption3 text-green1 shrink-0 px-3.5 py-1.5 hover:brightness-95 disabled:opacity-60"
             >
-              {saving ? '저장 중...' : '수정'}
+              {saving ? '저장 중...' : '저장'}
             </button>
           </div>
           {saveMsg && <p className="text-caption2 text-green-muted mt-2">{saveMsg}</p>}
