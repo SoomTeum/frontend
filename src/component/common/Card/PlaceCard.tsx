@@ -43,7 +43,7 @@ export default function PlaceCard({
         </div>
 
         {/*뱃지 2개*/}
-        <div className="mt-4.5 flex shrink-0 gap-3 pr-12">
+        <div className="mt-4.5 flex shrink-0 gap-4 pr-12">
           <Badge type="default" color="green" count={quietLevel}>
             한적함
           </Badge>
@@ -60,15 +60,18 @@ export default function PlaceCard({
               e.stopPropagation();
               onRemove?.();
             }}
-            className="cursor-pointer"
+            onPointerDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            className="cursor-pointer px-1 py-1"
           >
             <CancelIcon className="h-3 w-3 text-black" />
           </button>
         ) : (
-          <div className="h-3 w-3" />
+          <div className="h-4 w-3" />
         )}
         {/*좋아요 수*/}
-        <div className="text-caption5 mt-6 ml-5 flex items-center justify-center gap-[3px]">
+        <div className="text-caption5 mt-5 ml-5 flex items-center justify-center gap-[3px]">
           <HeartFillIcon className="h-3 w-3" />
           <span className="w-[3ch] leading-none whitespace-nowrap tabular-nums">
             {likeCount > 99 ? '99+' : likeCount}
