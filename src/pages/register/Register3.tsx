@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FinishTitle from '@/image/Finish.svg';
 import RegisterFinal from '@/image/Registerf.svg';
 
 export default function Register3() {

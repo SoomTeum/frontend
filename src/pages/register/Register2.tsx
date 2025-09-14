@@ -117,7 +117,7 @@ export default function Register2() {
             if (e.key === 'Enter') handleNext();
           }}
           placeholder="닉네임 입력"
-          className="border-green3 text-body1 placeholder:text-gray1 mb-2 w-full rounded-l border bg-white px-4 py-3 text-black focus:outline-none"
+          className="border-green3 text-body1 placeholder:text-gray1 mt-2 mb-2 w-full rounded-l border bg-white px-4 py-3 text-black focus:outline-none"
         />
         <div className="text-caption2 text-green-muted mb-6">{len}/16</div>
 
