@@ -60,9 +60,8 @@ export default function Register2() {
         try {
           const newNick = res.data?.nickname ?? nickname.trim();
           localStorage.setItem('nickname', newNick);
-        } catch {
-          navigate('/register/3', { replace: true });
-        }
+        } catch {}
+        navigate('/register/3', { replace: true });
       } else {
         const msg =
           (res as any)?.error?.message ||
@@ -130,7 +129,6 @@ export default function Register2() {
             className="w-full"
             onClick={handleNext}
             disabled={saving || len === 0}
-            aria-label="다음 단계로 이동"
           >
             {saving ? '저장 중…' : '다음'}
           </Button>
