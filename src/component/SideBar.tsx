@@ -21,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
       navigate(path);
       onClose();
     },
-    [navigate, onClose]
+    [navigate, onClose],
   );
 
   const goProtectedMyTravel = useCallback(() => {
@@ -39,7 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
         className={`fixed top-0 left-[max(0px,calc(50vw-215px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         } overflow-hidden`}
-        aria-hidden={!isOpen}
       >
         <div
           className={`absolute inset-0 bg-black/30 transition-opacity duration-300 ${
