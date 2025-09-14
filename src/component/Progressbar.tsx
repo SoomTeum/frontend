@@ -9,7 +9,7 @@ export default function ProgressBar({ progress, className }: Props) {
 
   return (
     <div
-      className={`w-full h-3 rounded-full bg-gray-200 overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] ${className ?? ""}`}
+      className={`h-2.5 w-full overflow-hidden rounded-full bg-gray-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] ${className ?? ''}`}
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={100}
