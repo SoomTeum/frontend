@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LabeledInput, Button, Header, Sidebar } from '@/component';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
 import DistanceSlider from '@/component/ai_explore/DistanceSlider';
+import { AddressSearchModal } from '@/component/KakaoMap/AddressPickerModal';
 
 export default function AiExplorePage() {
   const navigate = useNavigate();
@@ -17,15 +18,11 @@ export default function AiExplorePage() {
     [address, theme, distanceKm],
   );
 
-  const fillSampleAddress = () => {
-    setAddress('경기도 성남시 수정구 성남대로 1342 이렇게 길어지면'); // UI 확인용입니당... 추후 API 연결
-  };
-
   const goThemeSelect = () => navigate('/explore/theme');
-
   const startSearch = () => navigate('/explore/result');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const handleMenuClick = () => {
     setIsSidebarOpen(true);
@@ -33,6 +30,15 @@ export default function AiExplorePage() {
 
   const handleSidebarClose = () => {
     setIsSidebarOpen(false);
+  };
+
+  const fillSampleAddress = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const handleAddressSelect = (selectedAddress: any) => {
+    setAddress(selectedAddress);
+    setIsAddressModalOpen(false);
   };
 
   return (
@@ -78,6 +84,12 @@ export default function AiExplorePage() {
           </div>
         </section>
       </div>
+      <AddressSearchModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onAddressSelect={handleAddressSelect}
+        currentAddress={address}
+      />
     </div>
   );
 }

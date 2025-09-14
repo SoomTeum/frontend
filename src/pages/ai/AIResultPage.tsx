@@ -31,12 +31,12 @@ export default function AIResultPage() {
         <div className="bg-green3-light text-caption3 text-green1 h-10 w-full items-center py-[10px] text-center">
           AI 맞춤 여행지 탐색
         </div>
-        <ul className="w-full space-y-4 py-5 pr-8 pl-5">
+        <ul className="w-full space-y-4 py-5 pr-8 pl-4">
           {mockAICard.map((it, idx) => {
             const rank = idx + 1;
             return (
               <li key={it.id}>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   {/*순위*/}
                   <span
                     className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold shadow-sm ${getRankBadgeClass(rank)}`}
