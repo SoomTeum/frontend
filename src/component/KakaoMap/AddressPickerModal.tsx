@@ -49,6 +49,18 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
       markerInstance.setMap(mapInstance);
       setMarker(markerInstance);
 
+      const recenter = (lat: number, lng: number) => {
+        const { kakao } = window;
+        const latlng = new kakao.maps.LatLng(lat, lng);
+
+        requestAnimationFrame(() => {
+          mapInstance.relayout?.();
+          mapInstance.setLevel(3);
+          mapInstance.setCenter(latlng);
+          markerInstance.setPosition(latlng);
+        });
+      };
+
       const locateNow = () => {
         if (!navigator.geolocation) return;
         setIsLoadingLocation(true);
@@ -56,10 +68,7 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
           (position) => {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            const locPosition = new window.kakao.maps.LatLng(lat, lng);
-
-            mapInstance.setCenter(locPosition);
-            markerInstance.setPosition(locPosition);
+            recenter(lat, lng);
 
             geocoderInstance.coord2Address(lng, lat, function (result: any[], status: any) {
               if (status === window.kakao.maps.services.Status.OK) {
@@ -92,9 +101,10 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
             mapInstance.setCenter(markerInstance.getPosition());
           }, 0);
         });
-      } else if (!didGeolocateOnceRef.current) {
-        didGeolocateOnceRef.current = true;
-        locateNow();
+      } else {
+        if (!searchKeyword && !currentAddress) {
+          locateNow();
+        }
       }
 
       //마커 드래그
@@ -137,8 +147,12 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
         const locPosition = new window.kakao.maps.LatLng(lat, lng);
 
         //지도 중심, 마커 현재 위치로 이동시키기
-        mapInstance.setCenter(locPosition);
-        markerInstance.setPosition(locPosition);
+        requestAnimationFrame(() => {
+          mapInstance.relayout?.();
+          mapInstance.setLevel(3);
+          mapInstance.setCenter(locPosition);
+          markerInstance.setPosition(locPosition);
+        });
 
         geocoderInstance.coord2Address(lng, lat, function (result: any[], status: any) {
           if (status === window.kakao.maps.services.Status.OK) {
@@ -178,13 +192,23 @@ const AddressSearchModal = ({ isOpen, onClose, onAddressSelect, currentAddress =
   };
 
   const selectSearchResult = (place: any) => {
-    const position = new window.kakao.maps.LatLng(place.y, place.x);
-    map.setCenter(position);
-    marker.setPosition(position);
+    const lat = Number(place.y);
+    const lng = Number(place.x);
 
-    setSelectedAddress(place.address_name || place.road_address_name);
     setSearchKeyword('');
     setSearchResults([]);
+
+    if (map && marker) {
+      requestAnimationFrame(() => {
+        map.relayout?.();
+        map.setLevel(3);
+        const pos = new window.kakao.maps.LatLng(lat, lng);
+        map.setCenter(pos);
+        marker.setPosition(pos);
+      });
+    }
+
+    setSelectedAddress(place.road_address_name || place.address_name || '');
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
