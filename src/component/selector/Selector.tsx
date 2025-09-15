@@ -12,7 +12,7 @@ export type SelectorProps = {
     leftActive?: string;
     rightItem?: string;
     rightActive?: string;
-    borderColor?: string;  
+    borderColor?: string;
   };
 };
 
@@ -34,7 +34,7 @@ const Selector = ({
 
   const [selectedMain, setSelectedMain] = useState(initialMain);
   const [selectedSub, setSelectedSub] = useState<string | null>(
-    initialSubs && initialSubs.length ? initialSubs[0] : null
+    initialSubs && initialSubs.length ? initialSubs[0] : null,
   );
 
   const changeMain = (next: string) => {
@@ -42,7 +42,7 @@ const Selector = ({
     setSelectedSub(null);
   };
   const chooseSub = (sub: string) => {
-    setSelectedSub(prev => (prev === sub ? null : sub));
+    setSelectedSub((prev) => (prev === sub ? null : sub));
   };
 
   useEffect(() => setSelectedMain(initialMain), [initialMain]);
@@ -56,8 +56,8 @@ const Selector = ({
   }, [selectedMain, selectedSub, onSelect]);
 
   return (
-    <div className={`flex h-96 w-full overflow-hidden border-t ${borderColor}`}>
-     <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
+    <div className={`flex h-85 w-full overflow-hidden border-t ${borderColor}`}>
+      <div className={`flex w-1/3 flex-col px-1 py-2 ${leftBase}`}>
         {Object.keys(dataMap).map((main) => (
           <button
             key={main}
@@ -71,7 +71,7 @@ const Selector = ({
         ))}
       </div>
 
-     <div className="min-h-col flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
+      <div className="min-h-col flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
         {dataMap[selectedMain]?.length ? (
           dataMap[selectedMain].map((sub) => {
             const active = selectedSub === sub;

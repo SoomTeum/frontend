@@ -14,7 +14,7 @@ export default function AiExplorePage() {
   const setDistanceKm = useAIExploreStore((s) => s.setDistanceKm);
 
   const isReady = useMemo(
-    () => !!address && !!theme?.subs.length && distanceKm !== null,
+    () => !!address && !!theme?.subs.length && distanceKm !== 0 && distanceKm !== null,
     [address, theme, distanceKm],
   );
 
