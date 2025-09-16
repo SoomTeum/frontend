@@ -1,27 +1,28 @@
 import api from '../api';
-import { ApiResponse } from '@/types/api-response';
+import type { ApiResponse } from '@/types/api-response';
 
-export interface ParkingLot {
-  prkId: string;
-  prkName: string;
-  totalLots: number;
-  availLots: number;
-  distance: number;
-}
-
-export interface PlaceDetail {
+export type IntegratedPlace = {
   placeName: string;
-  placeImageUrl: string;
-  placeAddress: string;
-  region: string;
-  theme: string;
-  tranquilityLevel: number;
-  likeCount: number;
-  introduction: string;
-  aiTipSummary?: string;
-  nearbyParkingLots?: ParkingLot[];
-  longitude: string;
-  latitude: string;
-}
+  placeImageUrl?: string | null;
+  placeAddress?: string | null;
+  region?: string | null;
+  theme?: string | null;
+  tranquilityLevel?: number | null;
+  likeCount?: number | null;
+  introduction?: string | null;
+  aiTipSummary?: string | null;
+  nearbyParkingLots?: Array<{
+    prkId: string;
+    prkName: string;
+    totalLots: number;
+    availLots: number;
+    distance: number;
+  }>;
+  longitude?: string | null;
+  latitude?: string | null;
+};
 
-export const getPlaceDetail;
+export async function getPlaceDetail(contentId: string) {
+  const resp = await api.get<ApiResponse<IntegratedPlace>>(`/places/integrated/${contentId}`);
+  return resp.data.data;
+}
