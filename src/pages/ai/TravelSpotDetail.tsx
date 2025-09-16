@@ -171,8 +171,8 @@ const TravelSpotDetail = () => {
               {/*이름, 주소*/}
               <div className="mt-2 flex flex-1 flex-col justify-between px-3">
                 <div className="min-w-0">
-                  <div className="text-caption3 line-clamp-2 break-words">{data.name}</div>
-                  <div className="text-body3 mt-6 line-clamp-2">{data.address}</div>
+                  <div className="text-caption3 line-clamp-2 break-keep">{data.name}</div>
+                  <div className="text-body3 mt-6 line-clamp-2 break-keep">{data.address}</div>
                 </div>
 
                 {/*좋아요, 저장*/}
@@ -208,7 +208,7 @@ const TravelSpotDetail = () => {
             {/*소개...*/}
             <div className="mt-5 px-1">
               <div className="text-title4">소개</div>
-              <div className="text-body3 mt-2 pr-2">{data.description}</div>
+              <div className="text-body3 mt-2 pr-2 break-keep">{data.description}</div>
             </div>
 
             {/*강릉시 한정 정보*/}
