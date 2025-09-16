@@ -1,4 +1,5 @@
 import api from '../api';
+import { ApiResponse } from '@/types/api-response';
 
 export interface ParkingLot {
   prkId: string;
@@ -22,3 +23,5 @@ export interface PlaceDetail {
   longitude: string;
   latitude: string;
 }
+
+export const getPlaceDetail;
