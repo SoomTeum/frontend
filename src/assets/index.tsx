@@ -16,6 +16,8 @@ import AIImage from '@/assets/icons/ai_image.svg?react';
 import HomeBanner from '@/assets/icons/home_banner.jpg';
 import KakaoLogin from '@/assets/icons/kakao_login.png';
 import LoginImage from '@/assets/icons/login_image.svg?react';
+import A1 from '@/assets/icons/AI_main1.png';
+import A2 from '@/assets/icons/AI_main2.png';
 
 export {
   InfoIcon,
@@ -36,4 +38,6 @@ export {
   HomeBanner,
   LoginImage,
   KakaoLogin,
+  A1,
+  A2,
 };

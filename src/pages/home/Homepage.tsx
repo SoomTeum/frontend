@@ -1,7 +1,14 @@
 import HomeBanner from '@/assets/icons/home_banner.jpg';
 import { Header, Sidebar, Image, Button } from '@/component';
+import FeatureSlides from '@/component/home/FeatureSlides';
+import { A1, A2 } from '@/assets';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const homeSlides = [
+  { id: 1, src: A1 },
+  { id: 2, src: A2 },
+];
 
 export default function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,7 +25,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />{' '}
-      <div className="mx-auto flex w-full max-w-[480px] flex-col pt-14">
+      <div className="mx-auto flex w-full flex-col pt-14">
         <Image src={HomeBanner} className="h-60 w-full" />
         <div className="text-caption2 text-green1 px-5 pt-1 text-right">
           *해당 사진 속 장소는 강릉입니다.
@@ -32,6 +39,10 @@ export default function HomePage() {
             바로가기
           </Button>
         </div>
+        <div className="py-7">
+          <FeatureSlides title="AI 맞춤 여행지 탐색" slides={homeSlides} />
+        </div>
+
         {/*Todo: 추후 홈 메인 내용 확정 되면 구현....*/}
       </div>
     </div>
