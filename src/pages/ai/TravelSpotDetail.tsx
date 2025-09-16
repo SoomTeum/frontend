@@ -208,7 +208,7 @@ const TravelSpotDetail = () => {
             {/*소개...*/}
             <div className="mt-5 px-1">
               <div className="text-title4">소개</div>
-              <div className="text-body3 mt-2 pr-2 break-keep">{data.description}</div>
+              <div className="text-body3 mt-2 pr-2">{data.description}</div>
             </div>
 
             {/*강릉시 한정 정보*/}
