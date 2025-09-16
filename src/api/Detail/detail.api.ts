@@ -1,28 +1,24 @@
 import api from '../api';
 
-export interface KorDetailItem {
-  title?: string;
-  firstimage?: string;
-  firstimage2?: string;
-  mapx?: string;
-  mapy?: string;
-  addr1?: string;
-  overview?: string;
+export interface ParkingLot {
+  prkId: string;
+  prkName: string;
+  totalLots: number;
+  availLots: number;
+  distance: number;
 }
 
-export interface KorDetailResponse {
-  header: { resultCode: string; resultMsg: string };
-  body: {
-    items?: { item?: KorDetailItem[] };
-    totalCount: number;
-    pageNo: number;
-    numOfRows: number;
-  };
-}
-
-export async function getKorDetail(contentId: string, pageNo = 1, numOfRows = 1) {
-  const { data } = await api.get<KorDetailResponse>('/kor/detail', {
-    params: { contentId, pageNo, numOfRows },
-  });
-  return data?.body?.items?.item?.[0] ?? null;
+export interface PlaceDetail {
+  placeName: string;
+  placeImageUrl: string;
+  placeAddress: string;
+  region: string;
+  theme: string;
+  tranquilityLevel: number;
+  likeCount: number;
+  introduction: string;
+  aiTipSummary?: string;
+  nearbyParkingLots?: ParkingLot[];
+  longitude: string;
+  latitude: string;
 }
