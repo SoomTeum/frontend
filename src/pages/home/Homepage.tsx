@@ -5,9 +5,14 @@ import { A1, A2 } from '@/assets';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const homeSlides = [
+const homeSlidesAI = [
   { id: 1, src: A1 },
   { id: 2, src: A2 },
+];
+
+const homeSlidesSearch = [
+  { id: 1, src: B1 },
+  { id: 2, src: B2 },
 ];
 
 export default function HomePage() {
@@ -40,7 +45,8 @@ export default function HomePage() {
           </Button>
         </div>
         <div className="py-7">
-          <FeatureSlides title="AI 맞춤 여행지 탐색" slides={homeSlides} />
+          <FeatureSlides title="AI 맞춤 여행지 탐색" slides={homeSlidesAI} />
+          <FeatureSlides title="여행지 탐색" slides={homeSlidesSearch} />
         </div>
 
         {/*Todo: 추후 홈 메인 내용 확정 되면 구현....*/}
