@@ -1,8 +1,8 @@
-import SelectorMulti from '@/component/selector/SelectorMulti';
 import { activityMap } from '@/constants/ActivityMap';
+import { Selector } from '@/component';
 import { ArrowLeft } from '@/assets';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
 import { Button } from '@/component';
 
@@ -13,6 +13,11 @@ const ThemeSelcetPage = () => {
   const firstMain = Object.keys(activityMap)[0] ?? '자연';
   const [main, setMain] = useState<string>(saved?.main ?? firstMain);
   const [subs, setSubs] = useState<string[]>(saved?.subs ?? []);
+
+  const handleSelect = useCallback((selectedMain: string, selectedSubs: string[]) => {
+    setMain(selectedMain);
+    setSubs(selectedSubs);
+  }, []);
 
   const done = () => {
     setTheme({ main, subs });
@@ -36,10 +41,11 @@ const ThemeSelcetPage = () => {
         <div className="border-green3 mt-5 border-t">
           <h2 className="text-title4 text-green1 py-2 text-center">테마</h2>
         </div>
-        <SelectorMulti
+        <Selector
           dataMap={activityMap}
           initialMain={main}
           initialSubs={subs}
+          onSelect={handleSelect}
           colorScheme={{
             leftBase: 'bg-green3-light text-caption4',
             leftItem: 'text-black text-caption4',
@@ -47,10 +53,6 @@ const ThemeSelcetPage = () => {
             rightItem: 'text-black',
             rightActive: 'outline outline-1 outline-[var(--color-green3)]',
             borderColor: 'border-green3',
-          }}
-          onSelect={(m, s) => {
-            setMain(m);
-            setSubs(s);
           }}
         />
 
