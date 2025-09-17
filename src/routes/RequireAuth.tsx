@@ -1,26 +1,17 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { getAccessToken } from '@/utils/auth';
 import { useAuthStore } from '@/stores/authStore';
 
-const getAccessToken = () => {
-  const t = localStorage.getItem('accessToken');
-  return t && t !== 'null' && t !== 'undefined' ? t : null;
-};
-
 export default function RequireAuth() {
-  const { token, hasHydrated } = useAuthStore((s) => ({
-    token: s.token,
-    hasHydrated: s.hasHydrated,
-  }));
+  const storeToken = useAuthStore?.getState ? useAuthStore.getState().token : null;
+
   const location = useLocation();
 
-  if (!hasHydrated) return null;
+  const accessToken = storeToken ?? getAccessToken();
 
-  const accessToken = token ?? getAccessToken();
   if (!accessToken) {
-    const target = location.pathname + location.search + location.hash;
-    sessionStorage.setItem('postLoginRedirect', target);
+    sessionStorage.setItem('postLoginRedirect', location.pathname + location.search);
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
-
   return <Outlet />;
 }
