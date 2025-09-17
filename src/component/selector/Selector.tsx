@@ -1,4 +1,3 @@
-// Selector.tsx
 import { useEffect, useState } from 'react';
 
 export type SelectorProps = {
