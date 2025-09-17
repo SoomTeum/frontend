@@ -1,23 +1,78 @@
-import { activityMap } from '@/constants/ActivityMap';
+// ThemeSelcetPage.tsx
 import { Selector } from '@/component';
 import { ArrowLeft } from '@/assets';
 import { useNavigate } from 'react-router-dom';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
 import { Button } from '@/component';
+import { getThemeGroups, type ThemeGroup } from '@/api/Selector/theme.api';
 
 const ThemeSelcetPage = () => {
   const navigate = useNavigate();
   const saved = useAIExploreStore((s) => s.theme);
   const setTheme = useAIExploreStore((s) => s.setTheme);
-  const firstMain = Object.keys(activityMap)[0] ?? '자연';
+  const setThemeCodes = useAIExploreStore((s) => s.setThemeCodes);
+
+  const [dataMap, setDataMap] = useState<Record<string, string[]>>({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const groups = await getThemeGroups();
+        const next: Record<string, string[]> = {};
+        groups.forEach((g: ThemeGroup) => {
+          next[g.cat1Name] = g.cat2List.map((c) => c.cat2Name);
+        });
+        setDataMap(next);
+      } catch (e) {
+        console.error(e);
+        setDataMap({});
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const firstMain = useMemo(() => Object.keys(dataMap)[0] ?? '자연', [dataMap]);
+
   const [main, setMain] = useState<string>(saved?.main ?? firstMain);
   const [subs, setSubs] = useState<string[]>(saved?.subs ?? []);
 
-  const handleSelect = useCallback((selectedMain: string, selectedSubs: string[]) => {
-    setMain(selectedMain);
-    setSubs(selectedSubs);
-  }, []);
+  useEffect(() => {
+    if (!dataMap[main]) {
+      setMain(saved?.main && dataMap[saved.main] ? saved.main : firstMain);
+      const validSubs = (saved?.subs ?? []).filter((s) =>
+        dataMap[saved?.main ?? firstMain]?.includes(s),
+      );
+      setSubs(validSubs);
+    } else {
+      setSubs((prev) => prev.filter((s) => dataMap[main]?.includes(s)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataMap, firstMain]);
+
+  const handleSelect = useCallback(
+    (selectedMain: string, selectedSubs: string[], meta?: any) => {
+      setMain(selectedMain);
+      setSubs(selectedSubs);
+      setTheme({ main: selectedMain, subs: selectedSubs });
+
+      const cat1: string | null = meta?.mainCode ?? meta?.cat1 ?? null;
+
+      const cat2: string[] = Array.isArray(meta?.subCodes)
+        ? meta.subCodes
+        : Array.isArray(meta?.cat2)
+          ? meta.cat2
+          : Array.isArray(meta?.subs)
+            ? meta.subs.map((s: any) => s.code).filter(Boolean)
+            : [];
+
+      setThemeCodes({ cat1, cat2 });
+    },
+    [setTheme, setThemeCodes],
+  );
 
   const done = () => {
     setTheme({ main, subs });
@@ -37,12 +92,15 @@ const ThemeSelcetPage = () => {
           AI 맞춤 여행지 탐색 테마
         </span>
       </div>
+
       <div className="px-9">
         <div className="border-green3 mt-5 border-t">
           <h2 className="text-title4 text-green1 py-2 text-center">테마</h2>
         </div>
+
         <Selector
-          dataMap={activityMap}
+          key={`${Object.keys(dataMap).length}-${main}-${subs.join(',')}`} // 데이터 로드 시 초기값 반영 보장
+          dataMap={dataMap}
           initialMain={main}
           initialSubs={subs}
           onSelect={handleSelect}
@@ -61,10 +119,10 @@ const ThemeSelcetPage = () => {
             variant="lg"
             color="green3"
             className="w-full"
-            disabled={!subs.length}
+            disabled={loading || !subs.length}
             onClick={done}
           >
-            완료
+            {loading ? '불러오는 중…' : '완료'}
           </Button>
         </div>
       </div>

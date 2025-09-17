@@ -1,8 +1,7 @@
 import { Header, PlaceCard, Sidebar } from '@/component';
 import { useState } from 'react';
-import { mockAICard } from '@/__mocks/AICard.mock';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import type { AiPlace } from '@/api/List/aiList.api';
 function getRankBadgeClass(n: number) {
   if (n === 1) return 'bg-red1 text-black';
   if (n === 2) return 'bg-orange text-black';
@@ -14,6 +13,8 @@ export default function AIResultPage() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const { state } = useLocation() as { state?: { places?: AiPlace[] } };
+  const places = state?.places ?? [];
   const handleMenuClick = () => {
     setIsSidebarOpen(true);
   };
@@ -32,10 +33,10 @@ export default function AIResultPage() {
           AI 맞춤 여행지 탐색
         </div>
         <ul className="w-full space-y-4 py-5 pr-8 pl-4">
-          {mockAICard.map((it, idx) => {
+          {places.map((it, idx) => {
             const rank = idx + 1;
             return (
-              <li key={it.id}>
+              <li key={it.contentid ?? `${it.title}-${idx}`}>
                 <div className="flex items-center gap-2">
                   {/*순위*/}
                   <span
@@ -46,12 +47,12 @@ export default function AIResultPage() {
 
                   <div className="flex-1">
                     <PlaceCard
-                      imgUrl={it.thumbnail}
-                      title={it.name}
-                      theme={it.themeTag}
-                      quietLevel={it.serenity}
+                      imgUrl={it.firstimage || ''}
+                      title={it.title}
+                      theme={it.catName}
+                      quietLevel={it.quietnessLevel}
                       likeCount={it.likeCount}
-                      onClick={() => navigate(`/place/${it.id}`)}
+                      onClick={() => navigate(`/place/${it.contentid}`)}
                     />
                   </div>
                 </div>

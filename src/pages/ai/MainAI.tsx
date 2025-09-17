@@ -50,7 +50,6 @@ export default function AiExplorePage() {
       setLoading(true);
 
       const { lat, lng } = await geocodeAddress(address);
-      //TODO: 테마-카테고리 코드 매핑 로직 연결하기
       const cat1 = undefined;
       const cat2 = undefined;
 
@@ -59,8 +58,8 @@ export default function AiExplorePage() {
         mapX: lng,
         mapY: lat,
         radius: radiusMeters,
-        cat1,
-        cat2,
+        cat1: cat1 ?? undefined,
+        cat2: cat2?.[0],
         arrange: 'S',
         pageNo: 1,
         numOfRows: 20,
