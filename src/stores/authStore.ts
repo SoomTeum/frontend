@@ -6,6 +6,8 @@ type AuthState = {
   user?: { id: string; name: string } | null;
   setToken: (t: string | null) => void;
   logout: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (v: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -15,8 +17,15 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       setToken: (t) => set({ token: t }),
       logout: () => set({ token: null, user: null }),
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
     }),
-    { name: 'auth' },
+    {
+      name: 'auth',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+    },
   ),
 );
 

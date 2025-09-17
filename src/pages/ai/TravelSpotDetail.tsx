@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   EnergyIcon,
@@ -16,6 +16,7 @@ import { likePlace, unlikePlace } from '@/api/like/like.api';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { contentId = '' } = useParams<{ contentId: string }>();
   const formatCount = (n: number, cap = 999) => (n > cap ? `${cap}+` : `${n}`);
 
@@ -27,11 +28,18 @@ const TravelSpotDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
 
+  const isAuthed = !localStorage.getItem('accessToken');
+
   const handleToggleLike = async (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
 
     if (!data) return;
+
+    if (!isAuthed) {
+      navigate('/login', { state: { from: location }, replace: true });
+      return;
+    }
 
     try {
       if (liked) {

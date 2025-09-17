@@ -68,6 +68,7 @@ export default function MyPage() {
             '프로필 조회 중 오류가 발생했습니다.',
         );
       } finally {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         !cancelled && setLoading(false);
       }
     }
