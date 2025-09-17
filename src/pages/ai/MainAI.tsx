@@ -4,6 +4,8 @@ import { LabeledInput, Button, Header, Sidebar } from '@/component';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
 import DistanceSlider from '@/component/ai_explore/DistanceSlider';
 import { AddressSearchModal } from '@/component/KakaoMap/AddressPickerModal';
+import { getAIPlaces } from '@/api/List/aiList.api';
+import { geocodeAddress } from '@/utils/geocode';
 
 export default function AiExplorePage() {
   const navigate = useNavigate();
@@ -19,10 +21,10 @@ export default function AiExplorePage() {
   );
 
   const goThemeSelect = () => navigate('/explore/theme');
-  const startSearch = () => navigate('/explore/result');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleMenuClick = () => {
     setIsSidebarOpen(true);
@@ -39,6 +41,37 @@ export default function AiExplorePage() {
   const handleAddressSelect = (selectedAddress: any) => {
     setAddress(selectedAddress);
     setIsAddressModalOpen(false);
+  };
+
+  const startSearch = async () => {
+    if (!address || !distanceKm) return;
+
+    try {
+      setLoading(true);
+
+      const { lat, lng } = await geocodeAddress(address);
+      //TODO: 테마-카테고리 코드 매핑 로직 연결하기
+      const cat1 = undefined;
+      const cat2 = undefined;
+
+      const radiusMeters = Math.round(Number(distanceKm) * 1000);
+      const res = await getAIPlaces({
+        mapX: lng,
+        mapY: lat,
+        radius: radiusMeters,
+        cat1,
+        cat2,
+        arrange: 'S',
+        pageNo: 1,
+        numOfRows: 20,
+      });
+      navigate('/explore/result', { state: { places: res.data } });
+    } catch (e) {
+      console.error(e);
+      alert('추천지를 불러오지 못했습니다. 잠시 후에 다시 시도해주세요');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,7 +108,7 @@ export default function AiExplorePage() {
                 variant="lg"
                 color="green3"
                 className="w-full"
-                disabled={!isReady}
+                disabled={!isReady || loading}
                 onClick={startSearch}
               >
                 AI 탐색 시작하기
