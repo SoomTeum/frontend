@@ -28,7 +28,7 @@ const TravelSpotDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
 
-  const isAuthed = !localStorage.getItem('accessToken');
+  const isAuthed = !!localStorage.getItem('accessToken');
 
   const handleToggleLike = async (e?: React.MouseEvent) => {
     e?.preventDefault();
