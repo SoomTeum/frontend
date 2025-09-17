@@ -38,7 +38,7 @@ export default function AIResultPage() {
         typeof p.quietnessLevel === 'number'
           ? p.quietnessLevel >= 0
             ? Math.min(5, p.quietnessLevel)
-            : -1 // -1이면 "정보없음" 처리용
+            : -1
           : -1;
 
       const likes = typeof p.likeCount === 'number' ? p.likeCount : 0;

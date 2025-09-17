@@ -1,5 +1,4 @@
 import api from '../api';
-import type { ApiResponse } from '@/types/api-response';
 
 export type Arrange = 'O' | 'Q' | 'R' | 'S';
 
@@ -31,8 +30,6 @@ export interface AiPlacesParams {
   _type?: string;
 }
 export async function getAIPlaces(params: AiPlacesParams): Promise<AiPlace[]> {
-  // 서버가 "배열"을 바로 주는 형태라면 제네릭도 배열로!
   const { data } = await api.get<AiPlace[]>('/places/ai', { params });
-  // 혹시 단일 객체로 올 때도 대비 (안전장치)
   return Array.isArray(data) ? data : data ? [data] : [];
 }
