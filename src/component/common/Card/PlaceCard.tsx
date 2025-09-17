@@ -38,9 +38,9 @@ export default function PlaceCard({
       </div>
 
       {/*텍스트*/}
-      <div className="ml-4 flex w-full flex-col">
+      <div className="ml-4 flex w-full min-w-0 flex-col">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-caption4 truncate font-medium">{title}</p>
+          <p className="text-caption4 max-w-[20ch] truncate">{title}</p>
         </div>
 
         {/*뱃지 2개*/}
