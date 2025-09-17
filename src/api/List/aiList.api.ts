@@ -32,7 +32,7 @@ export interface AiPlacesParams {
 }
 
 export async function getAIPlaces(params: AiPlacesParams) {
-  const { data } = await api.get<ApiResponse<AiPlace>>(`/places/ai`, {
+  const { data } = await api.get<ApiResponse<AiPlace[]>>(`/places/ai`, {
     params,
   });
   return data;
