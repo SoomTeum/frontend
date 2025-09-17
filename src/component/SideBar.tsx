@@ -69,7 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
             </button>
             <div className="border-gray1 mr-13 border-b" />
             <button onClick={() => go('/explore/Filter')} className="cursor-pointer py-2 text-left">
-              여행지 검색
+              여행지 탐색
             </button>
             <div className="border-gray1 mr-13 border-b" />
             <button onClick={goProtectedMyTravel} className="cursor-pointer py-2 text-left">
