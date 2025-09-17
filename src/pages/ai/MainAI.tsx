@@ -6,6 +6,7 @@ import DistanceSlider from '@/component/ai_explore/DistanceSlider';
 import { AddressSearchModal } from '@/component/KakaoMap/AddressPickerModal';
 import { getAIPlaces } from '@/api/List/aiList.api';
 import { geocodeAddress } from '@/utils/geocode';
+import AILoadingPage from './AILoadingPage';
 
 export default function AiExplorePage() {
   const navigate = useNavigate();
@@ -89,6 +90,7 @@ export default function AiExplorePage() {
       setLoading(false);
     }
   };
+  if (loading) return <AILoadingPage />;
 
   return (
     <div className="min-h-screen">
