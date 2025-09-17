@@ -6,7 +6,7 @@ export type IntegratedPlace = {
   placeImageUrl?: string | null;
   placeAddress?: string | null;
   region?: string | null;
-  theme?: string | null;
+  themeName?: string | null;
   tranquilityLevel?: number | null;
   likeCount?: number | null;
   introduction?: string | null;
