@@ -201,9 +201,15 @@ const TravelSpotDetail = () => {
               <Badge color="red" type="default">
                 {data.themeName}
               </Badge>
-              <Badge type="default" color="green" count={data.serenity}>
-                한적함
-              </Badge>
+              {data.serenity === -1 ? (
+                <Badge type="default" color="green">
+                  정보없음
+                </Badge>
+              ) : (
+                <Badge type="default" color="green" count={data.serenity}>
+                  한적함
+                </Badge>
+              )}
             </div>
             {/*소개...*/}
             <div className="mt-5 px-1">

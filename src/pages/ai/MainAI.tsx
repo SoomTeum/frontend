@@ -11,6 +11,7 @@ export default function AiExplorePage() {
   const navigate = useNavigate();
   const address = useAIExploreStore((s) => s.address);
   const theme = useAIExploreStore((s) => s.theme);
+  const themeCodes = useAIExploreStore((s) => s.themeCodes); // ✅ 추가
   const distanceKm = useAIExploreStore((s) => s.distanceKm);
   const setAddress = useAIExploreStore((s) => s.setAddress);
   const setDistanceKm = useAIExploreStore((s) => s.setDistanceKm);
@@ -50,23 +51,39 @@ export default function AiExplorePage() {
       setLoading(true);
 
       const { lat, lng } = await geocodeAddress(address);
-      const cat1 = undefined;
-      const cat2 = undefined;
+
+      const cat1 = themeCodes.cat1;
+      const cat2 = themeCodes.cat2?.[0];
 
       const radiusMeters = Math.round(Number(distanceKm) * 1000);
-      const res = await getAIPlaces({
+
+      console.log('API 호출 파라미터:', {
         mapX: lng,
         mapY: lat,
         radius: radiusMeters,
-        cat1: cat1 ?? undefined,
-        cat2: cat2?.[0],
+        cat1,
+        cat2,
         arrange: 'S',
         pageNo: 1,
         numOfRows: 20,
       });
-      navigate('/explore/result', { state: { places: res.data } });
+
+      const places = await getAIPlaces({
+        mapX: lng,
+        mapY: lat,
+        radius: radiusMeters,
+        cat1: cat1 ?? undefined,
+        cat2: cat2 ?? undefined,
+        arrange: 'S',
+        pageNo: 1,
+        numOfRows: 20,
+      });
+
+      navigate('/explore/result', {
+        state: { places },
+      });
     } catch (e) {
-      console.error(e);
+      console.error('API 에러:', e);
       alert('추천지를 불러오지 못했습니다. 잠시 후에 다시 시도해주세요');
     } finally {
       setLoading(false);
@@ -76,7 +93,8 @@ export default function AiExplorePage() {
   return (
     <div className="min-h-screen">
       <Header onMenuClick={handleMenuClick} />
-      <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />{' '}
+      <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />
+
       <div className="mx-auto flex w-full max-w-[480px] flex-col pt-14">
         <div className="bg-green3-light text-caption3 text-green1 h-10 w-full items-center py-[10px] text-center">
           AI 맞춤 여행지 탐색
@@ -110,12 +128,13 @@ export default function AiExplorePage() {
                 disabled={!isReady || loading}
                 onClick={startSearch}
               >
-                AI 탐색 시작하기
+                {loading ? '탐색 중...' : 'AI 탐색 시작하기'}
               </Button>
             </div>
           </div>
         </section>
       </div>
+
       <AddressSearchModal
         isOpen={isAddressModalOpen}
         onClose={() => setIsAddressModalOpen(false)}

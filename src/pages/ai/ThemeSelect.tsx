@@ -1,4 +1,3 @@
-// ThemeSelcetPage.tsx
 import { Selector } from '@/component';
 import { ArrowLeft } from '@/assets';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +14,7 @@ const ThemeSelcetPage = () => {
 
   const [dataMap, setDataMap] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(false);
+  const [groups, setGroups] = useState<ThemeGroup[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -26,9 +26,11 @@ const ThemeSelcetPage = () => {
           next[g.cat1Name] = g.cat2List.map((c) => c.cat2Name);
         });
         setDataMap(next);
+        setGroups(groups);
       } catch (e) {
         console.error(e);
         setDataMap({});
+        setGroups([]);
       } finally {
         setLoading(false);
       }
@@ -54,24 +56,22 @@ const ThemeSelcetPage = () => {
   }, [dataMap, firstMain]);
 
   const handleSelect = useCallback(
-    (selectedMain: string, selectedSubs: string[], meta?: any) => {
+    (selectedMain: string, selectedSubs: string[]) => {
       setMain(selectedMain);
       setSubs(selectedSubs);
       setTheme({ main: selectedMain, subs: selectedSubs });
 
-      const cat1: string | null = meta?.mainCode ?? meta?.cat1 ?? null;
+      // 원본 groups에서 코드 찾기
+      const group = groups.find((g) => g.cat1Name === selectedMain);
+      const cat1 = group?.cat1 ?? null;
 
-      const cat2: string[] = Array.isArray(meta?.subCodes)
-        ? meta.subCodes
-        : Array.isArray(meta?.cat2)
-          ? meta.cat2
-          : Array.isArray(meta?.subs)
-            ? meta.subs.map((s: any) => s.code).filter(Boolean)
-            : [];
+      const cat2 = (group?.cat2List ?? [])
+        .filter((c) => selectedSubs.includes(c.cat2Name))
+        .map((c) => c.cat2);
 
       setThemeCodes({ cat1, cat2 });
     },
-    [setTheme, setThemeCodes],
+    [groups, setTheme, setThemeCodes],
   );
 
   const done = () => {

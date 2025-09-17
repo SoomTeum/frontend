@@ -1,5 +1,5 @@
 import { Header, PlaceCard, Sidebar } from '@/component';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import type { AiPlace } from '@/api/List/aiList.api';
 
@@ -15,15 +15,18 @@ export default function AIResultPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { state } = useLocation() as { state?: { places?: AiPlace[] } };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const places = state?.places ?? [];
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleSidebarClose = () => setIsSidebarOpen(false);
-
-  // ✅ 서버 응답 → UI 안전값으로 정규화
   const normalized = useMemo(() => {
-    return (places ?? []).map((p, idx) => {
-      // dist는 문자열로 오므로 숫자로 파싱(옵션)
+    if (!Array.isArray(places)) {
+      console.warn('places가 배열이 아닙니다:', places);
+      return [];
+    }
+
+    return places.map((p, idx) => {
       const distNum = Number(p.dist);
       const distKm = Number.isFinite(distNum)
         ? distNum >= 1000
@@ -31,27 +34,32 @@ export default function AIResultPage() {
           : `${Math.round(distNum)}m`
         : undefined;
 
-      // quietnessLevel: -1 은 "데이터 없음" → 0으로 보정(PlaceCard가 숫자 가정 시 안전)
       const quiet =
-        typeof p.quietnessLevel === 'number' && p.quietnessLevel >= 0
-          ? Math.min(5, p.quietnessLevel)
-          : 0;
+        typeof p.quietnessLevel === 'number'
+          ? p.quietnessLevel >= 0
+            ? Math.min(5, p.quietnessLevel)
+            : -1 // -1이면 "정보없음" 처리용
+          : -1;
 
-      // likeCount: null → 0
       const likes = typeof p.likeCount === 'number' ? p.likeCount : 0;
 
       return {
         key: p.contentid ?? `${p.title ?? 'item'}-${idx}`,
         id: p.contentid ?? '',
         imgUrl: p.firstimage ?? '',
-        title: p.title ?? '(제목 없음)',
-        theme: p.catName ?? '', // null이면 공백
+        title: p.title ?? '',
+        theme: p.catName ?? '',
         quietLevel: quiet,
         likeCount: likes,
-        distText: distKm, // 필요하면 PlaceCard에 추가 props로 표시
+        distText: distKm,
       };
     });
   }, [places]);
+
+  useEffect(() => {
+    console.log('normalized:', normalized);
+    console.log('normalized.length:', normalized.length);
+  }, [normalized]);
 
   return (
     <div className="min-h-screen">
@@ -65,7 +73,10 @@ export default function AIResultPage() {
 
         <ul className="w-full space-y-4 py-5 pr-8 pl-4">
           {normalized.length === 0 && (
-            <li className="py-8 text-center text-sm text-gray-500">표시할 결과가 없어요.</li>
+            <li className="py-8 text-center">
+              <div className="mb-2 text-sm text-gray-500">표시할 결과가 없어요.</div>
+              <div className="text-xs text-gray-400">다른 조건으로 다시 검색해보세요.</div>
+            </li>
           )}
 
           {normalized.map((it, idx) => {
@@ -83,8 +94,8 @@ export default function AIResultPage() {
                       imgUrl={it.imgUrl}
                       title={it.title}
                       theme={it.theme}
-                      quietLevel={it.quietLevel} // 0~5로 보정된 숫자
-                      likeCount={it.likeCount} // null → 0 보정
+                      quietLevel={it.quietLevel}
+                      likeCount={it.likeCount}
                       onClick={() => it.id && navigate(`/place/${it.id}`)}
                     />
                   </div>
