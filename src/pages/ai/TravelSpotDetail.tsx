@@ -9,7 +9,7 @@ import {
   HeartOutline,
 } from '@/assets';
 import type { PlaceDetail } from '@/types/Detail';
-import { getKorDetail, type KorDetailItem } from '@/api/Detail/detail.api';
+import { getPlaceDetail, type IntegratedPlace } from '@/api/Detail/detail.api';
 import { useEffect, useState } from 'react';
 import { Badge, Image, Loader, ParkingTable } from '@/component';
 import { likePlace, unlikePlace } from '@/api/like/like.api';
@@ -56,33 +56,45 @@ const TravelSpotDetail = () => {
     setBookmarked((prev) => !prev);
   };
 
-  function mapKorToPlaceDetail(id: string, item: KorDetailItem): PlaceDetail {
-    const name = item.title ?? '';
-    const normalize = (u?: string) => {
-      const s = u?.trim();
+  function mapIntegratedToPlaceDetail(id: string, item: IntegratedPlace): PlaceDetail {
+    const normalize = (u?: string | null) => {
+      const s = (u ?? '').trim();
       if (!s) return '';
       return s.startsWith('http://') ? s.replace(/^http:\/\//, 'https://') : s;
     };
-    const thumbnail = normalize(item.firstimage) || normalize(item.firstimage2) || '';
-    const address = item.addr1 ?? '';
-    const description = item.overview ?? '';
+    const name = item.placeName ?? '';
+    const thumbnail = normalize(item.placeImageUrl) || '';
+    const address = item.placeAddress ?? '';
+    const description = item.introduction ?? '';
 
-    const regionTag = '정보없음';
+    const regionTag = item.region ?? '정보없음';
+    const themeTag = item.theme ?? '여행지';
+    const serenity = item.tranquilityLevel ?? -1;
+
+    const parkings =
+      item.nearbyParkingLots?.map((p) => ({
+        id: p.prkId,
+        name: p.prkName,
+        total: p.totalLots,
+        available: p.availLots,
+        distance: p.distance,
+      })) ?? undefined;
     return {
       id,
       name,
       thumbnail,
       address,
       description,
-      //투두: 서버에 좋아요/북마크 API 붙이면 여기를 갱신
       liked: false,
-      likeCount: 0,
+      likeCount: item.likeCount ?? 0,
       bookmarked: false,
-      //투두: 태그/지표는 추후 API 붙이기
       regionTag,
-      themeTag: '여행지',
-      serenity: 0,
-      extra: {},
+      themeTag,
+      serenity,
+      extra: {
+        aiSummary: item.aiTipSummary ?? undefined,
+        parkings,
+      },
     };
   }
   useEffect(() => {
@@ -96,14 +108,14 @@ const TravelSpotDetail = () => {
       try {
         setLoading(true);
         setErrMsg(null);
-        const item = await getKorDetail(contentId);
+        const item = await getPlaceDetail(contentId);
         if (!alive) return;
 
         if (!item) {
           setErrMsg('해당 여행지 정보를 찾을 수 없습니다.');
           setData(null);
         } else {
-          const mapped = mapKorToPlaceDetail(contentId, item);
+          const mapped = mapIntegratedToPlaceDetail(contentId, item);
           setData(mapped);
           //좋아요/북마크 초기값 세팅
           setLiked(mapped.liked);
@@ -159,8 +171,8 @@ const TravelSpotDetail = () => {
               {/*이름, 주소*/}
               <div className="mt-2 flex flex-1 flex-col justify-between px-3">
                 <div className="min-w-0">
-                  <div className="text-caption3 line-clamp-2 break-words">{data.name}</div>
-                  <div className="text-body3 mt-6 line-clamp-2">{data.address}</div>
+                  <div className="text-caption3 line-clamp-2 break-keep">{data.name}</div>
+                  <div className="text-body3 mt-6 line-clamp-2 break-keep">{data.address}</div>
                 </div>
 
                 {/*좋아요, 저장*/}
