@@ -1,77 +1,137 @@
-import api from "@/api/api"; 
+// src/api/Myplace/savep.api.ts
+import api from "@/api/api";
 
 export type SaveMyPlaceRequest = {
-  contentId: string;   
-  regionName: string;  
-  themeName: string;
-  cnctrLevel: number;  
+  contentId: string | number;
+
+  // 코드 기반(권장)
+  areaCode?: number | string;
+  sigunguCode?: number | string;
+  cat1?: string;
+  cat2?: string;
+
+  cnctrLevel?: number;
+
+  // 레거시(문자명) — 백엔드가 아직 받을 수도 있어 optional로 유지
+  regionName?: string;
+  themeName?: string;
 };
 
-export type SaveMyPlaceResponse = {
-  placedId: number;
-  type: string;        
-  like: boolean;
+export type SaveMyPlaceData = {
+  placeId: number;
+  type: string;            // "CREATED" | "UPDATED" | "UNCHANGED" 등 백 정의에 맞춰 들어옴
   enabled: boolean;
   changed: boolean;
-  likeCount: number;
-  message: string;     
-  createdAt: string;  
-  updatedAt: string;   
+  likeCount?: number;
+  message?: string;        // 백에서 사유 메시지 내려줄 수 있음
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-type ApiEnvelope<T> = {
-  success?: boolean;
-  data?: T;
-  message?: string;
-  code?: string | number;
+type Wrapped<T> = {
+  success: boolean;
+  data: T | null;
   error?: {
-    code?: string | number;
+    code?: number | string;
     status?: number;
     message?: string;
     path?: string;
-    timestamp?: string | number;
-    detail?: string;
-  };
+    detail?: unknown;
+  } | null;
 };
 
-function unwrapResponse<T>(raw: T | ApiEnvelope<T>): T {
-  const anyRaw = raw as any;
-  if (anyRaw && typeof anyRaw === "object" && "data" in anyRaw && anyRaw.data) {
-    return anyRaw.data as T;
+class AppError extends Error {
+  code: number | string;
+  status?: number;
+  raw?: unknown;
+  constructor(msg: string, code: number | string, status?: number, raw?: unknown) {
+    super(msg);
+    this.name = "AppError";
+    this.code = code;
+    this.status = status;
+    this.raw = raw;
   }
-  return raw as T;
 }
 
-function assertResponseShape(res: any): asserts res is SaveMyPlaceResponse {
-  if (!res || typeof res.placedId !== "number") {
-    throw new Error("서버 응답 형식이 예상과 다릅니다.");
-  }
-}
-
-export async function savePlace(payload: SaveMyPlaceRequest): Promise<SaveMyPlaceResponse> {
+function safeParseJson(x: any) {
   try {
-    const body: SaveMyPlaceRequest = {
-      ...payload,
-      cnctrLevel: Number(payload.cnctrLevel),
-    };
-
-    const { data } = await api.put<SaveMyPlaceResponse | ApiEnvelope<SaveMyPlaceResponse>>(
-      "/my/places/save",
-      body,
-      { headers: { "Content-Type": "application/json" } }
-    );
-
-    const unwrapped = unwrapResponse<SaveMyPlaceResponse>(data);
-    assertResponseShape(unwrapped);
-    return unwrapped;
-  }  catch (err: any) {
-  console.error("[savePlace][raw error]", err?.response || err);
-  const serverMsg =
-    err?.response?.data?.message ||
-    err?.response?.data?.error?.message ||
-    err?.message;
-  throw new Error(serverMsg || "네트워크 오류 또는 서버 에러가 발생했습니다.");
-}
+    if (typeof x === "string") return JSON.parse(x);
+    return x;
+  } catch {
+    return x;
+  }
 }
 
-export default { savePlace };
+function throwNormalizedError(e: any): never {
+  const resp = e?.response;
+  const data = resp?.data;
+  const err = data?.error ?? data;
+
+  const status = resp?.status ?? err?.status ?? 0;
+  const code = err?.code ?? status ?? "UNKNOWN";
+  const msg =
+    err?.message ||
+    data?.message ||
+    e?.message ||
+    "요청 처리 중 오류가 발생했습니다.";
+
+  if (resp) {
+    console.debug("[saveMyPlace][HTTP ERROR]", {
+      method: resp.config?.method,
+      url: resp.config?.url,
+      status,
+      requestBody: safeParseJson(resp.config?.data),
+      responseBody: data,
+    });
+  }
+  throw new AppError(msg, code, status, e);
+}
+
+export async function saveMyPlace(body: SaveMyPlaceRequest): Promise<SaveMyPlaceData> {
+  const payload: SaveMyPlaceRequest = {
+    ...body,
+    contentId: String(body.contentId),
+  };
+
+  try {
+    console.debug("[saveMyPlace][REQUEST]", {
+      method: "PUT",
+      url: "/my/places/save",
+      payload,
+    });
+
+    const { data, status, config } = await api.put<SaveMyPlaceData | Wrapped<SaveMyPlaceData>>("my/places/save", payload, {
+       headers: { "Content-Type": "application/json" },
+    });
+
+    console.debug("[saveMyPlace][RESPONSE]", {
+      status,
+      url: config?.url,
+      raw: data,
+    });
+
+    // 비래핑
+    if ((data as any)?.placeId !== undefined) {
+      return data as SaveMyPlaceData;
+    }
+
+    // 래핑
+    const wrapped = data as Wrapped<SaveMyPlaceData>;
+    if (typeof wrapped?.success === "boolean") {
+      if (wrapped.success && wrapped.data) return wrapped.data;
+
+      const em = wrapped?.error?.message || "요청이 실패했습니다.";
+      const ec = wrapped?.error?.code ?? status ?? 400;
+      const es = wrapped?.error?.status ?? status;
+      throw new AppError(em, ec, es, wrapped?.error);
+    }
+
+    throw new AppError("알 수 없는 응답 형식입니다.", "UNEXPECTED_RESPONSE", status, data);
+  } catch (e) {
+    throwNormalizedError(e);
+  }
+}
+
+// 기존 import 경로 호환
+export { saveMyPlace as savePlace };
+export { AppError };
