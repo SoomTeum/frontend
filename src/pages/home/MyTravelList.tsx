@@ -5,11 +5,17 @@ import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
 import { getSavedPlaces, unsavePlace, type SavedPlaceItem } from '@/api/Myplace/myPlace.api';
 import { useNavigate } from 'react-router-dom';
+import SortPillSelect, { type Option } from '@/component/selector/SortPillSelect';
 
 const PAGE_SIZE = 20;
 
 type Row = SavedPlaceItem;
-
+const arrangeOptions: Option<'O' | 'Q' | 'R' | 'S'>[] = [
+  { value: 'O', label: '기본순' },
+  { value: 'Q', label: '수정일순' },
+  { value: 'R', label: '등록일순' },
+  { value: 'S', label: '거리순' },
+];
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [items, setItems] = useState<Row[]>([]);
@@ -18,6 +24,7 @@ const MyTravelList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
+  const [arrange, setArrange] = useState<'O' | 'Q' | 'R' | 'S'>('O');
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
@@ -91,6 +98,15 @@ const MyTravelList = () => {
           <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 px-9 text-[#7f8c6b]">
             <img src={SearchIcon} alt="search" className="h-4 w-4" />
           </span>
+        </div>
+        {/*정렬*/}
+        <div className="-mt-2 mb-4 flex justify-end px-9">
+          <SortPillSelect
+            value={arrange}
+            options={arrangeOptions}
+            onChange={setArrange}
+            size="sm"
+          />
         </div>
 
         {error && (
