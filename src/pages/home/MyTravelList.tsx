@@ -83,24 +83,24 @@ const MyTravelList = () => {
   }, [items, q]);
 
   return (
-    <div className="bg-beige1 min-h-screen">
+    <div className="min-h-screen">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
 
-      <div className="px-4 pt-14 pb-8">
-        <div className="mx-[-1rem] mb-3 rounded-b-xl bg-[#dfead1] pt-2 pb-3">
-          <div className="text-heading3 text-green1 text-center font-bold">나의 여행지</div>
+      <div className="mx-auto flex w-full max-w-[430px] flex-col pt-14">
+        <div className="bg-green3-light text-caption3 text-green1 h-10 w-full items-center py-[10px] text-center">
+          나의 여행지
         </div>
 
-        <div className="relative mb-5">
+        <div className="relative my-5 px-9">
           <input
             type="text"
             placeholder="Search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            className="w-full rounded-full bg-[#edf0e2] px-4 py-2 pl-10 text-sm text-black placeholder:text-[#7f8c6b] focus:outline-none"
+            className="bg-gray2 w-full rounded-full px-9 py-2 pl-10 text-sm text-black placeholder:text-[#7f8c6b] focus:outline-none"
           />
-          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#7f8c6b]">
+          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 px-9 text-[#7f8c6b]">
             <img src={SearchIcon} alt="search" className="h-4 w-4" />
           </span>
         </div>
@@ -109,7 +109,7 @@ const MyTravelList = () => {
           <div className="mb-3 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">{error}</div>
         )}
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 px-9">
           {filtered.map((it) => {
             const title =
               it.regionName && it.themeName
