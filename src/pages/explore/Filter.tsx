@@ -16,6 +16,11 @@ export default function FilterPage() {
   const [activity, setActivity] = useState<Pair>({});
   const [results, setResults] = useState<Place[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [regionCodes, setRegionCodes] = useState<{
+    areaCode?: string | number;
+    sigunguCode?: string | number;
+  }>({});
+  const [activityCodes, setActivityCodes] = useState<{ cat1?: string; cat2?: string[] }>({});
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -23,6 +28,7 @@ export default function FilterPage() {
 
   useEffect(() => {
     setActivity({});
+    setActivityCodes({});
   }, [region.left, region.right]);
 
   const progress = useMemo(() => {
@@ -31,7 +37,12 @@ export default function FilterPage() {
   }, [phase, step]);
 
   const handleFinish = () => {
-    navigate('/explore/Searching', { state: { region, activity } });
+    navigate('/search/result', {
+      state: {
+        region: { areaCode: regionCodes.areaCode, sigunguCode: regionCodes.sigunguCode },
+        activity: { cat1: activityCodes.cat1, cat2: activityCodes.cat2 },
+      },
+    });
   };
 
   const resetAndSelectAgain = () => {
@@ -64,11 +75,17 @@ export default function FilterPage() {
           {phase === 'select' && (
             <>
               {step === 1 ? (
-                <RegionStep value={region} onChange={setRegion} onNext={() => setStep(2)} />
+                <RegionStep
+                  value={region}
+                  onChange={setRegion}
+                  onChangeCodes={setRegionCodes}
+                  onNext={() => setStep(2)}
+                />
               ) : (
                 <ThemeStep
                   value={activity}
                   onChange={setActivity}
+                  onChangeCodes={setActivityCodes}
                   onPrev={() => setStep(1)}
                   onFinish={handleFinish}
                 />

@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn';
 type Props = {
   className?: string;
   onChange?: (main: string, subs: string[]) => void;
+  onChangeCodes?: (cat1?: string, cat2?: string[]) => void;
 };
 
 type Cat2Dto = { cat2: string; cat2Name: string };
@@ -17,7 +18,7 @@ function unwrap<T>(raw: any): T {
 
 const norm = (s?: string | null) => (s ?? '').replace(/\u00A0/g, ' ').trim();
 
-export default function TravelActivitySelector({ className, onChange }: Props) {
+export default function TravelActivitySelector({ className, onChange, onChangeCodes }: Props) {
   const [groups, setGroups] = useState<Cat1GroupDto[]>([]);
   const [dataMap, setDataMap] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
@@ -105,12 +106,13 @@ export default function TravelActivitySelector({ className, onChange }: Props) {
           borderColor: 'border-red2',
         }}
         onSelect={(main, subs) => {
-          onChange?.(norm(main), subs.map(norm));
+          const m = norm(main);
+          const s = subs.map(norm);
+          onChange?.(m, s);
 
-          // 만약 이후에 코드가 필요하면 codeMap으로 역조회 가능:
-          // const cat1Code = codeMap[norm(main)]?.cat1;
-          // const cat2Codes = subs.map((s) => codeMap[norm(main)]?.cat2ByName[norm(s)]);
-          // console.log(cat1Code, cat2Codes);
+          const c1 = codeMap[m]?.cat1;
+          const c2 = subs.map((x) => codeMap[m]?.cat2ByName[norm(x)]).filter(Boolean) as string[];
+          onChangeCodes?.(c1, c2);
         }}
       />
     </div>

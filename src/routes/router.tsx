@@ -59,14 +59,6 @@ export const router = createBrowserRouter([
         path: 'result',
         element: <AIResultPage />,
       },
-      {
-        path: 'searching',
-        element: <Searching />,
-      },
-      {
-        path: 'travelsearch',
-        element: <TravelSearch />,
-      },
     ],
   },
   {
@@ -87,5 +79,9 @@ export const router = createBrowserRouter([
   {
     path: '/search',
     element: <Filter />,
+  },
+  {
+    path: '/search/result',
+    element: <TravelSearch />,
   },
 ]);
