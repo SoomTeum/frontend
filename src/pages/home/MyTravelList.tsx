@@ -4,13 +4,22 @@ import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
-import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg.api';
-import { unsavePlace } from '@/api/Myplace/saved.api';
+import {
+  getSavedPlaces,
+  type SavedPlace,
+  forgetSavedPlaceSnapshot,
+} from '@/api/Myplace/saveg.api';
+import { unsavePlace, type PlaceActionRequestDto } from '@/api/Myplace/saved.api';
 
 const PAGE_SIZE = 20;
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
+}
+function toCnctrLevel(it: SavedPlace): number {
+  if (typeof (it as any).cnctrLevel === 'number') return (it as any).cnctrLevel;
+  if (typeof it.entrLevel === 'number') return it.entrLevel;
+  return 3;
 }
 
 const MyTravelList = () => {
@@ -44,27 +53,49 @@ const MyTravelList = () => {
 
   useEffect(() => {
     loadPage(0, true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRemoveItem = async (contentId: string | number) => {
+  const handleRemoveItem = async (it: SavedPlace) => {
     const snapshot = items;
-    setItems((prev) => prev.filter((it) => it.contentId !== contentId));
+   
+    setItems((prev) => prev.filter((p) => p.contentId !== it.contentId));
     try {
-      await unsavePlace(contentId);
+      const dto: PlaceActionRequestDto = {
+        contentId: String(it.contentId),
+        regionName: it.regionName || '기타',
+        themeName: it.themeName || '기타',
+        cnctrLevel: toCnctrLevel(it),
+        action: 'UNSAVE',
+        enabled: false,
+      };
+      await unsavePlace(dto);             
+      forgetSavedPlaceSnapshot(it.contentId); 
+      await loadPage(0, true);               
     } catch (e) {
       console.error('[MyTravelList][unsavePlace]', e);
-      setItems(snapshot); // 롤백
+      setItems(snapshot); 
       alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
     }
   };
 
-  const filtered = useMemo(() => {
-    if (!q.trim()) return items;
+  const visible = useMemo(() => {
+    const base = items.filter((it: any) => {
+      if (typeof it.enabled === 'boolean') return it.enabled;
+      if (typeof it.like === 'boolean') return it.like;
+      return true;
+    });
+    if (!q.trim()) return base;
     const kw = q.trim().toLowerCase();
-    return items.filter((it) => {
-      const title = `${it.regionName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
-      return title.includes(kw);
+    return base.filter((it) => {
+      const displayTitle =
+        (it as any).title ||
+        (it as any).name ||
+        (it as any).placeTitle ||
+        (it.regionName && it.themeName ? `${it.regionName} · ${it.themeName}` : undefined) ||
+        it.regionName ||
+        it.themeName ||
+        String(it.contentId);
+      return displayTitle.toLowerCase().includes(kw);
     });
   }, [items, q]);
 
@@ -96,25 +127,34 @@ const MyTravelList = () => {
         )}
 
         <div className="flex flex-col gap-3">
-          {filtered.map((it) => {
-            const title =
-              it.regionName && it.themeName
-                ? `${it.regionName} · ${it.themeName}`
-                : it.regionName || it.themeName || String(it.contentId);
+          {visible.map((it) => {
+            const displayTitle =
+              (it as any).title ||
+              (it as any).name ||
+              (it as any).placeTitle ||
+              (it.regionName && it.themeName ? `${it.regionName} · ${it.themeName}` : undefined) ||
+              it.regionName ||
+              it.themeName ||
+              String(it.contentId);
 
-            const likeCount = (it as any).likeCnt ?? (it as any).likedCnt ?? 0;
-            const quietLevel = clamp(Math.round(it.entrLevel ?? 3), 1, 5);
+            const imgUrl = (it as any).imageUrl ?? (it as any).firstImage ?? undefined;
+            const likeCount = (it as any).likedCnt ?? (it as any).likeCount ?? 0;
+            const quietLevel = clamp(
+              Math.round((it as any).entrLevel ?? (it as any).cnctrLevel ?? 3),
+              1,
+              5
+            );
 
             return (
               <PlaceCard
                 key={String(it.contentId)}
-                title={title}
+                title={displayTitle}
                 theme={it.themeName ?? '-'}
                 likeCount={likeCount}
-                imgUrl={undefined}
+                imgUrl={imgUrl}         
                 quietLevel={quietLevel}
                 showRemoveButton
-                onRemove={() => handleRemoveItem(it.contentId)}
+                onRemove={() => handleRemoveItem(it)}
               />
             );
           })}

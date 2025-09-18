@@ -62,10 +62,7 @@ export const router = createBrowserRouter([
         path: 'searching',
         element: <Searching />,
       },
-      {
-        path: 'travelsearch',
-        element: <TravelSearch />,
-      },
+     
     ],
   },
   //여행지 상세페이지
@@ -81,6 +78,10 @@ export const router = createBrowserRouter([
     path: '/mypage',
     element: <MyPage />,
   },
+    {
+        path: 'travelsearch',
+        element: <TravelSearch />,
+      },
   {
     path: '/region', // 지역 선택 테스트용
     element: <RegionSelector />,

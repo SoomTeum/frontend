@@ -1,22 +1,23 @@
+// src/api/Myplace/savep.api.ts
 import api from "@/api/api"; 
 
 export type SaveMyPlaceRequest = {
-  contentId: string;   
-  regionName: string;  
+  contentId: string;
+  regionName: string;
   themeName: string;
-  cnctrLevel: number;  
+  cnctrLevel: number;
 };
 
 export type SaveMyPlaceResponse = {
   placedId: number;
-  type: string;        
+  type: string;
   like: boolean;
   enabled: boolean;
   changed: boolean;
   likeCount: number;
-  message: string;     
-  createdAt: string;  
-  updatedAt: string;   
+  message: string;   // ← 클라이언트에서 한글로 덮어씀
+  createdAt: string;
+  updatedAt: string;
 };
 
 type ApiEnvelope<T> = {
@@ -42,12 +43,6 @@ function unwrapResponse<T>(raw: T | ApiEnvelope<T>): T {
   return raw as T;
 }
 
-function assertResponseShape(res: any): asserts res is SaveMyPlaceResponse {
-  if (!res || typeof res.placedId !== "number") {
-    throw new Error("서버 응답 형식이 예상과 다릅니다.");
-  }
-}
-
 export async function savePlace(payload: SaveMyPlaceRequest): Promise<SaveMyPlaceResponse> {
   try {
     const body: SaveMyPlaceRequest = {
@@ -62,16 +57,24 @@ export async function savePlace(payload: SaveMyPlaceRequest): Promise<SaveMyPlac
     );
 
     const unwrapped = unwrapResponse<SaveMyPlaceResponse>(data);
-    assertResponseShape(unwrapped);
-    return unwrapped;
-  }  catch (err: any) {
-  console.error("[savePlace][raw error]", err?.response || err);
-  const serverMsg =
-    err?.response?.data?.message ||
-    err?.response?.data?.error?.message ||
-    err?.message;
-  throw new Error(serverMsg || "네트워크 오류 또는 서버 에러가 발생했습니다.");
-}
+
+    // ✅ 표시/반환 메시지를 한글로 통일
+    const msg = "저장되었습니다.";
+    const final: SaveMyPlaceResponse = { ...unwrapped, message: msg };
+
+    if (typeof window !== "undefined" && typeof window.alert === "function") {
+      window.alert(msg);
+    }
+
+    return final;
+  } catch (err: any) {
+    console.error("[savePlace][raw error]", err?.response || err);
+    const serverMsg =
+      err?.response?.data?.message ||
+      err?.response?.data?.error?.message ||
+      err?.message;
+    throw new Error(serverMsg || "네트워크 오류 또는 서버 에러가 발생했습니다.");
+  }
 }
 
 export default { savePlace };
