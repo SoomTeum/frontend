@@ -1,18 +1,78 @@
-import SelectorMulti from '@/component/selector/SelectorMulti';
-import { activityMap } from '@/constants/ActivityMap';
+import { Selector } from '@/component';
 import { ArrowLeft } from '@/assets';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useAIExploreStore } from '@/stores/useAIExploreStore';
 import { Button } from '@/component';
+import { getThemeGroups, type ThemeGroup } from '@/api/Selector/theme.api';
 
 const ThemeSelcetPage = () => {
   const navigate = useNavigate();
   const saved = useAIExploreStore((s) => s.theme);
   const setTheme = useAIExploreStore((s) => s.setTheme);
-  const firstMain = Object.keys(activityMap)[0] ?? '자연';
+  const setThemeCodes = useAIExploreStore((s) => s.setThemeCodes);
+
+  const [dataMap, setDataMap] = useState<Record<string, string[]>>({});
+  const [loading, setLoading] = useState(false);
+  const [groups, setGroups] = useState<ThemeGroup[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const groups = await getThemeGroups();
+        const next: Record<string, string[]> = {};
+        groups.forEach((g: ThemeGroup) => {
+          next[g.cat1Name] = g.cat2List.map((c) => c.cat2Name);
+        });
+        setDataMap(next);
+        setGroups(groups);
+      } catch (e) {
+        console.error(e);
+        setDataMap({});
+        setGroups([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const firstMain = useMemo(() => Object.keys(dataMap)[0] ?? '자연', [dataMap]);
+
   const [main, setMain] = useState<string>(saved?.main ?? firstMain);
   const [subs, setSubs] = useState<string[]>(saved?.subs ?? []);
+
+  useEffect(() => {
+    if (!dataMap[main]) {
+      setMain(saved?.main && dataMap[saved.main] ? saved.main : firstMain);
+      const validSubs = (saved?.subs ?? []).filter((s) =>
+        dataMap[saved?.main ?? firstMain]?.includes(s),
+      );
+      setSubs(validSubs);
+    } else {
+      setSubs((prev) => prev.filter((s) => dataMap[main]?.includes(s)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataMap, firstMain]);
+
+  const handleSelect = useCallback(
+    (selectedMain: string, selectedSubs: string[]) => {
+      setMain(selectedMain);
+      setSubs(selectedSubs);
+      setTheme({ main: selectedMain, subs: selectedSubs });
+
+      // 원본 groups에서 코드 찾기
+      const group = groups.find((g) => g.cat1Name === selectedMain);
+      const cat1 = group?.cat1 ?? null;
+
+      const cat2 = (group?.cat2List ?? [])
+        .filter((c) => selectedSubs.includes(c.cat2Name))
+        .map((c) => c.cat2);
+
+      setThemeCodes({ cat1, cat2 });
+    },
+    [groups, setTheme, setThemeCodes],
+  );
 
   const done = () => {
     setTheme({ main, subs });
@@ -32,14 +92,18 @@ const ThemeSelcetPage = () => {
           AI 맞춤 여행지 탐색 테마
         </span>
       </div>
+
       <div className="px-9">
         <div className="border-green3 mt-5 border-t">
           <h2 className="text-title4 text-green1 py-2 text-center">테마</h2>
         </div>
-        <SelectorMulti
-          dataMap={activityMap}
+
+        <Selector
+          key={`${Object.keys(dataMap).length}-${main}-${subs.join(',')}`} // 데이터 로드 시 초기값 반영 보장
+          dataMap={dataMap}
           initialMain={main}
           initialSubs={subs}
+          onSelect={handleSelect}
           colorScheme={{
             leftBase: 'bg-green3-light text-caption4',
             leftItem: 'text-black text-caption4',
@@ -48,10 +112,6 @@ const ThemeSelcetPage = () => {
             rightActive: 'outline outline-1 outline-[var(--color-green3)]',
             borderColor: 'border-green3',
           }}
-          onSelect={(m, s) => {
-            setMain(m);
-            setSubs(s);
-          }}
         />
 
         <div className="fixed right-0 bottom-[10px] left-0 z-10 mx-auto w-full max-w-[430px] px-10 pt-4 pb-6">
@@ -59,10 +119,10 @@ const ThemeSelcetPage = () => {
             variant="lg"
             color="green3"
             className="w-full"
-            disabled={!subs.length}
+            disabled={loading || !subs.length}
             onClick={done}
           >
-            완료
+            {loading ? '불러오는 중…' : '완료'}
           </Button>
         </div>
       </div>

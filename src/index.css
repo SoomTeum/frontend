@@ -173,8 +173,8 @@
   .text-green1 {
     color: var(--color-green1);
   }
-  .text-green2{
-    color:var(--color-green2);
+  .text-green2 {
+    color: var(--color-green2);
   }
   .text-white {
     color: var(--color-white);
@@ -265,6 +265,9 @@
   .border-red2 {
     border-color: var(--color-red2);
   }
+  .border-orange {
+    border-color: var(--color-orange);
+  }
 
   /* radius */
   .rounded-s {
@@ -290,5 +293,8 @@
   .scrollbar-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  html {
+    scrollbar-gutter: stable;
   }
 }

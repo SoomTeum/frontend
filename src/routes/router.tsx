@@ -10,7 +10,6 @@ import AiExploreMain from '@/pages/ai/MainAI';
 import ThemeSelcetPage from '@/pages/ai/ThemeSelect';
 import Filter from '@/pages/explore/Filter';
 import TravelSpotDetail from '@/pages/ai/TravelSpotDetail';
-import AILoadingPage from '@/pages/ai/AILoadingPage';
 import AIResultPage from '@/pages/ai/AIResultPage';
 import LoginPage from '@/pages/home/Login';
 import KakaoCallbackPage from '@/pages/home/KakaoCallbackPage';
@@ -23,14 +22,14 @@ export const router = createBrowserRouter([
     path: '/',
     element: <HomePage />,
   },
-{
-  path: '/register/2',
-  element: <Register2 />,
-},
-{
-  path:'/register/3',
-  element:<Register3/>
-},
+  {
+    path: '/register/2',
+    element: <Register2 />,
+  },
+  {
+    path: '/register/3',
+    element: <Register3 />,
+  },
   //테스트
   {
     path: '/alert',
@@ -54,10 +53,6 @@ export const router = createBrowserRouter([
       {
         path: 'theme',
         element: <ThemeSelcetPage />,
-      },
-      {
-        path: 'loading',
-        element: <AILoadingPage />,
       },
       {
         path: 'result',
@@ -102,5 +97,4 @@ export const router = createBrowserRouter([
     path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
     element: <Filter />,
   },
- 
 ]);

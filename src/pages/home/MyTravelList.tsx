@@ -1,11 +1,11 @@
 // src/pages/MyTravelList.tsx
-import { useEffect, useMemo, useState } from "react";
-import Header from "@/component/Header";
-import Sidebar from "@/component/SideBar";
-import SearchIcon from "@/image/Search.svg";
-import PlaceCard from "@/component/common/Card/PlaceCard";
-import { getSavedPlaces, type SavedPlace } from "@/api/Myplace/saveg.api";
-import { unsavePlace } from "@/api/Myplace/saved.api";
+import { useEffect, useMemo, useState } from 'react';
+import Header from '@/component/Header';
+import Sidebar from '@/component/SideBar';
+import SearchIcon from '@/image/Search.svg';
+import PlaceCard from '@/component/common/Card/PlaceCard';
+import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg.api';
+import { unsavePlace } from '@/api/Myplace/saved.api';
 
 const PAGE_SIZE = 20;
 
@@ -20,7 +20,7 @@ const MyTravelList = () => {
   const [last, setLast] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState('');
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
@@ -31,12 +31,12 @@ const MyTravelList = () => {
     setError(null);
     try {
       const res = await getSavedPlaces({ page: p, size: PAGE_SIZE });
-      setItems(prev => (replace ? res.content : [...prev, ...res.content]));
+      setItems((prev) => (replace ? res.content : [...prev, ...res.content]));
       setPage(res.page);
       setLast(res.last);
     } catch (e) {
-      console.error("[MyTravelList][getSavedPlaces]", e);
-      setError("목록을 불러오는 중 문제가 발생했습니다.");
+      console.error('[MyTravelList][getSavedPlaces]', e);
+      setError('목록을 불러오는 중 문제가 발생했습니다.');
     } finally {
       setLoading(false);
     }
@@ -49,21 +49,21 @@ const MyTravelList = () => {
 
   const handleRemoveItem = async (contentId: string | number) => {
     const snapshot = items;
-    setItems(prev => prev.filter(it => it.contentId !== contentId));
+    setItems((prev) => prev.filter((it) => it.contentId !== contentId));
     try {
       await unsavePlace(contentId);
     } catch (e) {
-      console.error("[MyTravelList][unsavePlace]", e);
+      console.error('[MyTravelList][unsavePlace]', e);
       setItems(snapshot); // 롤백
-      alert("삭제에 실패했어요. 잠시 후 다시 시도해주세요.");
+      alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
     }
   };
 
   const filtered = useMemo(() => {
     if (!q.trim()) return items;
     const kw = q.trim().toLowerCase();
-    return items.filter(it => {
-      const title = `${it.regionName ?? ""} ${it.themeName ?? ""} ${it.contentId}`.toLowerCase();
+    return items.filter((it) => {
+      const title = `${it.regionName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
       return title.includes(kw);
     });
   }, [items, q]);
@@ -73,9 +73,9 @@ const MyTravelList = () => {
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
 
-      <div className="pt-14 px-4 pb-8">
-        <div className="mx-[-1rem] mb-3 rounded-b-xl bg-[#dfead1] pb-3 pt-2">
-          <div className="text-center text-heading3 font-bold text-green1">나의 여행지</div>
+      <div className="px-4 pt-14 pb-8">
+        <div className="mx-[-1rem] mb-3 rounded-b-xl bg-[#dfead1] pt-2 pb-3">
+          <div className="text-heading3 text-green1 text-center font-bold">나의 여행지</div>
         </div>
 
         <div className="relative mb-5">
@@ -83,10 +83,10 @@ const MyTravelList = () => {
             type="text"
             placeholder="Search"
             value={q}
-            onChange={e => setQ(e.target.value)}
+            onChange={(e) => setQ(e.target.value)}
             className="w-full rounded-full bg-[#edf0e2] px-4 py-2 pl-10 text-sm text-black placeholder:text-[#7f8c6b] focus:outline-none"
           />
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#7f8c6b]">
+          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#7f8c6b]">
             <img src={SearchIcon} alt="search" className="h-4 w-4" />
           </span>
         </div>
@@ -96,7 +96,7 @@ const MyTravelList = () => {
         )}
 
         <div className="flex flex-col gap-3">
-          {filtered.map(it => {
+          {filtered.map((it) => {
             const title =
               it.regionName && it.themeName
                 ? `${it.regionName} · ${it.themeName}`
@@ -109,7 +109,7 @@ const MyTravelList = () => {
               <PlaceCard
                 key={String(it.contentId)}
                 title={title}
-                theme={it.themeName ?? "-"}
+                theme={it.themeName ?? '-'}
                 likeCount={likeCount}
                 imgUrl={undefined}
                 quietLevel={quietLevel}
@@ -127,7 +127,7 @@ const MyTravelList = () => {
               disabled={loading}
               className="rounded-full bg-[var(--color-green4)] px-4 py-2 text-sm text-white disabled:opacity-50"
             >
-              {loading ? "불러오는 중..." : "더 보기"}
+              {loading ? '불러오는 중...' : '더 보기'}
             </button>
           )}
         </div>
