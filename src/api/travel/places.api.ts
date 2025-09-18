@@ -53,6 +53,6 @@ export function mapToCard(p: PlaceDto) {
     theme: p.catName ?? '-',
     likeCount: p.likeCount ?? 0,
     imgUrl,
-    quietLevel: typeof p.quietnessLevel === 'number' ? p.quietnessLevel : 3, // 없으면 3
+    quietLevel: typeof p.quietnessLevel === 'number', // 없으면 3
   };
 }
