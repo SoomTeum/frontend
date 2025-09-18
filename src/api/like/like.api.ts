@@ -19,10 +19,20 @@ interface LikePlaceResponse {
   updatedAt: string;
 }
 
+export interface LikeStatusResponse {
+  contentId: string;
+  like: boolean;
+}
+
 export const likePlace = (body: LikePlaceRequest) =>
   api.post<ApiResponse<LikePlaceResponse>>('/places/like', body);
 
 export const unlikePlace = (contentId: string) =>
   api.delete<ApiResponse<LikePlaceResponse>>('/places/like', {
+    params: { contentId },
+  });
+
+export const getLikeStatus = (contentId: string) =>
+  api.get<ApiResponse<LikeStatusResponse>>('places/like/status', {
     params: { contentId },
   });

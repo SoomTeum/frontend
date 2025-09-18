@@ -11,11 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
   const isLeft = position === 'left';
   const navigate = useNavigate();
 
-  const isLoggedIn = useCallback(() => {
-    const access = localStorage.getItem('accessToken');
-    return !!access;
-  }, []);
-
   const go = useCallback(
     (path: string) => {
       navigate(path);
@@ -24,19 +19,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
     [navigate, onClose],
   );
 
-  const goProtectedMyTravel = useCallback(() => {
-    if (isLoggedIn()) {
-      navigate('/mytravel');
-    } else {
-      navigate('/login', { state: { from: '/mytravel' } });
-    }
-    onClose();
-  }, [isLoggedIn, navigate, onClose]);
-
   return (
     <>
       <div
-        className={`fixed top-0 left-[max(0px,calc(50vw-221px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${
+        className={`fixed top-0 left-[max(0px,calc(50vw-218px))] z-[60] h-[100dvh] w-[min(100vw,433px)] ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         } overflow-hidden`}
       >
@@ -50,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
         <div
           role="dialog"
           aria-modal="true"
-          className={`absolute top-0 ${isLeft ? 'left-0' : 'right-0'} bg-beige3 z-[70] h-full w-50 transform transition-transform duration-300 ${
+          className={`absolute top-0 ${isLeft ? 'left-0' : 'right-0'} bg-beige3 z-[70] h-full w-52 transform transition-transform duration-300 ${
             isOpen ? 'translate-x-0' : isLeft ? '-translate-x-full' : 'translate-x-full'
           } `}
         >
@@ -69,10 +55,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
             </button>
             <div className="border-gray1 mr-13 border-b" />
             <button onClick={() => go('/explore/Filter')} className="cursor-pointer py-2 text-left">
-              여행지 검색
+              여행지 탐색
             </button>
             <div className="border-gray1 mr-13 border-b" />
-            <button onClick={goProtectedMyTravel} className="cursor-pointer py-2 text-left">
+            <button onClick={() => go('/mytravel')} className="cursor-pointer py-2 text-left">
               나의 여행지
             </button>
           </nav>

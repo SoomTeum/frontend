@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   EnergyIcon,
@@ -12,10 +12,11 @@ import type { PlaceDetail } from '@/types/Detail';
 import { getPlaceDetail, type IntegratedPlace } from '@/api/Detail/detail.api';
 import { useEffect, useState } from 'react';
 import { Badge, Image, Loader, ParkingTable } from '@/component';
-import { likePlace, unlikePlace } from '@/api/like/like.api';
+import { likePlace, unlikePlace, getLikeStatus } from '@/api/like/like.api';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { contentId = '' } = useParams<{ contentId: string }>();
   const formatCount = (n: number, cap = 999) => (n > cap ? `${cap}+` : `${n}`);
 
@@ -27,11 +28,39 @@ const TravelSpotDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
 
+  const isAuthed = !!localStorage.getItem('accessToken');
+
   const handleToggleLike = async (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
 
     if (!data) return;
+
+    if (!isAuthed) {
+      const here = `${location.pathname}${location.search}${location.hash}`;
+      sessionStorage.setItem('postLoginRedirect', here);
+
+      sessionStorage.setItem(
+        'postLoginAction',
+        JSON.stringify({
+          kind: 'LIKE_PLACE',
+          contentId,
+          payload: {
+            regionName: data.regionTag ?? '정보없음',
+            themeName: data.themeName ?? '여행지',
+            cnctrLevel: data.serenity ?? 0,
+          },
+        }),
+      );
+
+      navigate(
+        `/login?redirect=${encodeURIComponent(here)}&action=like_place&cid=${encodeURIComponent(
+          contentId,
+        )}`,
+        { replace: true },
+      );
+      return;
+    }
 
     try {
       if (liked) {
@@ -121,6 +150,17 @@ const TravelSpotDetail = () => {
           setLiked(mapped.liked);
           setLikeCount(mapped.likeCount);
           setBookmarked(mapped.bookmarked);
+
+          if (isAuthed) {
+            try {
+              const { data: resp } = await getLikeStatus(contentId);
+              if (alive && resp?.success && resp.data) {
+                setLiked(!!resp.data.like);
+              }
+            } catch (e) {
+              console.debug('좋아요 상태 조회 실패:', e);
+            }
+          }
         }
       } catch (e: any) {
         setErrMsg(e?.message || '여행지 정보를 불러오지 못했습니다.');
