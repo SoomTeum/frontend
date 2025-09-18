@@ -1,4 +1,3 @@
-// src/utils/ktoMapping.ts
 import { themeCatMap } from "@/constants/themeCatMap";
 import { regionMap, normalizeRegionName } from "@/constants/regionMap";
 import type { ThemeCodes, RegionCodes } from "@/types/kto";
