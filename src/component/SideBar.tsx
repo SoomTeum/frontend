@@ -11,11 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
   const isLeft = position === 'left';
   const navigate = useNavigate();
 
-  const isLoggedIn = useCallback(() => {
-    const access = localStorage.getItem('accessToken');
-    return !!access;
-  }, []);
-
   const go = useCallback(
     (path: string) => {
       navigate(path);
@@ -23,15 +18,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
     },
     [navigate, onClose],
   );
-
-  const goProtectedMyTravel = useCallback(() => {
-    if (isLoggedIn()) {
-      navigate('/mytravel');
-    } else {
-      navigate('/login', { state: { from: '/mytravel' } });
-    }
-    onClose();
-  }, [isLoggedIn, navigate, onClose]);
 
   return (
     <>
@@ -72,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
               여행지 탐색
             </button>
             <div className="border-gray1 mr-13 border-b" />
-            <button onClick={goProtectedMyTravel} className="cursor-pointer py-2 text-left">
+            <button onClick={() => go('/mytravel')} className="cursor-pointer py-2 text-left">
               나의 여행지
             </button>
           </nav>

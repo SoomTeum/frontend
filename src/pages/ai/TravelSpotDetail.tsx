@@ -37,7 +37,28 @@ const TravelSpotDetail = () => {
     if (!data) return;
 
     if (!isAuthed) {
-      navigate('/login', { state: { from: location }, replace: true });
+      const here = `${location.pathname}${location.search}${location.hash}`;
+      sessionStorage.setItem('postLoginRedirect', here);
+
+      sessionStorage.setItem(
+        'postLoginAction',
+        JSON.stringify({
+          kind: 'LIKE_PLACE',
+          contentId,
+          payload: {
+            regionName: data.regionTag ?? '정보없음',
+            themeName: data.themeName ?? '여행지',
+            cnctrLevel: data.serenity ?? 0,
+          },
+        }),
+      );
+
+      navigate(
+        `/login?redirect=${encodeURIComponent(here)}&action=like_place&cid=${encodeURIComponent(
+          contentId,
+        )}`,
+        { replace: true },
+      );
       return;
     }
 
