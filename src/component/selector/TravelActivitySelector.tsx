@@ -19,7 +19,7 @@ function unwrap<T>(raw: any): T {
 const norm = (s?: string | null) => (s ?? '').replace(/\u00A0/g, ' ').trim();
 
 export default function TravelActivitySelector({ className, onChange, onChangeCodes }: Props) {
-  const [groups, setGroups] = useState<Cat1GroupDto[]>([]);
+  const [, setGroups] = useState<Cat1GroupDto[]>([]);
   const [dataMap, setDataMap] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
