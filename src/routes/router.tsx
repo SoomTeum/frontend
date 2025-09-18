@@ -2,8 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '@/pages/home/Homepage';
 import MyTravelList from '@/pages/home/MyTravelList';
 import MyPage from '@/pages/home/MyPage';
-import RegionSelector from '@/component/selector/RegionSelector';
-import TravelActivitySelector from '@/component/selector/TravelActivitySelector';
 import CardTestPage from '@/examples/CardTest';
 import AlertComponent from '@/examples/AlertTest';
 import AiExploreMain from '@/pages/ai/MainAI';
@@ -15,7 +13,6 @@ import LoginPage from '@/pages/home/Login';
 import KakaoCallbackPage from '@/pages/home/KakaoCallbackPage';
 import Register2 from '@/pages/register/Register2';
 import Register3 from '@/pages/register/Register3';
-import Searching from '@/pages/explore/Searching';
 import TravelSearch from '@/pages/home/TravelSearch';
 import RequireAuth from './RequireAuth';
 

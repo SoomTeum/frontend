@@ -21,7 +21,7 @@ export default function TravelSearch() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [q, setQ] = useState('');
   const [items, setItems] = useState<ReturnType<typeof mapToCard>[]>([]);
-  const [pageNo, setPageNo] = useState(1);
+  const [, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);

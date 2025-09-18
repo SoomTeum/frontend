@@ -5,7 +5,7 @@ type PlaceCardProps = {
   imgUrl?: string;
   title: string;
   theme: string;
-  quietLevel: number;
+  quietLevel: number | boolean;
   likeCount: number;
   showRemoveButton?: boolean;
   onRemove?: () => void;
