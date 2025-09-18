@@ -14,7 +14,7 @@ export type PlaceDetail = {
   thumbnail?: string | null;
 
   regionTag: string;
-  themeTag: string;
+  themeName: string;
   serenity: number; //한적함 수치
 
   description: string;

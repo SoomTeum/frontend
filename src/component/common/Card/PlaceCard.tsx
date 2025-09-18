@@ -22,6 +22,7 @@ export default function PlaceCard({
   onRemove,
   onClick,
 }: PlaceCardProps) {
+  const showCount = typeof quietLevel === 'number' && quietLevel !== -1;
   return (
     <div
       className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95"
@@ -37,15 +38,19 @@ export default function PlaceCard({
       </div>
 
       {/*텍스트*/}
-      <div className="ml-4 flex w-full flex-col">
+      <div className="ml-4 flex w-full min-w-0 flex-col">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-caption4 truncate font-medium">{title}</p>
+          <p className="text-caption4 max-w-[20ch] truncate">{title}</p>
         </div>
 
         {/*뱃지 2개*/}
         <div className="mt-4.5 flex shrink-0 gap-4 pr-12">
-          <Badge type="default" color="green" count={quietLevel}>
-            한적함
+          <Badge
+            type="default"
+            color="green"
+            {...(showCount ? { count: quietLevel } : {})} // -1이면 count prop 자체를 전달하지 않음
+          >
+            {showCount ? '한적함' : '정보없음'}
           </Badge>
           <Badge type="default" color="red">
             {theme}

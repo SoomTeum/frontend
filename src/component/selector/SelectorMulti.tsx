@@ -6,7 +6,6 @@ export type SelectorMultiProps = {
   onSelect?: (main: string, subs: string[]) => void;
   initialSubs?: string[];
 
-  // 색상 커스터마이징
   colorScheme?: {
     leftBase?: string;
     leftItem?: string;
@@ -34,7 +33,10 @@ const SelectorMulti = ({
   } = colorScheme;
 
   const [selectedMain, setSelectedMain] = useState(initialMain);
-  const [selectedSubs, setSelectedSubs] = useState<string[]>(initialSubs ?? []);
+
+  const [selectedSubs, setSelectedSubs] = useState<string[]>(
+    initialSubs && initialSubs.length ? [initialSubs[0]] : []
+  );
 
   const changeMain = (next: string) => {
     setSelectedMain(next);
@@ -42,9 +44,7 @@ const SelectorMulti = ({
   };
 
   const toggleSub = (sub: string) => {
-    setSelectedSubs((prev) =>
-      prev.includes(sub) ? prev.filter((s) => s !== sub) : [...prev, sub],
-    );
+    setSelectedSubs((prev) => (prev[0] === sub ? [] : [sub]));
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const SelectorMulti = ({
 
   useEffect(() => {
     if (initialSubs !== undefined) {
-      setSelectedSubs(initialSubs);
+      setSelectedSubs(initialSubs.length ? [initialSubs[0]] : []);
     }
   }, [initialSubs]);
 
@@ -67,6 +67,7 @@ const SelectorMulti = ({
         {Object.keys(dataMap).map((main) => (
           <button
             key={main}
+            type="button"
             onClick={() => changeMain(main)}
             className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-1 text-center ${
               selectedMain === main ? leftActive : leftItem
@@ -76,13 +77,15 @@ const SelectorMulti = ({
           </button>
         ))}
       </div>
+
       <div className="min-h-col flex w-2/3 flex-col gap-2 overflow-y-auto py-2">
         {dataMap[selectedMain]?.length ? (
           dataMap[selectedMain].map((sub) => {
-            const active = selectedSubs.includes(sub);
+            const active = selectedSubs[0] === sub;
             return (
               <button
                 key={sub}
+                type="button"
                 onClick={() => toggleSub(sub)}
                 className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 rounded-l px-2 py-1 text-center ${
                   active ? rightActive : rightItem
