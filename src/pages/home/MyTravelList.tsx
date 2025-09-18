@@ -1,39 +1,47 @@
-// src/pages/MyTravelList.tsx
 import { useEffect, useMemo, useState } from 'react';
 import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
-import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg.api';
-import { unsavePlace } from '@/api/Myplace/saved.api';
+import { getSavedPlaces, unsavePlace, type SavedPlaceItem } from '@/api/Myplace/myPlace.api';
+import { useNavigate } from 'react-router-dom';
+import SortPillSelect, { type Option } from '@/component/selector/SortPillSelect';
 
 const PAGE_SIZE = 20;
 
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
-
+type Row = SavedPlaceItem;
+const arrangeOptions: Option<'O' | 'Q' | 'R' | 'S'>[] = [
+  { value: 'O', label: '기본순' },
+  { value: 'Q', label: '수정일순' },
+  { value: 'R', label: '등록일순' },
+  { value: 'S', label: '거리순' },
+];
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [items, setItems] = useState<SavedPlace[]>([]);
+  const [items, setItems] = useState<Row[]>([]);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
+  const [arrange, setArrange] = useState<'O' | 'Q' | 'R' | 'S'>('O');
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
+  const navigate = useNavigate();
 
   const loadPage = async (p: number, replace = false) => {
     if (loading) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await getSavedPlaces({ page: p, size: PAGE_SIZE });
-      setItems((prev) => (replace ? res.content : [...prev, ...res.content]));
-      setPage(res.page);
-      setLast(res.last);
+      const raw = (await getSavedPlaces(p, PAGE_SIZE)) as any;
+      const pageData = raw?.content ? raw : (raw?.data ?? {});
+      const content = Array.isArray(pageData.content) ? pageData.content : [];
+
+      setItems((prev) => (replace ? content : [...prev, ...content]));
+      setPage(pageData.page ?? p);
+      setLast(!!pageData.last);
     } catch (e) {
       console.error('[MyTravelList][getSavedPlaces]', e);
       setError('목록을 불러오는 중 문제가 발생했습니다.');
@@ -47,14 +55,15 @@ const MyTravelList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRemoveItem = async (contentId: string | number) => {
+  const handleRemoveItem = async (item: Row) => {
     const snapshot = items;
-    setItems((prev) => prev.filter((it) => it.contentId !== contentId));
+    setItems((prev) => prev.filter((it) => it.contentId !== item.contentId));
     try {
-      await unsavePlace(contentId);
+      await unsavePlace({ contentId: String(item.contentId) });
     } catch (e) {
       console.error('[MyTravelList][unsavePlace]', e);
-      setItems(snapshot); // 롤백
+      // 롤백
+      setItems(snapshot);
       alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
     }
   };
@@ -63,58 +72,64 @@ const MyTravelList = () => {
     if (!q.trim()) return items;
     const kw = q.trim().toLowerCase();
     return items.filter((it) => {
-      const title = `${it.regionName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
-      return title.includes(kw);
+      const hay = `${it.placeName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
+      return hay.includes(kw);
     });
   }, [items, q]);
 
   return (
-    <div className="bg-beige1 min-h-screen">
+    <div className="min-h-screen">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
 
-      <div className="px-4 pt-14 pb-8">
-        <div className="mx-[-1rem] mb-3 rounded-b-xl bg-[#dfead1] pt-2 pb-3">
-          <div className="text-heading3 text-green1 text-center font-bold">나의 여행지</div>
+      <div className="mx-auto flex w-full max-w-[430px] flex-col pt-14">
+        <div className="bg-green3-light text-caption3 text-green1 h-10 w-full items-center py-[10px] text-center">
+          나의 여행지
         </div>
 
-        <div className="relative mb-5">
+        <div className="relative my-5 px-9">
           <input
             type="text"
             placeholder="Search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            className="w-full rounded-full bg-[#edf0e2] px-4 py-2 pl-10 text-sm text-black placeholder:text-[#7f8c6b] focus:outline-none"
+            className="bg-gray2 w-full rounded-full px-9 py-2 pl-10 text-sm text-black placeholder:text-[#7f8c6b] focus:outline-none"
           />
-          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#7f8c6b]">
+          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 px-9 text-[#7f8c6b]">
             <img src={SearchIcon} alt="search" className="h-4 w-4" />
           </span>
+        </div>
+        {/*정렬*/}
+        <div className="-mt-2 mb-4 flex justify-end px-9">
+          <SortPillSelect
+            value={arrange}
+            options={arrangeOptions}
+            onChange={setArrange}
+            size="sm"
+          />
         </div>
 
         {error && (
           <div className="mb-3 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">{error}</div>
         )}
 
-        <div className="flex flex-col gap-3">
-          {filtered.map((it) => {
-            const title =
-              it.regionName && it.themeName
-                ? `${it.regionName} · ${it.themeName}`
-                : it.regionName || it.themeName || String(it.contentId);
+        <div className="flex flex-col gap-3 px-9">
+          {filtered.map((row) => {
+            const { contentId, themeName, likeCount, cnctrLevel } = row;
 
-            const likeCount = (it as any).likeCnt ?? (it as any).likedCnt ?? 0;
-            const quietLevel = clamp(Math.round(it.entrLevel ?? 3), 1, 5);
+            const title = row.placeName || String(contentId);
 
             return (
               <PlaceCard
-                key={String(it.contentId)}
+                key={String(row.contentId)}
                 title={title}
-                theme={it.themeName ?? '-'}
+                theme={themeName ?? '-'}
                 likeCount={likeCount}
                 imgUrl={undefined}
-                quietLevel={quietLevel}
+                quietLevel={cnctrLevel}
                 showRemoveButton
-                onRemove={() => handleRemoveItem(it.contentId)}
+                onClick={() => navigate(`/place/${contentId}`)}
+                onRemove={() => handleRemoveItem(row)}
               />
             );
           })}

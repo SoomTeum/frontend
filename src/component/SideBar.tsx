@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
   return (
     <>
       <div
-        className={`fixed top-0 left-[max(0px,calc(50vw-218px))] z-[60] h-[100dvh] w-[min(100vw,433px)] ${
+        className={`fixed top-0 left-[max(0px,calc(50vw-221px))] z-[60] h-[100dvh] w-[min(100vw,432px)] ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         } overflow-hidden`}
       >
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
               AI 맞춤 여행지 탐색
             </button>
             <div className="border-gray1 mr-13 border-b" />
-            <button onClick={() => go('/explore/Filter')} className="cursor-pointer py-2 text-left">
+            <button onClick={() => go('/search')} className="cursor-pointer py-2 text-left">
               여행지 탐색
             </button>
             <div className="border-gray1 mr-13 border-b" />

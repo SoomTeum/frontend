@@ -13,6 +13,7 @@ import { getPlaceDetail, type IntegratedPlace } from '@/api/Detail/detail.api';
 import { useEffect, useState } from 'react';
 import { Badge, Image, Loader, ParkingTable } from '@/component';
 import { likePlace, unlikePlace, getLikeStatus } from '@/api/like/like.api';
+import { savePlace, unsavePlace, getSaveStatus } from '@/api/Myplace/myPlace.api';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const TravelSpotDetail = () => {
             regionName: data.regionTag ?? '정보없음',
             themeName: data.themeName ?? '여행지',
             cnctrLevel: data.serenity ?? 0,
+            placeName: data.name || String(contentId),
           },
         }),
       );
@@ -81,8 +83,60 @@ const TravelSpotDetail = () => {
     }
   };
 
-  const handleToggleBookmark = () => {
-    setBookmarked((prev) => !prev);
+  const handleToggleBookmark = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+
+    if (!data) return;
+
+    // 미로그인: 로그인 후 다시 실행하도록 액션/리다이렉트 저장
+    if (!isAuthed) {
+      const here = `${location.pathname}${location.search}${location.hash}`;
+      sessionStorage.setItem('postLoginRedirect', here);
+      sessionStorage.setItem(
+        'postLoginAction',
+        JSON.stringify({
+          kind: 'SAVE_PLACE',
+          contentId,
+          payload: {
+            regionName: data.regionTag ?? '정보없음',
+            themeName: data.themeName ?? '여행지',
+            cnctrLevel: data.serenity ?? 0,
+            placeName: data.name || String(contentId),
+          },
+        }),
+      );
+      navigate(
+        `/login?redirect=${encodeURIComponent(here)}&action=save_place&cid=${encodeURIComponent(
+          contentId,
+        )}`,
+        { replace: true },
+      );
+      return;
+    }
+
+    try {
+      if (bookmarked) {
+        await unsavePlace({
+          contentId,
+          regionName: data?.regionTag ?? '정보없음',
+          themeName: data?.themeName ?? '여행지',
+          cnctrLevel: data?.serenity ?? 0,
+        });
+        setBookmarked(false);
+      } else {
+        await savePlace({
+          contentId,
+          regionName: data.regionTag ?? '정보없음',
+          themeName: data.themeName ?? '여행지',
+          cnctrLevel: data.serenity ?? 0,
+          placeName: data.name || String(contentId),
+        });
+        setBookmarked(true);
+      }
+    } catch (err: any) {
+      console.error('저장 처리 실패:', err?.message || err);
+    }
   };
 
   function mapIntegratedToPlaceDetail(id: string, item: IntegratedPlace): PlaceDetail {
@@ -160,6 +214,12 @@ const TravelSpotDetail = () => {
             } catch (e) {
               console.debug('좋아요 상태 조회 실패:', e);
             }
+            try {
+              const saved = await getSaveStatus(contentId);
+              if (alive) setBookmarked(!!saved);
+            } catch (e) {
+              console.debug('저장 상태 조회 실패:', e);
+            }
           }
         }
       } catch (e: any) {
@@ -172,7 +232,7 @@ const TravelSpotDetail = () => {
     return () => {
       alive = false;
     };
-  }, [contentId]);
+  }, [contentId, isAuthed]);
 
   return (
     <div className="min-h-screen">
