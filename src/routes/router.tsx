@@ -81,19 +81,11 @@ export const router = createBrowserRouter([
     element: <TravelSpotDetail />,
   },
   {
-    path: '/region',
-    element: <RegionSelector />,
-  },
-  {
-    path: '/activity',
-    element: <TravelActivitySelector />,
-  },
-  {
     path: '/card',
     element: <CardTestPage />,
   },
   {
-    path: '/explore/Filter',
+    path: '/search',
     element: <Filter />,
   },
 ]);
