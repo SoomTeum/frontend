@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "@/component/Header";
-import Sidebar from "@/component/SideBar";
-import api from "@/api/api";
-import type { ApiResponse } from "@/types/api-response";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '@/component/Header';
+import Sidebar from '@/component/SideBar';
+import api from '@/api/api';
+import type { ApiResponse } from '@/types/api-response';
 
 type Profile = {
   userId: number;
@@ -17,7 +17,7 @@ export default function MyPage() {
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
 
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
@@ -28,11 +28,11 @@ export default function MyPage() {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("userId");
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userId');
     } finally {
-      navigate("/", { replace: true });
+      navigate('/', { replace: true });
     }
   };
 
@@ -43,29 +43,29 @@ export default function MyPage() {
       setLoading(true);
       setError(null);
       try {
-        const resp = await api.get<ApiResponse<Profile>>("/my/profile/");
+        const resp = await api.get<ApiResponse<Profile>>('/my/profile/');
         const res = resp.data;
         if (!cancelled) {
           if (res?.success && res.data) {
             setProfile(res.data);
-            setNickname(res.data.nickname ?? "");
+            setNickname(res.data.nickname ?? '');
           } else {
-            setError((res as any)?.error?.message || "프로필 정보를 불러오지 못했습니다.");
+            setError((res as any)?.error?.message || '프로필 정보를 불러오지 못했습니다.');
           }
         }
       } catch (err: any) {
         if (cancelled) return;
         const status = err?.response?.status as number | undefined;
         if (status === 401) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          navigate("/", { replace: true });
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          navigate('/', { replace: true });
           return;
         }
         setError(
           err?.response?.data?.error?.message ||
             err?.message ||
-            "프로필 조회 중 오류가 발생했습니다."
+            '프로필 조회 중 오류가 발생했습니다.',
         );
       } finally {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -79,7 +79,7 @@ export default function MyPage() {
     };
   }, [navigate]);
 
-  const email = profile?.email || "";
+  const email = profile?.email || '';
 
   const handleSaveNickname = async () => {
     if (saving) return;
@@ -87,62 +87,67 @@ export default function MyPage() {
 
     const value = nickname.trim();
     if (value.length < 2) {
-      setSaveMsg("닉네임은 2글자 이상이어야 합니다.");
+      setSaveMsg('닉네임은 2글자 이상이어야 합니다.');
       return;
     }
 
     setSaving(true);
     try {
-      const resp = await api.patch<ApiResponse<Profile>>("/my/profile/nickname", {
+      const resp = await api.patch<ApiResponse<Profile>>('/my/profile/nickname', {
         nickname: value,
       });
       const res = resp.data;
 
       if (res?.success && res.data) {
         setProfile((prev) =>
-          prev ? { ...prev, nickname: res.data?.nickname ?? value } : res.data
+          prev ? { ...prev, nickname: res.data?.nickname ?? value } : res.data,
         );
         setNickname(res.data?.nickname ?? value);
-        setSaveMsg("닉네임이 저장되었습니다.");
+        setSaveMsg('닉네임이 저장되었습니다.');
         try {
-          localStorage.setItem("nickname", res.data?.nickname ?? value);
+          localStorage.setItem('nickname', res.data?.nickname ?? value);
         } catch {}
       } else {
         const msg =
           (res as any)?.error?.message ||
           (res as any)?.message ||
-          "닉네임 저장 중 문제가 발생했습니다.";
+          '닉네임 저장 중 문제가 발생했습니다.';
         setSaveMsg(msg);
       }
     } catch (err: any) {
       const status = err?.response?.status as number | undefined;
       if (status === 401) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        navigate("/", { replace: true });
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        navigate('/', { replace: true });
         return;
       }
       if (status === 409) {
-        setSaveMsg("이미 사용 중인 닉네임입니다.");
+        setSaveMsg('이미 사용 중인 닉네임입니다.');
         return;
       }
       setSaveMsg(
         err?.response?.data?.error?.message ||
           err?.response?.data?.message ||
           err?.message ||
-          "닉네임 저장 중 오류가 발생했습니다."
+          '닉네임 저장 중 오류가 발생했습니다.',
       );
     } finally {
       setSaving(false);
     }
   };
+  const canSave = (() => {
+    const trimmed = nickname.trim();
+    const prev = (profile?.nickname ?? '').trim();
+    return !saving && trimmed.length >= 2 && trimmed !== prev;
+  })();
 
   return (
-    <div className="flex min-h-screen flex-col bg-beige3">
+    <div className="bg-beige3 flex min-h-screen flex-col">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} position="left" />
 
-      <div className="mt-[3.5rem] px-4 py-4 text-center bg-green3-light text-green2">
+      <div className="bg-green3-light text-green2 mt-[3.5rem] px-4 py-4 text-center">
         {loading ? (
           <p className="font-semibold">마이페이지 불러오는 중…</p>
         ) : error ? (
@@ -151,21 +156,21 @@ export default function MyPage() {
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="mt-2 rounded-m border px-3 py-1 text-caption2 bg-beige2 text-green1 border-gray1"
+              className="rounded-m text-caption2 bg-beige2 text-green1 border-gray1 mt-2 border px-3 py-1"
             >
               다시 시도
             </button>
           </>
         ) : (
           <>
-            <p className="font-semibold">
-              안녕하세요 {nickname ? `${nickname}님` : "여행자님"}!
+            <p className="text-caption1 text-black">
+              안녕하세요 {nickname ? `${nickname}님` : '여행자님'}!
             </p>
-            <p>{email || "이메일 정보 없음"}</p>
+            <p className="text-body1 text-green2">{email || '이메일 정보 없음'}</p>
             <button
               type="button"
               onClick={handleLogout}
-              className="mt-2 rounded-m border px-3 py-1 text-caption2 bg-beige2 text-green1 border-gray1 hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="rounded-m text-caption2 bg-yellow2 text-green1 mt-2 px-3 py-1"
             >
               로그아웃
             </button>
@@ -173,9 +178,9 @@ export default function MyPage() {
         )}
       </div>
 
-      <div className="mt-6 flex flex-col gap-6 px-6 text-green1">
+      <div className="text-green1 mt-6 flex flex-col gap-6 px-8">
         <div>
-          <label htmlFor="email" className="mb-1 block text-title4 text-green1">
+          <label htmlFor="email" className="text-title4 text-green1 mb-1 block">
             이메일
           </label>
           <input
@@ -183,46 +188,53 @@ export default function MyPage() {
             type="email"
             value={email}
             readOnly
-            className="w-full rounded-m border border-gray2 bg-white px-3 py-2 text-body1"
+            className="rounded-m border-gray2 text-body1 bg-gray1 w-full border px-3 py-2"
           />
         </div>
 
         <div>
-          <label htmlFor="nickname" className="mb-1 block text-title4 text-green1">
-            닉네임
-          </label>
+          <label className="text-title4 text-green1 mb-1 block">닉네임</label>
           <div className="flex items-center gap-2">
             <input
               id="nickname"
               type="text"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className="w-full rounded-m border border-gray1 bg-white px-3 py-2 text-body1"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && canSave) handleSaveNickname();
+              }}
+              className="rounded-m border-gray1 text-body1 h-10 w-full border bg-white px-3"
               placeholder="닉네임 입력"
             />
-            {/* ✅ 수정 버튼 하나만 */}
             <button
               type="button"
-              disabled={saving}
+              disabled={!canSave}
               onClick={handleSaveNickname}
-              className="rounded-m border border-green3 bg-green3-light px-3 py-1 text-caption2 text-green1 hover:brightness-95 disabled:opacity-60"
+              className="rounded-m border-green3 bg-green3-light text-caption2 text-green1 h-10 shrink-0 border px-5 hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-disabled={!canSave}
             >
-              {saving ? "저장 중..." : "수정"}
+              {saving ? '저장 중...' : '저장'}
             </button>
           </div>
-          {saveMsg && <p className="mt-2 text-caption2 text-green-muted">{saveMsg}</p>}
+          {saveMsg && <p className="text-caption2 text-green-muted mt-2">{saveMsg}</p>}
+        </div>
+        {/*회원 탈퇴*/}
+        <div className="mt-40 px-6 pb-24">
+          <div className="border-t border-gray-200/70 pt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-caption2 text-green-muted">
+                더 이상 서비스를 사용하지 않으신가요?
+              </span>
+              <button
+                type="button"
+                className="text-caption2 text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
+              >
+                회원 탈퇴
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        disabled
-        aria-disabled
-        title="UI 데모 — 기능 비활성화"
-        className="fixed right-4 bottom-20 z-50 text-caption2 font-medium text-black underline-offset-2 hover:underline disabled:no-underline disabled:opacity-60"
-      >
-        회원 탈퇴
-      </button>
     </div>
   );
 }
