@@ -17,7 +17,9 @@ export default function Badge({ type, children, color, count, percent, size = 's
 
   const label =
     type === 'parkingTag' ? (
-      <span className="min-w-0 flex-1 truncate text-center">{children}</span>
+      <span className="w-[17ch] min-w-0 truncate text-center">{children}</span>
+    ) : type === 'parkingCount' ? (
+      <span className="w-[3ch]">{children}</span>
     ) : (
       <>{children}</>
     );

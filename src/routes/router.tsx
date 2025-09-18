@@ -17,6 +17,8 @@ import Register2 from '@/pages/register/Register2';
 import Register3 from '@/pages/register/Register3';
 import Searching from '@/pages/explore/Searching';
 import TravelSearch from '@/pages/home/TravelSearch';
+import RequireAuth from './RequireAuth';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -30,7 +32,6 @@ export const router = createBrowserRouter([
     path: '/register/3',
     element: <Register3 />,
   },
-  //테스트
   {
     path: '/alert',
     element: <AlertComponent />,
@@ -65,29 +66,27 @@ export const router = createBrowserRouter([
      
     ],
   },
-  //여행지 상세페이지
+  {
+    element: <RequireAuth />,
+    children: [
+      { path: '/mytravel', element: <MyTravelList /> },
+      { path: '/mypage', element: <MyPage /> },
+    ],
+  },
   {
     path: '/place/:contentId',
     element: <TravelSpotDetail />,
-  },
-  {
-    path: '/mytravel',
-    element: <MyTravelList />,
-  },
-  {
-    path: '/mypage',
-    element: <MyPage />,
   },
     {
         path: 'travelsearch',
         element: <TravelSearch />,
       },
   {
-    path: '/region', // 지역 선택 테스트용
+    path: '/region',
     element: <RegionSelector />,
   },
   {
-    path: '/activity', // ✅ 여행 활동 선택 테스트용
+    path: '/activity',
     element: <TravelActivitySelector />,
   },
   {
@@ -95,7 +94,7 @@ export const router = createBrowserRouter([
     element: <CardTestPage />,
   },
   {
-    path: '/explore/Filter', // ✅ 여행탐색 Filter 페이지 테스트용
+    path: '/explore/Filter',
     element: <Filter />,
   },
 ]);
