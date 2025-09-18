@@ -1,21 +1,24 @@
-// src/pages/MyTravelList.tsx
 import { useEffect, useMemo, useState } from 'react';
 import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
-import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg.api';
-import { unsavePlace } from '@/api/Myplace/saved.api';
+import {
+  getSavedPlaces,
+  unsavePlace,
+  type SavedPlaceItem,
+  type SavedPlacePage,
+  type SavePlaceRequest,
+} from '@/api/Myplace/myPlace.api';
+import { useNavigate } from 'react-router-dom';
 
 const PAGE_SIZE = 20;
 
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
+type Row = SavedPlaceItem & { regionName?: string };
 
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [items, setItems] = useState<SavedPlace[]>([]);
+  const [items, setItems] = useState<Row[]>([]);
   const [page, setPage] = useState(0);
   const [last, setLast] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,16 +27,20 @@ const MyTravelList = () => {
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
+  const navigate = useNavigate();
 
   const loadPage = async (p: number, replace = false) => {
     if (loading) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await getSavedPlaces({ page: p, size: PAGE_SIZE });
-      setItems((prev) => (replace ? res.content : [...prev, ...res.content]));
-      setPage(res.page);
-      setLast(res.last);
+      const raw = (await getSavedPlaces(p, PAGE_SIZE)) as any;
+      const pageData = raw?.content ? raw : (raw?.data ?? {});
+      const content = Array.isArray(pageData.content) ? pageData.content : [];
+
+      setItems((prev) => (replace ? content : [...prev, ...content]));
+      setPage(pageData.page ?? p);
+      setLast(!!pageData.last);
     } catch (e) {
       console.error('[MyTravelList][getSavedPlaces]', e);
       setError('목록을 불러오는 중 문제가 발생했습니다.');
@@ -47,14 +54,21 @@ const MyTravelList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRemoveItem = async (contentId: string | number) => {
+  const handleRemoveItem = async (item: Row) => {
     const snapshot = items;
-    setItems((prev) => prev.filter((it) => it.contentId !== contentId));
+    setItems((prev) => prev.filter((it) => it.contentId !== item.contentId));
     try {
-      await unsavePlace(contentId);
+      const payload: SavePlaceRequest = {
+        contentId: String(item.contentId),
+        regionName: item.regionName ?? '정보없음',
+        themeName: item.themeName ?? '여행지',
+        cnctrLevel: typeof item.cnctrLevel === 'number' ? item.cnctrLevel : 0,
+      };
+      await unsavePlace(payload);
     } catch (e) {
       console.error('[MyTravelList][unsavePlace]', e);
-      setItems(snapshot); // 롤백
+      // 롤백
+      setItems(snapshot);
       alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
     }
   };
@@ -102,8 +116,8 @@ const MyTravelList = () => {
                 ? `${it.regionName} · ${it.themeName}`
                 : it.regionName || it.themeName || String(it.contentId);
 
-            const likeCount = (it as any).likeCnt ?? (it as any).likedCnt ?? 0;
-            const quietLevel = clamp(Math.round(it.entrLevel ?? 3), 1, 5);
+            const likeCount = it.likeCount;
+            const quietLevel = it.cnctrLevel;
 
             return (
               <PlaceCard
@@ -114,7 +128,8 @@ const MyTravelList = () => {
                 imgUrl={undefined}
                 quietLevel={quietLevel}
                 showRemoveButton
-                onRemove={() => handleRemoveItem(it.contentId)}
+                onClick={() => navigate(`/place/${it.contentId}`)}
+                onRemove={() => handleRemoveItem(it)}
               />
             );
           })}
