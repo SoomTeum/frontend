@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
   return (
     <>
       <div
-        className={`fixed top-0 left-[max(0px,calc(50vw-215px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${
+        className={`fixed top-0 left-[max(0px,calc(50vw-221px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         } overflow-hidden`}
       >

@@ -1,4 +1,3 @@
-// Selector.tsx
 import { useEffect, useState } from 'react';
 
 export type SelectorProps = {
@@ -39,21 +38,24 @@ const Selector = ({
 
   const changeMain = (next: string) => {
     setSelectedMain(next);
-    setSelectedSub(null);
+    setSelectedSub(null); // 메인 카테고리 변경 시 서브 선택 초기화
   };
+
   const chooseSub = (sub: string) => {
-    setSelectedSub((prev) => (prev === sub ? null : sub));
+    setSelectedSub((prev) => (prev === sub ? null : sub)); // 단일 선택, 같은 것 클릭시 해제
   };
 
   useEffect(() => setSelectedMain(initialMain), [initialMain]);
+
   useEffect(() => {
     if (initialSubs !== undefined) {
       setSelectedSub(initialSubs.length ? initialSubs[0] : null);
     }
   }, [initialSubs]);
+
   useEffect(() => {
     onSelect?.(selectedMain, selectedSub ? [selectedSub] : []);
-  }, [selectedMain, selectedSub, onSelect]);
+  }, [onSelect, selectedMain, selectedSub]);
 
   return (
     <div className={`flex h-85 w-full overflow-hidden border-t ${borderColor}`}>

@@ -4,8 +4,8 @@ import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
-import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg';
-import { unsavePlace } from '@/api/Myplace/saved';
+import { getSavedPlaces, type SavedPlace } from '@/api/Myplace/saveg.api';
+import { unsavePlace } from '@/api/Myplace/saved.api';
 
 const PAGE_SIZE = 20;
 
@@ -69,12 +69,13 @@ const MyTravelList = () => {
   }, [items, q]);
 
   return (
-    <div className="min-h-screen">
+    <div className="bg-beige1 min-h-screen">
       <Header onMenuClick={handleMenuClick} />
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} position="left" />
-      <div className="mx-auto flex w-full max-w-[480px] flex-col pt-14">
-        <div className="bg-green3-light text-caption3 text-green1 h-10 w-full items-center py-[10px] text-center">
-          나의 여행지
+
+      <div className="px-4 pt-14 pb-8">
+        <div className="mx-[-1rem] mb-3 rounded-b-xl bg-[#dfead1] pt-2 pb-3">
+          <div className="text-heading3 text-green1 text-center font-bold">나의 여행지</div>
         </div>
 
         <div className="relative mb-5">
