@@ -12,7 +12,7 @@ import type { PlaceDetail } from '@/types/Detail';
 import { getPlaceDetail, type IntegratedPlace } from '@/api/Detail/detail.api';
 import { useEffect, useState } from 'react';
 import { Badge, Image, Loader, ParkingTable } from '@/component';
-import { likePlace, unlikePlace } from '@/api/like/like.api';
+import { likePlace, unlikePlace, getLikeStatus } from '@/api/like/like.api';
 
 const TravelSpotDetail = () => {
   const navigate = useNavigate();
@@ -129,6 +129,17 @@ const TravelSpotDetail = () => {
           setLiked(mapped.liked);
           setLikeCount(mapped.likeCount);
           setBookmarked(mapped.bookmarked);
+
+          if (isAuthed) {
+            try {
+              const { data: resp } = await getLikeStatus(contentId);
+              if (alive && resp?.success && resp.data) {
+                setLiked(!!resp.data.like);
+              }
+            } catch (e) {
+              console.debug('좋아요 상태 조회 실패:', e);
+            }
+          }
         }
       } catch (e: any) {
         setErrMsg(e?.message || '여행지 정보를 불러오지 못했습니다.');
