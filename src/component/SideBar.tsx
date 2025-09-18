@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
   return (
     <>
       <div
-        className={`fixed top-0 left-[max(0px,calc(50vw-221px))] z-[60] h-[100dvh] w-[min(100vw,430px)] ${
+        className={`fixed top-0 left-[max(0px,calc(50vw-218px))] z-[60] h-[100dvh] w-[min(100vw,433px)] ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         } overflow-hidden`}
       >
@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, position = 'right' }
         <div
           role="dialog"
           aria-modal="true"
-          className={`absolute top-0 ${isLeft ? 'left-0' : 'right-0'} bg-beige3 z-[70] h-full w-50 transform transition-transform duration-300 ${
+          className={`absolute top-0 ${isLeft ? 'left-0' : 'right-0'} bg-beige3 z-[70] h-full w-52 transform transition-transform duration-300 ${
             isOpen ? 'translate-x-0' : isLeft ? '-translate-x-full' : 'translate-x-full'
           } `}
         >
