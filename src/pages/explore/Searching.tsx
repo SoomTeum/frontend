@@ -9,7 +9,7 @@ export default function Searching() {
 
   useEffect(() => {
     const t = setTimeout(() => {
-      navigate("/explore/travelsearch");
+      navigate("/travelsearch");
     }, 3000);
     return () => clearTimeout(t);
   }, [navigate]);
