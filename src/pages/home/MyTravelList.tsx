@@ -3,18 +3,12 @@ import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
-import {
-  getSavedPlaces,
-  unsavePlace,
-  type SavedPlaceItem,
-  type SavedPlacePage,
-  type SavePlaceRequest,
-} from '@/api/Myplace/myPlace.api';
+import { getSavedPlaces, unsavePlace, type SavedPlaceItem } from '@/api/Myplace/myPlace.api';
 import { useNavigate } from 'react-router-dom';
 
 const PAGE_SIZE = 20;
 
-type Row = SavedPlaceItem & { regionName?: string };
+type Row = SavedPlaceItem;
 
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -58,13 +52,7 @@ const MyTravelList = () => {
     const snapshot = items;
     setItems((prev) => prev.filter((it) => it.contentId !== item.contentId));
     try {
-      const payload: SavePlaceRequest = {
-        contentId: String(item.contentId),
-        regionName: item.regionName ?? '정보없음',
-        themeName: item.themeName ?? '여행지',
-        cnctrLevel: typeof item.cnctrLevel === 'number' ? item.cnctrLevel : 0,
-      };
-      await unsavePlace(payload);
+      await unsavePlace({ contentId: String(item.contentId) });
     } catch (e) {
       console.error('[MyTravelList][unsavePlace]', e);
       // 롤백
@@ -77,8 +65,8 @@ const MyTravelList = () => {
     if (!q.trim()) return items;
     const kw = q.trim().toLowerCase();
     return items.filter((it) => {
-      const title = `${it.regionName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
-      return title.includes(kw);
+      const hay = `${it.placeName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
+      return hay.includes(kw);
     });
   }, [items, q]);
 
@@ -110,26 +98,22 @@ const MyTravelList = () => {
         )}
 
         <div className="flex flex-col gap-3 px-9">
-          {filtered.map((it) => {
-            const title =
-              it.regionName && it.themeName
-                ? `${it.regionName} · ${it.themeName}`
-                : it.regionName || it.themeName || String(it.contentId);
+          {filtered.map((row) => {
+            const { contentId, themeName, likeCount, cnctrLevel } = row;
 
-            const likeCount = it.likeCount;
-            const quietLevel = it.cnctrLevel;
+            const title = row.placeName || String(contentId);
 
             return (
               <PlaceCard
-                key={String(it.contentId)}
+                key={String(row.contentId)}
                 title={title}
-                theme={it.themeName ?? '-'}
+                theme={themeName ?? '-'}
                 likeCount={likeCount}
                 imgUrl={undefined}
-                quietLevel={quietLevel}
+                quietLevel={cnctrLevel}
                 showRemoveButton
-                onClick={() => navigate(`/place/${it.contentId}`)}
-                onRemove={() => handleRemoveItem(it)}
+                onClick={() => navigate(`/place/${contentId}`)}
+                onRemove={() => handleRemoveItem(row)}
               />
             );
           })}

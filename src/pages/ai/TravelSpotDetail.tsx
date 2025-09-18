@@ -50,6 +50,7 @@ const TravelSpotDetail = () => {
             regionName: data.regionTag ?? '정보없음',
             themeName: data.themeName ?? '여행지',
             cnctrLevel: data.serenity ?? 0,
+            placeName: data.name || String(contentId),
           },
         }),
       );
@@ -101,6 +102,7 @@ const TravelSpotDetail = () => {
             regionName: data.regionTag ?? '정보없음',
             themeName: data.themeName ?? '여행지',
             cnctrLevel: data.serenity ?? 0,
+            placeName: data.name || String(contentId),
           },
         }),
       );
@@ -128,6 +130,7 @@ const TravelSpotDetail = () => {
           regionName: data.regionTag ?? '정보없음',
           themeName: data.themeName ?? '여행지',
           cnctrLevel: data.serenity ?? 0,
+          placeName: data.name || String(contentId),
         });
         setBookmarked(true);
       }

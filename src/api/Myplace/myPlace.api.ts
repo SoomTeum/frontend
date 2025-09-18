@@ -6,6 +6,7 @@ export interface SavePlaceRequest {
   regionName: string;
   themeName: string;
   cnctrLevel: number;
+  placeName: string;
 }
 
 export interface SaveToggleResponse {
@@ -27,6 +28,7 @@ export interface SaveStatusData {
 export interface SavedPlaceItem {
   cnctrLevel: number;
   contentId: string;
+  placeName: string;
   likeCount: number;
   themeName: string;
   savedAt: string;
