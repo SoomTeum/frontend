@@ -59,7 +59,12 @@ const MyTravelList = () => {
     const snapshot = items;
     setItems((prev) => prev.filter((it) => it.contentId !== item.contentId));
     try {
-      await unsavePlace({ contentId: String(item.contentId) });
+      await unsavePlace({
+        contentId: item.contentId,
+        themeName: item.themeName,
+        cnctrLevel: item.cnctrLevel,
+        regionName: item.regionName ?? '여행지',
+      });
     } catch (e) {
       console.error('[MyTravelList][unsavePlace]', e);
       // 롤백

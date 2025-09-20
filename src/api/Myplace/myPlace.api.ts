@@ -31,6 +31,7 @@ export interface SavedPlaceItem {
   placeName: string;
   likeCount: number;
   themeName: string;
+  regionName: string;
   savedAt: string;
 }
 export interface SavedPlacePage {
@@ -54,9 +55,9 @@ export async function savePlace(payload: SavePlaceRequest): Promise<SaveToggleRe
 //저장 OFF
 export async function unsavePlace(payload: {
   contentId: string;
-  regionName?: string;
+  regionName: string;
   themeName?: string;
-  cnctrLevel?: number;
+  cnctrLevel: number;
 }) {
   const res = await api.delete<SaveToggleResponse>('/my/places/save', {
     data: payload,

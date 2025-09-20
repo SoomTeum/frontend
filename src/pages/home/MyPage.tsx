@@ -178,7 +178,7 @@ export default function MyPage() {
         )}
       </div>
 
-      <div className="text-green1 mt-6 flex flex-col gap-6 px-8">
+      <div className="text-green1 mt-6 flex flex-1 flex-col gap-6 px-8">
         <div>
           <label htmlFor="email" className="text-title4 text-green1 mb-1 block">
             이메일
@@ -219,7 +219,7 @@ export default function MyPage() {
           {saveMsg && <p className="text-caption2 text-green-muted mt-2">{saveMsg}</p>}
         </div>
         {/*회원 탈퇴*/}
-        <div className="mt-40 px-6 pb-24">
+        <div className="mt-auto px-6 pb-10">
           <div className="border-t border-gray-200/70 pt-4">
             <div className="flex items-center justify-between">
               <span className="text-caption2 text-green-muted">

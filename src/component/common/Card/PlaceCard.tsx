@@ -23,42 +23,36 @@ export default function PlaceCard({
   onClick,
 }: PlaceCardProps) {
   const showCount = typeof quietLevel === 'number' && quietLevel !== -1;
+
   return (
     <div
-      className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-start rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95"
       onClick={onClick}
+      className="bg-yellow2 flex h-19 w-full max-w-[430px] cursor-pointer items-stretch overflow-hidden rounded-[10px] px-3 py-2 transition-all hover:scale-[1.01] hover:shadow-md active:scale-95"
     >
-      {/*썸네일*/}
-      <div className="bg-gray1 flex aspect-square w-15 flex-shrink-0 items-center justify-center overflow-hidden rounded-[5px]">
+      <div className="bg-gray1 relative h-full w-15 shrink-0 overflow-hidden rounded-[5px]">
         {imgUrl ? (
           <img src={imgUrl} className="h-full w-full object-cover" />
         ) : (
-          <ImageIcon className="h-8 w-8" />
+          <div className="flex h-full w-full items-center justify-center">
+            <ImageIcon className="h-8 w-8" />
+          </div>
         )}
       </div>
 
-      {/*텍스트*/}
-      <div className="ml-4 flex w-full min-w-0 flex-col">
-        <div className="flex items-start justify-between gap-2">
-          <p className="text-caption4 max-w-[20ch] truncate">{title}</p>
-        </div>
-
-        {/*뱃지 2개*/}
-        <div className="mt-4.5 flex shrink-0 gap-4 pr-12">
-          <Badge
-            type="default"
-            color="green"
-            {...(showCount ? { count: quietLevel } : {})} // -1이면 count prop 자체를 전달하지 않음
-          >
+      <div className="ml-4 flex min-w-0 flex-1 flex-col">
+        <p className="text-caption4 line-clamp-2 min-h-[40px] leading-5">{title}</p>
+        <div className="flex min-w-0 shrink-0 flex-nowrap gap-2 overflow-hidden pr-10">
+          <Badge type="default" color="green" {...(showCount ? { count: quietLevel } : {})}>
             {showCount ? '한적함' : '정보없음'}
           </Badge>
+
           <Badge type="default" color="red">
-            {theme}
+            <span className="block max-w-[16ch] truncate">{theme}</span>
           </Badge>
         </div>
       </div>
 
-      <div className="flex flex-col items-end justify-between gap-2">
+      <div className="flex h-full flex-col items-end justify-between">
         {showRemoveButton ? (
           <button
             onClick={(e) => {
@@ -75,8 +69,8 @@ export default function PlaceCard({
         ) : (
           <div className="h-4 w-3" />
         )}
-        {/*좋아요 수*/}
-        <div className="text-caption5 mt-5 ml-5 flex items-center justify-center gap-[3px]">
+
+        <div className="text-caption5 flex items-center gap-[3px]">
           <HeartFillIcon className="h-3 w-3" />
           <span className="w-[3ch] leading-none whitespace-nowrap tabular-nums">
             {likeCount > 99 ? '99+' : likeCount}
