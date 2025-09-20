@@ -47,7 +47,7 @@ export default function HomePage() {
               내가 원하는 조용한 여행지,
               <br /> 이제 손쉽게 찾을 수 있어요.
             </div>
-            <Button variant="sm" className="mt-5" onClick={() => navigate('/explore/Filter')}>
+            <Button variant="sm" className="mt-5" onClick={() => navigate('/search')}>
               바로가기
             </Button>
           </div>
@@ -77,7 +77,6 @@ export default function HomePage() {
           </div>
         </div>
         <Footer />
-        {/*Todo: 추후 홈 메인 내용 확정 되면 구현....*/}
       </div>
     </div>
   );
