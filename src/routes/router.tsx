@@ -15,11 +15,16 @@ import Register2 from '@/pages/register/Register2';
 import Register3 from '@/pages/register/Register3';
 import TravelSearch from '@/pages/home/TravelSearch';
 import RequireAuth from './RequireAuth';
-
+import Resgister1 from '@/pages/register/Register';
 export const router = createBrowserRouter([
+
   {
     path: '/',
     element: <HomePage />,
+  },
+  {
+    path:'/register/1',
+    element:<Resgister1 />
   },
   {
     path: '/register/2',
