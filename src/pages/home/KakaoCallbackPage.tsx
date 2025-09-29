@@ -75,7 +75,7 @@ export default function KakaoCallbackPage() {
         sessionStorage.removeItem('postLoginAction');
 
         if (result.newUser) {
-          navigate('/register/2', { replace: true });
+          navigate('/register/1', { replace: true });
           return;
         }
 
