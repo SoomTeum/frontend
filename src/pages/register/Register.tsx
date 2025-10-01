@@ -9,7 +9,7 @@ export default function Register1() {
     <div className="min-h-screen bg-beige1 flex flex-col items-center justify-between px-6 pt-12 pb-10">
       <div className="w-full flex justify-center px-2 mt-8 md:mt-10">
         <div className="w-full max-w-[320px] text-left">
-          <h1 className="font-extrabold text-[27px] leading-[32px] md:text-[28px] md:leading-[36px]  tracking-tight ">
+          <h1 className="font-extrabold tracking-tight text-title3 text-green1">
             숨여행, 틈이 처음이시네요!<br />
             초기 설정을 진행할게요.
           </h1>
