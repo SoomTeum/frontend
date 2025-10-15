@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/component/Header';
-import Sidebar from '@/component/SideBar';
+import { Header, Sidebar, ConfirmModal } from '@/component';
 import api from '@/api/api';
 import { withdrawAccount } from '@/api/user/profile.api';
 import type { ApiResponse } from '@/types/api-response';
@@ -18,6 +17,7 @@ export default function MyPage() {
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [withdrawing, setWithdrawing] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
@@ -144,13 +144,10 @@ export default function MyPage() {
     return !saving && trimmed.length >= 2 && trimmed !== prev;
   })();
 
-  const handleWithdraw = async () => {
-    if (withdrawing) return;
-    const ok = window.confirm(
-      '정말로 회원 탈퇴하시겠어요?\n탈퇴 시 계정 및 데이터가 삭제될 수 있습니다.',
-    );
-    if (!ok) return;
+  const openWithdrawModal = () => setWithdrawOpen(true);
 
+  const handleWithdrawConfirm = async () => {
+    if (withdrawing) return;
     setWithdrawing(true);
     try {
       const res = await withdrawAccount();
@@ -161,6 +158,7 @@ export default function MyPage() {
           localStorage.removeItem('userId');
           localStorage.removeItem('nickname');
         } catch {}
+        setWithdrawOpen(false);
         navigate('/', { replace: true });
         return;
       }
@@ -170,6 +168,7 @@ export default function MyPage() {
       if (status === 401) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        setWithdrawOpen(false);
         navigate('/', { replace: true });
         return;
       }
@@ -269,7 +268,7 @@ export default function MyPage() {
               </span>
               <button
                 type="button"
-                onClick={handleWithdraw}
+                onClick={openWithdrawModal}
                 disabled={withdrawing}
                 className="text-caption2 cursor-pointer text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
               >
@@ -279,6 +278,21 @@ export default function MyPage() {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        open={withdrawOpen}
+        title="회원 탈퇴 안내"
+        description={`회원 탈퇴를 신청하시면 계정이 탈퇴 대기 상태로 전환되며,  
+30일 동안 다시 로그인하지 않으면 모든 정보가 영구 삭제됩니다.
+
+30일 이내 로그인 시 탈퇴가 자동으로 취소됩니다.
+
+정말 탈퇴를 진행하시겠습니까?`}
+        confirmText="탈퇴하기"
+        cancelText="취소"
+        loading={withdrawing}
+        onConfirm={handleWithdrawConfirm}
+        onClose={() => !withdrawing && setWithdrawOpen(false)}
+      />
     </div>
   );
 }
