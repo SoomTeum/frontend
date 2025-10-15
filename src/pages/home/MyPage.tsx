@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import api from '@/api/api';
+import { withdrawAccount } from '@/api/user/profile.api';
 import type { ApiResponse } from '@/types/api-response';
 
 type Profile = {
@@ -16,6 +17,7 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [withdrawing, setWithdrawing] = useState(false);
 
   const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
@@ -142,6 +144,46 @@ export default function MyPage() {
     return !saving && trimmed.length >= 2 && trimmed !== prev;
   })();
 
+  const handleWithdraw = async () => {
+    if (withdrawing) return;
+    const ok = window.confirm(
+      '정말로 회원 탈퇴하시겠어요?\n탈퇴 시 계정 및 데이터가 삭제될 수 있습니다.',
+    );
+    if (!ok) return;
+
+    setWithdrawing(true);
+    try {
+      const res = await withdrawAccount();
+      if (res?.success) {
+        try {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('nickname');
+        } catch {}
+        navigate('/', { replace: true });
+        return;
+      }
+      alert(res?.message || '회원 탈퇴 처리 중 문제가 발생했습니다. 다시 시도해 주세요.');
+    } catch (err: any) {
+      const status = err?.response?.status as number | undefined;
+      if (status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        navigate('/', { replace: true });
+        return;
+      }
+      const msg =
+        err?.response?.data?.error?.message ||
+        err?.response?.data?.message ||
+        err?.message ||
+        '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setWithdrawing(false);
+    }
+  };
+
   return (
     <div className="bg-beige3 flex min-h-screen flex-col">
       <Header onMenuClick={handleMenuClick} />
@@ -227,7 +269,9 @@ export default function MyPage() {
               </span>
               <button
                 type="button"
-                className="text-caption2 text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
+                onClick={handleWithdraw}
+                disabled={withdrawing}
+                className="text-caption2 cursor-pointer text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
               >
                 회원 탈퇴
               </button>
