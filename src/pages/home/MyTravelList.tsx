@@ -1,21 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '@/component/Header';
 import Sidebar from '@/component/SideBar';
 import SearchIcon from '@/image/Search.svg';
 import PlaceCard from '@/component/common/Card/PlaceCard';
 import { getSavedPlaces, unsavePlace, type SavedPlaceItem } from '@/api/Myplace/myPlace.api';
 import { useNavigate } from 'react-router-dom';
-import SortPillSelect, { type Option } from '@/component/selector/SortPillSelect';
 
 const PAGE_SIZE = 20;
 
 type Row = SavedPlaceItem;
-const arrangeOptions: Option<'O' | 'Q' | 'R' | 'S'>[] = [
-  { value: 'O', label: '기본순' },
-  { value: 'Q', label: '수정일순' },
-  { value: 'R', label: '등록일순' },
-  { value: 'S', label: '거리순' },
-];
 const MyTravelList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [items, setItems] = useState<Row[]>([]);
@@ -24,21 +17,28 @@ const MyTravelList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
-  const [arrange, setArrange] = useState<'O' | 'Q' | 'R' | 'S'>('O');
+
+  //검색 디바운스
+  useEffect(() => {
+    const h = setTimeout(() => {
+      const kw = q.trim();
+      loadPage(0, true, kw);
+    }, 300);
+    return () => clearTimeout(h);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleCloseSidebar = () => setIsSidebarOpen(false);
   const navigate = useNavigate();
 
-  const loadPage = async (p: number, replace = false) => {
+  const loadPage = async (p: number, replace = false, keyword = '') => {
     if (loading) return;
     setLoading(true);
     setError(null);
     try {
-      const raw = (await getSavedPlaces(p, PAGE_SIZE)) as any;
-      const pageData = raw?.content ? raw : (raw?.data ?? {});
+      const pageData = await getSavedPlaces({ page: p, size: PAGE_SIZE, keyword });
       const content = Array.isArray(pageData.content) ? pageData.content : [];
-
       setItems((prev) => (replace ? content : [...prev, ...content]));
       setPage(pageData.page ?? p);
       setLast(!!pageData.last);
@@ -51,7 +51,7 @@ const MyTravelList = () => {
   };
 
   useEffect(() => {
-    loadPage(0, true);
+    loadPage(0, true, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,15 +72,6 @@ const MyTravelList = () => {
       alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
     }
   };
-
-  const filtered = useMemo(() => {
-    if (!q.trim()) return items;
-    const kw = q.trim().toLowerCase();
-    return items.filter((it) => {
-      const hay = `${it.placeName ?? ''} ${it.themeName ?? ''} ${it.contentId}`.toLowerCase();
-      return hay.includes(kw);
-    });
-  }, [items, q]);
 
   return (
     <div className="min-h-screen">
@@ -104,26 +95,15 @@ const MyTravelList = () => {
             <img src={SearchIcon} alt="search" className="h-4 w-4" />
           </span>
         </div>
-        {/*정렬*/}
-        <div className="-mt-2 mb-4 flex justify-end px-9">
-          <SortPillSelect
-            value={arrange}
-            options={arrangeOptions}
-            onChange={setArrange}
-            size="sm"
-          />
-        </div>
 
         {error && (
           <div className="mb-3 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">{error}</div>
         )}
 
         <div className="flex flex-col gap-3 px-9">
-          {filtered.map((row) => {
+          {items.map((row) => {
             const { contentId, themeName, likeCount, cnctrLevel } = row;
-
             const title = row.placeName || String(contentId);
-
             return (
               <PlaceCard
                 key={String(row.contentId)}
@@ -143,7 +123,7 @@ const MyTravelList = () => {
         <div className="mt-6 flex justify-center">
           {!last && (
             <button
-              onClick={() => loadPage(page + 1)}
+              onClick={() => loadPage(page + 1, false, q.trim())}
               disabled={loading}
               className="rounded-full bg-[var(--color-green4)] px-4 py-2 text-sm text-white disabled:opacity-50"
             >
