@@ -12,7 +12,7 @@ export default function AiExplorePage() {
   const navigate = useNavigate();
   const address = useAIExploreStore((s) => s.address);
   const theme = useAIExploreStore((s) => s.theme);
-  const themeCodes = useAIExploreStore((s) => s.themeCodes); // ✅ 추가
+  const themeCodes = useAIExploreStore((s) => s.themeCodes);
   const distanceKm = useAIExploreStore((s) => s.distanceKm);
   const setAddress = useAIExploreStore((s) => s.setAddress);
   const setDistanceKm = useAIExploreStore((s) => s.setDistanceKm);

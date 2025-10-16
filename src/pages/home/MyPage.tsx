@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/component/Header';
-import Sidebar from '@/component/SideBar';
+import { Header, Sidebar, ConfirmModal } from '@/component';
 import api from '@/api/api';
+import { withdrawAccount } from '@/api/user/profile.api';
 import type { ApiResponse } from '@/types/api-response';
 
 type Profile = {
@@ -16,6 +16,8 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
@@ -142,6 +144,45 @@ export default function MyPage() {
     return !saving && trimmed.length >= 2 && trimmed !== prev;
   })();
 
+  const openWithdrawModal = () => setWithdrawOpen(true);
+
+  const handleWithdrawConfirm = async () => {
+    if (withdrawing) return;
+    setWithdrawing(true);
+    try {
+      const res = await withdrawAccount();
+      if (res?.success) {
+        try {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('nickname');
+        } catch {}
+        setWithdrawOpen(false);
+        navigate('/', { replace: true });
+        return;
+      }
+      alert(res?.message || '회원 탈퇴 처리 중 문제가 발생했습니다. 다시 시도해 주세요.');
+    } catch (err: any) {
+      const status = err?.response?.status as number | undefined;
+      if (status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setWithdrawOpen(false);
+        navigate('/', { replace: true });
+        return;
+      }
+      const msg =
+        err?.response?.data?.error?.message ||
+        err?.response?.data?.message ||
+        err?.message ||
+        '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+      alert(msg);
+    } finally {
+      setWithdrawing(false);
+    }
+  };
+
   return (
     <div className="bg-beige3 flex min-h-screen flex-col">
       <Header onMenuClick={handleMenuClick} />
@@ -227,7 +268,9 @@ export default function MyPage() {
               </span>
               <button
                 type="button"
-                className="text-caption2 text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
+                onClick={openWithdrawModal}
+                disabled={withdrawing}
+                className="text-caption2 cursor-pointer text-red-600/80 underline underline-offset-[3px] hover:text-red-700 focus:outline-none"
               >
                 회원 탈퇴
               </button>
@@ -235,6 +278,21 @@ export default function MyPage() {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        open={withdrawOpen}
+        title="회원 탈퇴 안내"
+        description={`회원 탈퇴를 신청하시면 계정이 탈퇴 대기 상태로 전환되며,  
+30일 동안 다시 로그인하지 않으면 모든 정보가 영구 삭제됩니다.
+
+30일 이내 로그인 시 탈퇴가 자동으로 취소됩니다.
+
+정말 탈퇴를 진행하시겠습니까?`}
+        confirmText="탈퇴하기"
+        cancelText="취소"
+        loading={withdrawing}
+        onConfirm={handleWithdrawConfirm}
+        onClose={() => !withdrawing && setWithdrawOpen(false)}
+      />
     </div>
   );
 }

@@ -75,7 +75,14 @@ export async function getSaveStatus(contentId: string): Promise<boolean> {
 }
 
 //내 저장 목록
-export async function getSavedPlaces(page = 0, size = 20): Promise<SavedPlacePage> {
-  const res = await api.get<SavedPlacePage>('/my/places', { params: { page, size } });
-  return res.data;
+export async function getSavedPlaces(
+  params: { page?: number; size?: number; keyword?: string } = {},
+): Promise<SavedPlacePage> {
+  const { page = 0, size = 20, keyword } = params;
+  const kw = (keyword ?? '').trim();
+
+  const res = await api.get<ApiResponse<SavedPlacePage>>('/my/places', {
+    params: { page, size, ...(kw ? { keyword: kw } : {}) },
+  });
+  return res.data.data;
 }

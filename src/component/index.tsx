@@ -10,8 +10,10 @@ import SelectorMulti from './selector/SelectorMulti';
 import Selector from './selector/Selector';
 import ParkingTable from './ai_explore/ParkingInfo';
 import Loader from './common/Loading/Loading';
+import ConfirmModal from './common/Modal/ConfirmModal';
 
 export {
+  ConfirmModal,
   Button,
   TagButton,
   Badge,
