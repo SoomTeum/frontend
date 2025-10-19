@@ -9,6 +9,7 @@ export type SearchPlacesParams = {
   pageNo?: number;
   numOfRows?: number;
   arrange?: 'O' | 'Q' | 'R' | 'S';
+  keyword?: string;
   _type?: string;
 };
 

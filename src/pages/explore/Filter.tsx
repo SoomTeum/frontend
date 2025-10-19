@@ -37,13 +37,25 @@ export default function FilterPage() {
   }, [phase, step]);
 
   const handleFinish = () => {
+  // 1. 먼저 /searching 으로 이동
+  navigate('/searching');
+
+  // 2. 3초(3000ms) 후 /search/result로 이동
+  setTimeout(() => {
     navigate('/search/result', {
       state: {
-        region: { areaCode: regionCodes.areaCode, sigunguCode: regionCodes.sigunguCode },
-        activity: { cat1: activityCodes.cat1, cat2: activityCodes.cat2 },
+        region: {
+          areaCode: regionCodes.areaCode,
+          sigunguCode: regionCodes.sigunguCode,
+        },
+        activity: {
+          cat1: activityCodes.cat1,
+          cat2: activityCodes.cat2,
+        },
       },
     });
-  };
+  }, 3000);
+};
 
   const resetAndSelectAgain = () => {
     setPhase('select');

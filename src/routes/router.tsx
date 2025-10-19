@@ -16,6 +16,7 @@ import Register3 from '@/pages/register/Register3';
 import TravelSearch from '@/pages/home/TravelSearch';
 import RequireAuth from './RequireAuth';
 import Resgister1 from '@/pages/register/Register';
+import SearchingPage from '@/pages/explore/Searching';
 export const router = createBrowserRouter([
 
   {
@@ -86,4 +87,8 @@ export const router = createBrowserRouter([
     path: '/search/result',
     element: <TravelSearch />,
   },
+  {
+    path: '/searching',   
+    element: <SearchingPage />, 
+  }
 ]);
