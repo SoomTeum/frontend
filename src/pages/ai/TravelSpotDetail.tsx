@@ -277,7 +277,10 @@ const TravelSpotDetail = () => {
 
                 {/*좋아요, 저장*/}
                 <div className="mt-8 flex items-center gap-1">
-                  <button onClick={handleToggleLike} className="transition-transform">
+                  <button
+                    onClick={handleToggleLike}
+                    className="cursor-pointer transition-transform"
+                  >
                     {liked ? <HeartFill /> : <HeartOutline />}
                   </button>
                   <span

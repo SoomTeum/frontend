@@ -8,7 +8,7 @@ export type SearchPlacesParams = {
   contentTypeId?: number;
   pageNo?: number;
   numOfRows?: number;
-  arrange?: 'O' | 'Q' | 'R' | 'S';
+  arrange?: 'A' | 'C' | 'Q' | 'R';
   keyword?: string;
   _type?: string;
 };
@@ -37,8 +37,20 @@ function toArray<T>(raw: any): T[] {
 }
 
 export async function searchPlaces(params: SearchPlacesParams): Promise<PlaceDto[]> {
-  const res = await api.get('/places', { params });
+  const cleanParams = { ...params };
+  if (typeof cleanParams.keyword === 'string' && cleanParams.keyword.trim() === '') {
+    delete (cleanParams as any).keyword;
+  }
+  const res = await api.get('/places', { params: cleanParams });
   return toArray<PlaceDto>(unwrap(res.data));
+}
+
+//-1(데이터 없음)은 undefined 처리
+function toNumberOrUndef(v: unknown): number | undefined {
+  if (v === null || v === undefined) return undefined;
+  const n = typeof v === 'number' ? v : Number(v);
+  if (Number.isNaN(n)) return undefined;
+  return n === -1 ? undefined : n;
 }
 
 export function mapToCard(p: PlaceDto) {
@@ -48,12 +60,16 @@ export function mapToCard(p: PlaceDto) {
       ? raw.replace(/^http:\/\//, 'https://')
       : raw || undefined;
 
+  const quiet =
+    typeof p.quietnessLevel === 'number' ? p.quietnessLevel : toNumberOrUndef(p.cnctrRate);
+
   return {
     id: p.contentid,
     title: p.title,
     theme: p.catName ?? '-',
     likeCount: p.likeCount ?? 0,
     imgUrl,
-    quietLevel: typeof p.quietnessLevel === 'number',
+    quietLevel: quiet,
+    cnctrRate: quiet,
   };
 }
