@@ -33,6 +33,6 @@ export const unlikePlace = (contentId: string) =>
   });
 
 export const getLikeStatus = (contentId: string) =>
-  api.get<ApiResponse<LikeStatusResponse>>('places/like/status', {
+  api.get<ApiResponse<LikeStatusResponse>>('/places/like/status', {
     params: { contentId },
   });

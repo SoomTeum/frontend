@@ -1,4 +1,4 @@
-export const BUTTON_BASE='disabled:cursor-not-allowed active:scale-95 transition-color';
+export const BUTTON_BASE = 'disabled:cursor-not-allowed active:scale-95 transition-color';
 
 export const BUTTON_VARIANT = {
   lg: {
@@ -20,10 +20,10 @@ export const BUTTON_SIZE = {
   sm: 'w-18 h-6 text-caption2',
 } as const;
 
-export const BUTTON_COLOR={
+export const BUTTON_COLOR = {
   green3: 'bg-green3 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed',
   'green-muted': 'bg-green-muted hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed',
-}
+};
 
 export const BUTTON_ROUNDED = {
   lg: 'rounded-l',

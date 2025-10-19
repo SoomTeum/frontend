@@ -30,7 +30,7 @@ export default function HomePage() {
           <div className="text-title5 text-green1 pt-1">
             지금 가장 여유롭고 한적한 여행지를 찾아드립니다.
           </div>
-          <Button variant="sm" className="mt-3" onClick={() => navigate('/explore')}>
+          <Button variant="sm" className="mt-3 cursor-pointer" onClick={() => navigate('/explore')}>
             바로가기
           </Button>
         </div>
@@ -47,7 +47,11 @@ export default function HomePage() {
               내가 원하는 조용한 여행지,
               <br /> 이제 손쉽게 찾을 수 있어요.
             </div>
-            <Button variant="sm" className="mt-5" onClick={() => navigate('/search')}>
+            <Button
+              variant="sm"
+              className="mt-5 cursor-pointer"
+              onClick={() => navigate('/search')}
+            >
               바로가기
             </Button>
           </div>
@@ -71,7 +75,11 @@ export default function HomePage() {
               <br />
               주차장 위치까지 한눈에 확인해보세요.
             </div>
-            <Button variant="sm" className="mt-5" onClick={() => navigate('/explore')}>
+            <Button
+              variant="sm"
+              className="mt-5 cursor-pointer"
+              onClick={() => navigate('/explore')}
+            >
               바로가기
             </Button>
           </div>
