@@ -211,7 +211,7 @@ export default function MyPage() {
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-m text-caption2 bg-yellow2 text-green1 mt-2 px-3 py-1"
+              className="rounded-m text-caption2 bg-yellow2 text-green1 mt-2 cursor-pointer px-3 py-1"
             >
               로그아웃
             </button>
@@ -251,7 +251,7 @@ export default function MyPage() {
               type="button"
               disabled={!canSave}
               onClick={handleSaveNickname}
-              className="rounded-m border-green3 bg-green3-light text-caption2 text-green1 h-10 shrink-0 border px-5 hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-m border-green3 bg-green3-light text-caption2 text-green1 h-10 shrink-0 cursor-pointer border px-5 hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
               aria-disabled={!canSave}
             >
               {saving ? '저장 중...' : '저장'}

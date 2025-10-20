@@ -35,12 +35,12 @@ const SelectorMulti = ({
   const [selectedMain, setSelectedMain] = useState(initialMain);
 
   const [selectedSubs, setSelectedSubs] = useState<string[]>(
-    initialSubs && initialSubs.length ? [initialSubs[0]] : []
+    initialSubs && initialSubs.length ? [initialSubs[0]] : [],
   );
 
   const changeMain = (next: string) => {
     setSelectedMain(next);
-    setSelectedSubs([]); 
+    setSelectedSubs([]);
   };
 
   const toggleSub = (sub: string) => {
@@ -69,7 +69,7 @@ const SelectorMulti = ({
             key={main}
             type="button"
             onClick={() => changeMain(main)}
-            className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-1 text-center ${
+            className={`text-caption4 mx-1 mb-1 cursor-pointer rounded-l px-1 py-1 text-center ${
               selectedMain === main ? leftActive : leftItem
             }`}
           >
@@ -87,7 +87,7 @@ const SelectorMulti = ({
                 key={sub}
                 type="button"
                 onClick={() => toggleSub(sub)}
-                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 rounded-l px-2 py-1 text-center ${
+                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 cursor-pointer rounded-l px-2 py-1 text-center ${
                   active ? rightActive : rightItem
                 }`}
               >

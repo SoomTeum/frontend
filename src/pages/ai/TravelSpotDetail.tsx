@@ -237,7 +237,10 @@ const TravelSpotDetail = () => {
   return (
     <div className="min-h-screen">
       <div className="bg-green3-light relative sticky top-0 z-50 h-10 w-full shadow-sm">
-        <button onClick={() => navigate(-1)} className="absolute top-1/2 -translate-y-1/2 pl-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-1/2 -translate-y-1/2 cursor-pointer pl-4"
+        >
           <ArrowLeft className="w-4" />
         </button>
         <span className="text-caption3 text-green1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -277,7 +280,10 @@ const TravelSpotDetail = () => {
 
                 {/*좋아요, 저장*/}
                 <div className="mt-8 flex items-center gap-1">
-                  <button onClick={handleToggleLike} className="transition-transform">
+                  <button
+                    onClick={handleToggleLike}
+                    className="cursor-pointer transition-transform"
+                  >
                     {liked ? <HeartFill /> : <HeartOutline />}
                   </button>
                   <span
@@ -287,7 +293,10 @@ const TravelSpotDetail = () => {
                     {formatCount(likeCount)}
                   </span>
 
-                  <button onClick={handleToggleBookmark} className="ml-5 transition-transform">
+                  <button
+                    onClick={handleToggleBookmark}
+                    className="ml-5 cursor-pointer transition-transform"
+                  >
                     {bookmarked ? <StarFill /> : <StarLine />}
                   </button>
                 </div>

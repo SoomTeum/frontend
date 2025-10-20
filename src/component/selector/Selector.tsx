@@ -64,7 +64,7 @@ const Selector = ({
           <button
             key={main}
             onClick={() => changeMain(main)}
-            className={`text-caption4 mx-1 mb-1 rounded-l px-1 py-1 text-center ${
+            className={`text-caption4 mx-1 mb-1 cursor-pointer rounded-l px-1 py-1 text-center ${
               selectedMain === main ? leftActive : leftItem
             }`}
           >
@@ -81,7 +81,7 @@ const Selector = ({
               <button
                 key={sub}
                 onClick={() => chooseSub(sub)}
-                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 rounded-l px-2 py-1 text-center ${
+                className={`text-caption4 mx-2 mb-1 ml-5 w-3/7 cursor-pointer rounded-l px-2 py-1 text-center ${
                   active ? rightActive : rightItem
                 }`}
               >
