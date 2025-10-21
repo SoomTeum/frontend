@@ -88,6 +88,7 @@ api.interceptors.response.use(
           code: resData?.code || 401,
           error: Array.isArray(resData?.error) ? resData?.error : null,
         };
+        window.location.href = '/login';
         return Promise.reject(apiError);
       }
 
@@ -114,6 +115,8 @@ api.interceptors.response.use(
           code: resData?.code || 401,
           error: Array.isArray(resData?.error) ? resData?.error : null,
         };
+
+        window.location.href = '/login';
         return Promise.reject(apiError);
       }
 
